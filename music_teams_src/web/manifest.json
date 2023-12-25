@@ -1,6 +1,6 @@
 {
-    "name": "music_teams_src",
-    "short_name": "music_teams_src",
+    "name": "test",
+    "short_name": "test",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

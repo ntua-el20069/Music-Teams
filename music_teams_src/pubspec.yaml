@@ -1,5 +1,7 @@
-name: music_teams_src
-description: A new Flutter project.
+name: myapp
+description: A exported flutter project from FUNCTION12
+
+
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -19,7 +21,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.4 <4.0.0'
+  sdk: '>=2.18.2 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,6 +37,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  google_fonts:  ^4.0.3   # ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +65,184 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/prototype/images/back-button-bar.png
+    - assets/prototype/images/leading-icon.png
+    - assets/prototype/images/checkboxes.png
+    - assets/prototype/images/icon-close.png
+    - assets/prototype/images/icon-arrow-forward-ios.png
+    - assets/prototype/images/icon-menu.png
+    - assets/prototype/images/vector.png
+    - assets/prototype/images/trailing-icon.png
+    - assets/prototype/images/vector-gfv.png
+    - assets/prototype/images/icon-arrow-forward-ios-Bo2.png
+    - assets/prototype/images/group-19.png
+    - assets/prototype/images/group-23.png
+    - assets/prototype/images/icon-menu-Ntt.png
+    - assets/prototype/images/icon-close-F5e.png
+    - assets/prototype/images/back-button-bar-Rn4.png
+    - assets/prototype/images/big-music-symbol.png
+    - assets/prototype/images/back-button-bar-Ktx.png
+    - assets/prototype/images/icon-menu-fcx.png
+    - assets/prototype/images/auto-group-bjuc.png
+    - assets/prototype/images/back-button-bar-bqN.png
+    - assets/prototype/images/icon-menu-SVz.png
+    - assets/prototype/images/icon-remove-circle-outline.png
+    - assets/prototype/images/auto-group-bupg.png
+    - assets/prototype/images/icon-menu-dpg.png
+    - assets/prototype/images/icon-menu-p7n.png
+    - assets/prototype/images/icon-arrow-forward-ios-Evp.png
+    - assets/prototype/images/input.png
+    - assets/prototype/images/vector-V16.png
+    - assets/prototype/images/icon-close-AxL.png
+    - assets/assets-components/images/icon-arrow-forward-ios-wu6.png
+    - assets/prototype/images/icon-close-xF6.png
+    - assets/prototype/images/icon-add-circle-outline.png
+    - assets/assets-components/images/icon-arrow-forward-ios-9jJ.png
+    - assets/prototype/images/image-1-bg.png
+    - assets/assets-components/images/vector-3qE.png
+    - assets/prototype/images/back-button-bar-FAc.png
+    - assets/prototype/images/icon-menu-Ptx.png
+    - assets/assets-components/images/trailing-icon-V96.png
+    - assets/prototype/images/leading-icon-3bJ.png
+    - assets/prototype/images/auto-group-cw12.png
+    - assets/assets-components/images/upload-button.png
+    - assets/assets-components/images/vector-qTz.png
+    - assets/assets-components/images/icon-add-circle-outline-x2p.png
+    - assets/assets-components/images/icon-arrow-forward-ios-hFJ.png
+    - assets/assets-components/images/leading-icon-3KA.png
+    - assets/assets-components/images/checkboxes-7F2.png
+    - assets/wireframes/images/icon-close-SHJ.png
+    - assets/wireframes/images/vector-o7r.png
+    - assets/wireframes/images/vector-kon.png
+    - assets/wireframes/images/icon-remove-circle-outline-hj2.png
+    - assets/assets-components/images/vector-cWY.png
+    - assets/assets-components/images/icon-arrow-forward-ios-jja.png
+    - assets/wireframes/images/checkboxes-Ucc.png
+    - assets/wireframes/images/icon-menu-n7W.png
+    - assets/wireframes/images/leading-icon-c5r.png
+    - assets/wireframes/images/icon-arrow-forward-ios-L1r.png
+    - assets/wireframes/images/back-button-bar-wnL.png
+    - assets/wireframes/images/leading-icon-ctU.png
+    - assets/assets-components/images/trailing-icon-wXz.png
+    - assets/prototype/images/auto-group-5q3n.png
+    - assets/assets-components/images/auto-group-axsi.png
+    - assets/assets-components/images/vector-WzQ.png
+    - assets/assets-components/images/vector-e52.png
+    - assets/wireframes/images/icon-close-13J.png
+    - assets/assets-components/images/icon-menu-kFn.png
+    - assets/wireframes/images/big-music-symbol-WEx.png
+    - assets/wireframes/images/auto-group-4ew6.png
+    - assets/wireframes/images/auto-group-nt5j.png
+    - assets/assets-components/images/vector-mZW.png
+    - assets/assets-components/images/auto-group-jffr.png
+    - assets/assets-components/images/back-button.png
+    - assets/prototype/images/icon-upload.png
+    - assets/wireframes/images/icon-add-circle-outline-Em2.png
+    - assets/wireframes/images/icon-arrow-forward-ios-fDn.png
+    - assets/wireframes/images/icon-arrow-forward-ios-Bxp.png
+    - assets/wireframes/images/icon-menu-t6Y.png
+    - assets/assets-components/images/trailing-icon-T3A.png
+    - assets/wireframes/images/input-CmS.png
+    - assets/assets-components/images/big-music-symbol-9wa.png
+    - assets/wireframes/images/icon-close-VkY.png
+    - assets/assets-components/images/icon-close-etL.png
+    - assets/assets-components/images/close-button.png
+    - assets/wireframes/images/icon-close-zBW.png
+    - assets/wireframes/images/icon-upload-6EY.png
+    - assets/wireframes/images/icon-menu-rDi.png
+    - assets/wireframes/images/icon-close-pAY.png
+    - assets/assets-components/images/group-19-B16.png
+    - assets/assets-components/images/group-23-wFA.png
+    - assets/wireframes/images/icon-menu-6Nx.png
+    - assets/assets-components/images/recording-button.png
+    - assets/wireframes/images/icon-close-dNt.png
+    - assets/assets-components/images/icon-mic.png
+    - assets/assets-components/images/input-ZXS.png
+    - assets/wireframes/images/back-button-bar-yLG.png
+    - assets/wireframes/images/back-button-bar-rex.png
+    - assets/prototype/images/back-button-bar-p5z.png
+    - assets/assets-components/images/icon-close-AvY.png
+    - assets/assets-components/images/icon-remove-circle-outline-ihA.png
+    - assets/prototype/images/icon-menu-Gya.png
+    - assets/wireframes/images/auto-group-vt3n.png
+    - assets/wireframes/images/icon-arrow-forward-ios-CcL.png
+    - assets/wireframes/images/back-button-bar-xbW.png
+    - assets/wireframes/images/icon-menu-iag.png
+    - assets/assets-components/images/auto-group-kaus.png
+    - assets/assets-components/images/big-music-symbol-o3a.png
+    - assets/wireframes/images/group-19-6Ha.png
+    - assets/wireframes/images/back-button-bar-Dd6.png
+    - assets/wireframes/images/icon-menu-NVz.png
+    - assets/assets-components/images/music-symbol-button.png
+    - assets/prototype/images/back-button-bar-NuJ.png
+    - assets/assets-components/images/back-button-bar-erp.png
+    - assets/wireframes/images/group-23-xXN.png
+    - assets/assets-components/images/recording.png
+    - assets/wireframes/images/icon-menu-kLk.png
+    - assets/wireframes/images/auto-group-jgex.png
+    - assets/assets-components/images/enter-button.png
+    - assets/wireframes/images/auto-group-dqp2.png
+    - assets/wireframes/images/back-button-bar-GTW.png
+    - assets/assets-components/images/icon-arrow-forward-ios-Yfv.png
+    - assets/assets-components/images/icon-arrow-forward-ios-J9J.png
+    - assets/wireframes/images/add-button.png
+    - assets/wireframes/images/vector-qQ8.png
+    - assets/assets-components/images/input-Zb2.png
+    - assets/assets-components/images/vector-aFE.png
+    - assets/prototype/images/icon-menu-iMS.png
+    - assets/wireframes/images/icon-menu-Gdr.png
+    - assets/assets-components/images/leading-icon-dUQ.png
+    - assets/prototype/images/icon-arrow-forward-ios-Ltc.png
+    - assets/prototype/images/icon-menu-uB2.png
+    - assets/assets-components/images/add-button-Bmn.png
+    - assets/wireframes/images/back-button-bar-j1W.png
+    - assets/wireframes/images/trailing-icon-ZfS.png
+    - assets/prototype/images/icon-menu-EgL.png
+    - assets/final-ui/images/icon-menu-XbS.png
+    - assets/final-ui/images/icon-menu-3Mv.png
+    - assets/final-ui/images/image-1-bg-As6.png
+    - assets/final-ui/images/icon-close-8UU.png
+    - assets/final-ui/images/vector-ZKA.png
+    - assets/final-ui/images/icon-menu-WzQ.png
+    - assets/final-ui/images/trailing-icon-vaG.png
+    - assets/final-ui/images/group-19-1tQ.png
+    - assets/final-ui/images/icon-menu-MoA.png
+    - assets/final-ui/images/icon-arrow-forward-ios-FGG.png
+    - assets/final-ui/images/back-button-bar-w3r.png
+    - assets/final-ui/images/icon-menu-khS.png
+    - assets/final-ui/images/back-button-bar-4rg.png
+    - assets/final-ui/images/checkboxes-cNQ.png
+    - assets/final-ui/images/icon-arrow-forward-ios-kjW.png
+    - assets/final-ui/images/auto-group-kway.png
+    - assets/final-ui/images/icon-arrow-forward-ios-iCU.png
+    - assets/final-ui/images/icon-menu-NmJ.png
+    - assets/final-ui/images/icon-add-circle-outline-EJ8.png
+    - assets/final-ui/images/icon-close-o4G.png
+    - assets/final-ui/images/icon-remove-circle-outline-ETe.png
+    - assets/final-ui/images/back-button-bar-5pp.png
+    - assets/final-ui/images/big-music-symbol-vpk.png
+    - assets/final-ui/images/icon-upload-Hme.png
+    - assets/final-ui/images/back-button-bar-aKN.png
+    - assets/final-ui/images/icon-menu-EHJ.png
+    - assets/final-ui/images/icon-menu-y2L.png
+    - assets/final-ui/images/vector-sTi.png
+    - assets/final-ui/images/back-button-bar-JUU.png
+    - assets/final-ui/images/leading-icon-FoA.png
+    - assets/final-ui/images/back-button-bar-hDN.png
+    - assets/final-ui/images/auto-group-fwz6.png
+    - assets/final-ui/images/icon-arrow-forward-ios-wMe.png
+    - assets/final-ui/images/vector-Pj2.png
+    - assets/final-ui/images/icon-close-qoJ.png
+    - assets/final-ui/images/auto-group-k5kr.png
+    - assets/final-ui/images/icon-menu-R1v.png
+    - assets/final-ui/images/leading-icon-VkQ.png
+    - assets/final-ui/images/auto-group-btw6.png
+    - assets/final-ui/images/group-23-kPe.png
+    - assets/final-ui/images/auto-group-c4sv.png
+    - assets/final-ui/images/icon-close-raY.png
+    - assets/final-ui/images/back-button-bar-1qN.png
+    - assets/final-ui/images/input-2P6.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
