@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/prototype/add-chords-page.dart';
+import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
-class Scene extends StatelessWidget {
+class AddRecording extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 430;
+    double baseWidth = 450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       width: double.infinity,
       child: Container(
         // addrecpageS3v (61:1909)
@@ -93,7 +96,9 @@ class Scene extends StatelessWidget {
                                     // backbutton1YG (I202:3483;59:380)
                                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                                     child: TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push( context, MaterialPageRoute(builder: (context) => AddChords()), );
+                                      },
                                       style: TextButton.styleFrom (
                                         padding: EdgeInsets.zero,
                                       ),
@@ -288,7 +293,9 @@ class Scene extends StatelessWidget {
                                       // primarybuttonZZ6 (I202:3180;186:1144;61:518)
                                       margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 12*fem),
                                       child: TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                                        },
                                         style: TextButton.styleFrom (
                                           padding: EdgeInsets.zero,
                                         ),
@@ -324,7 +331,9 @@ class Scene extends StatelessWidget {
                                       height: 40*fem,
                                       child: TextButton(
                                         // secondarybuttonLiG (I202:3180;186:1144;61:517)
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                                        },
                                         style: TextButton.styleFrom (
                                           padding: EdgeInsets.zero,
                                         ),
@@ -459,7 +468,9 @@ class Scene extends StatelessWidget {
                               left: 0*fem,
                               top: 103*fem,
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                                },
                                 style: TextButton.styleFrom (
                                   padding: EdgeInsets.zero,
                                 ),
@@ -548,6 +559,7 @@ class Scene extends StatelessWidget {
           ],
         ),
       ),
+    ),
           );
   }
 }

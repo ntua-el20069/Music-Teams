@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/prototype/song-demand.dart';
+import 'package:myapp/prototype/song-page.dart';
+import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
-class Scene extends StatelessWidget {
+class Live extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 430;
+    double baseWidth = 450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       width: double.infinity,
       child: Container(
         // liveteam1Nrg (5:23)
@@ -55,25 +59,35 @@ class Scene extends StatelessWidget {
                         ),
                         Positioned(
                           // backbuttontextDkp (202:3519)
-                          left: 0*fem,
-                          top: 0*fem,
-                          child: Container(
-                            width: 384.7*fem,
-                            height: 80*fem,
-                            child: Center(
-                              // backbuttonbarxTW (I202:3519;64:383)
-                              child: SizedBox(
-                                width: 384.7*fem,
-                                height: 80*fem,
-                                child: Image.asset(
-                                  'assets/prototype/images/back-button-bar-FAc.png',
-                                  width: 384.7*fem,
-                                  height: 80*fem,
+                          left: 0 * fem,
+                          top: 0 * fem,
+                          child: GestureDetector(
+                            onTap: () {
+                              // Navigate to the desired screen when the image is tapped
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TeamHome()), // Replace BackScreen() with your desired screen
+                              );
+                            },
+                            child: Container(
+                              width: 384.7 * fem,
+                              height: 80 * fem,
+                              child: Center(
+                                // backbuttonbarxTW (I202:3519;64:383)
+                                child: SizedBox(
+                                  width: 384.7 * fem,
+                                  height: 80 * fem,
+                                  child: Image.asset(
+                                    'assets/prototype/images/back-button-bar-FAc.png',
+                                    width: 384.7 * fem,
+                                    height: 80 * fem,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
+
                       ],
                     ),
                   ),
@@ -95,7 +109,9 @@ class Scene extends StatelessWidget {
                     // buttonelementaDz (60:3929)
                     margin: EdgeInsets.fromLTRB(100*fem, 0*fem, 90*fem, 44*fem),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => Song()), );
+                      },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
                       ),
@@ -311,7 +327,9 @@ class Scene extends StatelessWidget {
               ),
               child: TextButton(
                 // linebuttonKoA (80:528)
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => SongDemand()), );
+                },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
                 ),
@@ -384,6 +402,7 @@ class Scene extends StatelessWidget {
           ],
         ),
       ),
+    ),
           );
   }
 }

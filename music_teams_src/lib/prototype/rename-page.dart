@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
-class Scene extends StatelessWidget {
+class Rename extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 430;
+    double baseWidth = 450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       width: double.infinity,
       child: Container(
         // renamepageoKA (80:1052)
@@ -28,20 +30,30 @@ class Scene extends StatelessWidget {
                 children: [
                   Positioned(
                     // backbuttonbareqa (I80:5015;64:383)
-                    left: 0*fem,
-                    top: 0*fem,
-                    child: Align(
-                      child: SizedBox(
-                        width: 384.7*fem,
-                        height: 80*fem,
-                        child: Image.asset(
-                          'assets/prototype/images/back-button-bar-NuJ.png',
-                          width: 384.7*fem,
-                          height: 80*fem,
+                    left: 0 * fem,
+                    top: 0 * fem,
+                    child: GestureDetector(
+                      onTap: () {
+                        // Navigate to the desired screen when the image is tapped
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => TeamHome()), // Replace NextScreen() with your desired screen
+                        );
+                      },
+                      child: Align(
+                        child: SizedBox(
+                          width: 384.7 * fem,
+                          height: 80 * fem,
+                          child: Image.asset(
+                            'assets/prototype/images/back-button-bar-NuJ.png',
+                            width: 384.7 * fem,
+                            height: 80 * fem,
+                          ),
                         ),
                       ),
                     ),
                   ),
+
                   Positioned(
                     // text9GY (I80:5015;64:372)
                     left: 96*fem,
@@ -109,7 +121,9 @@ class Scene extends StatelessWidget {
               // buttonelementWPv (80:1067)
               margin: EdgeInsets.fromLTRB(100*fem, 0*fem, 85*fem, 0*fem),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
                 ),
@@ -182,6 +196,7 @@ class Scene extends StatelessWidget {
           ],
         ),
       ),
+    ),
           );
   }
 }

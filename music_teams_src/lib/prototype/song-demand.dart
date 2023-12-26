@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/prototype/live-team-1.dart';
 import 'package:myapp/utils.dart';
 
-class Scene extends StatelessWidget {
+class SongDemand extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 430;
+    double baseWidth = 450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       width: double.infinity,
       child: Container(
         // songdemandazY (29:96)
@@ -28,20 +30,30 @@ class Scene extends StatelessWidget {
                 children: [
                   Positioned(
                     // backbuttonbarQig (I80:3660;64:383)
-                    left: 0*fem,
-                    top: 0*fem,
-                    child: Align(
-                      child: SizedBox(
-                        width: 384.7*fem,
-                        height: 80*fem,
-                        child: Image.asset(
-                          'assets/prototype/images/back-button-bar-p5z.png',
-                          width: 384.7*fem,
-                          height: 80*fem,
+                    left: 0 * fem,
+                    top: 0 * fem,
+                    child: GestureDetector(
+                      onTap: () {
+                        // Navigate to the desired screen when the image is tapped
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Live()), // Replace BackScreen() with your desired screen
+                        );
+                      },
+                      child: Align(
+                        child: SizedBox(
+                          width: 384.7 * fem,
+                          height: 80 * fem,
+                          child: Image.asset(
+                            'assets/prototype/images/back-button-bar-p5z.png',
+                            width: 384.7 * fem,
+                            height: 80 * fem,
+                          ),
                         ),
                       ),
                     ),
                   ),
+
                   Positioned(
                     // textK4x (I80:3660;64:372)
                     left: 96*fem,
@@ -78,7 +90,9 @@ class Scene extends StatelessWidget {
                     left: 165*fem,
                     top: 558*fem,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => Live()), );
+                      },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
                       ),
@@ -311,7 +325,9 @@ class Scene extends StatelessWidget {
                                             left: 0*fem,
                                             top: 0*fem,
                                             child: TextButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                
+                                              },
                                               style: TextButton.styleFrom (
                                                 padding: EdgeInsets.zero,
                                               ),
@@ -461,6 +477,7 @@ class Scene extends StatelessWidget {
           ],
         ),
       ),
+    ),
           );
   }
 }

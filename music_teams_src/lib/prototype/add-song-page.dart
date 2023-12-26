@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/prototype/add-chords-page.dart';
+import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
-class Scene extends StatelessWidget {
+class AddSong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 430;
+    double baseWidth = 450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       width: double.infinity,
       child: Container(
         // addsongpageZK2 (5:19)
@@ -20,7 +23,9 @@ class Scene extends StatelessWidget {
           children: [
             TextButton(
               // backbuttontextuNt (121:6397)
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+              },
               style: TextButton.styleFrom (
                 padding: EdgeInsets.zero,
               ),
@@ -188,7 +193,9 @@ class Scene extends StatelessWidget {
                           left: 16*fem,
                           top: 0*fem,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                            },
                             style: TextButton.styleFrom (
                               padding: EdgeInsets.zero,
                             ),
@@ -269,7 +276,9 @@ class Scene extends StatelessWidget {
                                             // trailingiconPRn (I61:2193;61:2156;52798:24382)
                                             margin: EdgeInsets.fromLTRB(0*fem, 4*fem, 0*fem, 0*fem),
                                             child: TextButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                                              },
                                               style: TextButton.styleFrom (
                                                 padding: EdgeInsets.zero,
                                               ),
@@ -367,7 +376,9 @@ class Scene extends StatelessWidget {
                     // buttonelementSB6 (80:519)
                     margin: EdgeInsets.fromLTRB(160*fem, 0*fem, 0*fem, 0*fem),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => AddChords()), );
+                      },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
                       ),
@@ -443,6 +454,7 @@ class Scene extends StatelessWidget {
           ],
         ),
       ),
+    ),
           );
   }
 }

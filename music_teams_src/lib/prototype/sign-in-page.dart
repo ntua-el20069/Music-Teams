@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/utils.dart';
+import 'package:myapp/prototype/opening-page.dart';
+import 'package:myapp/prototype/home-page.dart';
 
-class Scene extends StatelessWidget {
+class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 430;
+    double baseWidth = 450; //500; //430; //322.1; 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       width: double.infinity,
       child: Container(
         // signinpageHgQ (5:12)
-        padding: EdgeInsets.fromLTRB(13*fem, 38*fem, 13*fem, 48*fem),
+        padding: EdgeInsets.fromLTRB(13*fem, 38*fem, 13*fem, 48*fem),  // 13 38 13 48
         width: double.infinity,
         decoration: BoxDecoration (
           color: Color(0xfff3edf7),
@@ -30,7 +33,9 @@ class Scene extends StatelessWidget {
                     // backbuttonUVz (I141:1025;59:380)
                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => Opening()), );
+                      },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
                       ),
@@ -148,7 +153,9 @@ class Scene extends StatelessWidget {
               // buttonelementEBe (80:5161)
               margin: EdgeInsets.fromLTRB(160*fem, 0*fem, 0*fem, 0*fem),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => Home()), );
+                },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
                 ),
@@ -221,6 +228,7 @@ class Scene extends StatelessWidget {
           ],
         ),
       ),
-          );
+      )
+    );
   }
 }

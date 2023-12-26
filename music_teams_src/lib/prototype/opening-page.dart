@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/utils.dart';
+import 'package:myapp/prototype/sign-in-page.dart';
+import 'package:myapp/prototype/sign-up-page.dart';
 
-class Scene extends StatelessWidget {
+class Opening extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 430;
+    double baseWidth = 450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       width: double.infinity,
       child: Container(
         // openingpageuBS (5:2)
@@ -43,7 +46,13 @@ class Scene extends StatelessWidget {
               // buttonelementDNU (60:816)
               margin: EdgeInsets.fromLTRB(86*fem, 0*fem, 87*fem, 0*fem),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Navigate to the 'signin.dart' screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignIn()),
+                  );
+                },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
                 ),
@@ -120,7 +129,9 @@ class Scene extends StatelessWidget {
               // buttonelementbA4 (60:824)
               margin: EdgeInsets.fromLTRB(86*fem, 0*fem, 87*fem, 0*fem),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => SignUp()), );
+                },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
                 ),
@@ -193,6 +204,7 @@ class Scene extends StatelessWidget {
           ],
         ),
       ),
+    ),
           );
   }
 }

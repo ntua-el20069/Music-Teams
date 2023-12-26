@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
-class Scene extends StatelessWidget {
+class TeamCode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 430;
+    double baseWidth = 450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       width: double.infinity,
       child: Container(
         // teamcodepopupCTE (61:1533)
@@ -40,7 +42,9 @@ class Scene extends StatelessWidget {
                             // backbuttonuW4 (I61:2658;59:380)
                             margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                              },
                               style: TextButton.styleFrom (
                                 padding: EdgeInsets.zero,
                               ),
@@ -187,7 +191,9 @@ class Scene extends StatelessWidget {
                             // textfieldRgg (61:1876)
                             margin: EdgeInsets.fromLTRB(20.5*fem, 0*fem, 20.5*fem, 22*fem),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                              },
                               style: TextButton.styleFrom (
                                 padding: EdgeInsets.zero,
                               ),
@@ -311,7 +317,9 @@ class Scene extends StatelessWidget {
                             // primarybutton4Hi (61:1824)
                             margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 12*fem),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                              },
                               style: TextButton.styleFrom (
                                 padding: EdgeInsets.zero,
                               ),
@@ -347,7 +355,9 @@ class Scene extends StatelessWidget {
                             height: 40*fem,
                             child: TextButton(
                               // secondarybuttonDK2 (61:1826)
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                              },
                               style: TextButton.styleFrom (
                                 padding: EdgeInsets.zero,
                               ),
@@ -385,6 +395,7 @@ class Scene extends StatelessWidget {
           ],
         ),
       ),
+    ),
           );
   }
 }

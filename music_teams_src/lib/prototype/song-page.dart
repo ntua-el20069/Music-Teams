@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/prototype/live-team-1.dart';
+import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
-class Scene extends StatelessWidget {
+class Song extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 430;
+    double baseWidth = 450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       width: double.infinity,
       child: TextButton(
         // songpageVMv (5:22)
-        onPressed: () {},
+        onPressed: () {
+          
+        },
         style: TextButton.styleFrom (
           padding: EdgeInsets.zero,
         ),
@@ -95,7 +100,9 @@ class Scene extends StatelessWidget {
                               // backbuttonQfE (I202:3528;59:380)
                               margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                                },
                                 style: TextButton.styleFrom (
                                   padding: EdgeInsets.zero,
                                 ),
@@ -261,7 +268,9 @@ class Scene extends StatelessWidget {
                       // buttonelementitC (121:6354)
                       margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 4*fem, 0*fem),
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                        },
                         style: TextButton.styleFrom (
                           padding: EdgeInsets.zero,
                         ),
@@ -333,7 +342,9 @@ class Scene extends StatelessWidget {
                     ),
                     TextButton(
                       // buttonelement4UC (121:6350)
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => Live()), );
+                      },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
                       ),
@@ -563,6 +574,7 @@ class Scene extends StatelessWidget {
           ),
         ),
       ),
+    ),
           );
   }
 }
