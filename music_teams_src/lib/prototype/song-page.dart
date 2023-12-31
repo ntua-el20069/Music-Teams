@@ -6,7 +6,7 @@ import 'package:myapp/utils.dart';
 class Song extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 450; //500; //430; //322.1;
+    double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
