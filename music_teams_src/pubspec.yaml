@@ -32,7 +32,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+    
+  http: ^1.1.0  # Replace with the desired version number
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
