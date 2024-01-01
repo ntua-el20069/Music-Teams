@@ -3,11 +3,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:myapp/url.dart';
+
+// HTTP GET Request example
 
 Future<Album> fetchAlbum() async {
   final response = await http
       //.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-      .get(Uri.parse('http://10.0.2.2:5001/music-teams'));
+      .get(Uri.parse(baseUrl + '/music-teams'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
