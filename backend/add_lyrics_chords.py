@@ -220,4 +220,50 @@ def add_chords(song_id, update = False):
     else:
         pass
 
-        
+def add_chords_json(song_id, update=False):
+    title, lyrics, chords, composers, lyricists = get_song_by_id(song_id)
+
+    if request.method == 'GET':
+        if chords == '' or update == False or chords is None:
+            chords = '\n'.join(len(lyrics.split('\n')) * [''])
+        elif len(chords.split('\n')) != len(lyrics.split('\n')):
+            k = len(lyrics.split('\n')) - len(chords.split('\n'))
+            chords += k * '\n'
+
+        chords_list = [x + (100 - len(x)) * ' ' for x in chords.split('\n')]
+        lyrics_list = lyrics.split('\n')
+
+        return jsonify({
+            'title': title,
+            'composers': composers,
+            'lyricists': lyricists,
+            'lyrics_list': lyrics_list,
+            'chords_list': chords_list,
+            'song_id': song_id,
+            'i': 0,
+        })
+
+    elif request.method == 'POST':
+        lines = len(lyrics.split('\n'))
+        lyrics_input = []
+        chords_input = []
+        for i in range(lines):
+            lyrics_line = request.json.get(f'lyricsLine-{i+1}', '')
+            chords_line = request.json.get(f'chordsLine-{i+1}', '').rstrip()
+
+            lyrics_input.append(lyrics_line)
+            chords_input.append(chords_line)
+
+        lyrics = '\n'.join(lyrics_input)
+        chords = '\n'.join(chords_input)
+
+        update_lyrics_chords(song_id, lyrics, chords)
+
+        return jsonify({
+            'message': 'Lyrics and Chords updated successfully'
+        }), 200
+
+    else:
+        return jsonify({
+            'error': 'Invalid request method'
+        }), 405  # Method Not Allowed     

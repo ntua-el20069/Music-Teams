@@ -26,6 +26,10 @@ def verify_password(username, password):
         return username
 
 
+@app.route('/', methods = ['GET'])
+def home_route():
+    return render_template('API.html')
+
 @app.route('/music-teams', methods = ['GET', 'POST'])
 def home_route_json():
     return home_json()
@@ -34,7 +38,7 @@ def home_route_json():
 
 @app.route('/music-teams/add-song', methods = ['GET', 'POST'])
 
-def add_song_json_route():
+def add_song_route_json():
     return add_lyrics_json()
 
 
@@ -47,10 +51,10 @@ def update_lyrics_route(song_id):
 
 
 
-@app.route('/<song_id>/add-chords', methods = ['GET', 'POST'])
+@app.route('/music-teams/<song_id>/add-chords', methods = ['GET', 'POST'])
 
-def add_chords_route(song_id):
-    return add_chords(song_id)
+def add_chords_route_json(song_id):
+    return add_chords_json(song_id)
 
 
 
