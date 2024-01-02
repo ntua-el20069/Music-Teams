@@ -54,3 +54,39 @@ Dm                  A#    C       Dm      C   Dm
         update_chords(song_id, chords)
         transporto = 0
     return render_template('song-transpose.html', title=title, composers=composers, lyricists=lyricists, lyrics=lyrics, chords=chords, zip=zip, transporto=transporto, song_id=song_id, type_transporto=type_transporto, live = live, live_id = live_id)
+
+def song_transpose_json(song_id, permanent=False):
+    if request.method == 'POST':
+        request_data = request.json
+        transporto = request_data.get('transporto')
+    else:
+        transporto = 0
+
+    type_transporto = "Permanent" if permanent else "Temporary"
+
+    title, lyrics, chords, composers, lyricists = get_song_by_id(song_id)
+
+    try:
+        transporto = int(transporto)
+        if chords:
+            chords = transpose(chords, transporto)
+        else:
+            chords = '\n'.join(len(lyrics.split('\n')) * [''])
+    except ValueError:
+        return jsonify({'error': 'Please insert a valid transporto number'}), 400
+
+    if permanent:
+        update_chords(song_id, chords)
+        transporto = 0
+
+    return jsonify({
+        'title': title,
+        'composers': composers,
+        'lyricists': lyricists,
+        'lyrics': lyrics,
+        'chords': chords,
+        'transporto': transporto,
+        'song_id': song_id,
+        'type_transporto': type_transporto
+    })
+

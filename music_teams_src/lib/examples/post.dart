@@ -9,7 +9,7 @@ import 'package:myapp/url.dart';
 
 Future<Album> createAlbum(String title, String composer, String lyricist, String lyrics, ) async {
   final response = await http.post(
-    Uri.parse(baseUrl + '/music-teams/add-song'),
+    Uri.parse(baseUrl + '/API/add-song'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

@@ -10,7 +10,7 @@ import 'package:myapp/url.dart';
 Future<Album> fetchAlbum() async {
   final response = await http
       //.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-      .get(Uri.parse(baseUrl + '/music-teams'));
+      .get(Uri.parse(baseUrl + '/API/home'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

@@ -25,24 +25,36 @@ def verify_password(username, password):
     if username in users and password == users[username]: #or username==get_admin()[0] and password==get_admin()[1]:
         return username
 
-
 @app.route('/', methods = ['GET'])
 def home_route():
+    return "<a href='/API'> API </a>  <br><br>"
+
+@app.route('/API', methods = ['GET'])
+def API_route():
     return render_template('API.html')
 
-@app.route('/music-teams', methods = ['GET', 'POST'])
+@app.route('/API/home', methods = ['GET', 'POST'])
 def home_route_json():
     return home_json()
 
-
-
-@app.route('/music-teams/add-song', methods = ['GET', 'POST'])
+@app.route('/API/add-song', methods = ['GET', 'POST'])
 
 def add_song_route_json():
     return add_lyrics_json()
 
+@app.route('/API/<song_id>/add-chords', methods = ['GET', 'POST'])
+
+def add_chords_route_json(song_id):
+    return add_chords_json(song_id)
+
+@app.route('/API/<song_id>/song-transpose', methods = ['GET', 'POST'])
+def song_transpose_route_json(song_id):
+    return song_transpose_json(song_id)
 
 
+
+
+################################################################
 
 @app.route('/<song_id>/update-lyrics', methods = ['GET', 'POST'])
 
@@ -50,31 +62,15 @@ def update_lyrics_route(song_id):
     return add_lyrics(song_id=song_id, update=True)
 
 
-
-@app.route('/music-teams/<song_id>/add-chords', methods = ['GET', 'POST'])
-
-def add_chords_route_json(song_id):
-    return add_chords_json(song_id)
-
-
-
 @app.route('/<song_id>/update-chords', methods = ['GET', 'POST'])
 
 def update_chords_route(song_id):
     return add_chords(song_id, update = True)
 
-
-
-
-@app.route('/<song_id>/song-transpose', methods = ['GET', 'POST'])
-def song_transpose_route(song_id):
-    return song_transpose(song_id)
-
 @app.route('/<song_id>/permanent-transporto', methods = ['GET', 'POST'])
 
 def permanent_transporto_route(song_id):
     return song_transpose(song_id, permanent=True)
-
 
 @app.route('/live')
 def live_route():
@@ -98,7 +94,5 @@ def live_song(num: int):
     except:
         return f'{song_title} does not exist in the Database, try to find lyrics somewhere else! <br>'
     
-    
-
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
