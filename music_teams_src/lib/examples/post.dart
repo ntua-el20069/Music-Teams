@@ -58,20 +58,17 @@ class Album {
   }
 }
 
-void main() {
-  runApp(const MyApp());
-}
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class Post extends StatefulWidget {
+  const Post({super.key});
 
   @override
-  State<MyApp> createState() {
-    return _MyAppState();
+  State<Post> createState() {
+    return _PostState();
   }
 }
 
-class _MyAppState extends State<MyApp> {
+class _PostState extends State<Post> {
   Future<Album>? _futureAlbum;
 
   @override

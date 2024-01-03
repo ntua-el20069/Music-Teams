@@ -51,16 +51,15 @@ class Album {
 }
 
 
-void main() => runApp(const MyApp());
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class Get extends StatefulWidget {
+  const Get({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<Get> createState() => _GetState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _GetState extends State<Get> {
   late Future<Album> futureAlbum;
 
   @override
@@ -104,9 +103,6 @@ class _MyAppState extends State<MyApp> {
                   // Return some default widget if data is not available
                   return CircularProgressIndicator(); // Placeholder or loading indicator
                 }
-
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
             },
           ),
         ),

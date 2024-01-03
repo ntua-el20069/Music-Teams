@@ -56,43 +56,6 @@ def song_transpose_route_json(song_id):
 
 ################################################################
 
-@app.route('/<song_id>/update-lyrics', methods = ['GET', 'POST'])
 
-def update_lyrics_route(song_id):
-    return add_lyrics(song_id=song_id, update=True)
-
-
-@app.route('/<song_id>/update-chords', methods = ['GET', 'POST'])
-
-def update_chords_route(song_id):
-    return add_chords(song_id, update = True)
-
-@app.route('/<song_id>/permanent-transporto', methods = ['GET', 'POST'])
-
-def permanent_transporto_route(song_id):
-    return song_transpose(song_id, permanent=True)
-
-@app.route('/live')
-def live_route():
-    songs = songs_list()
-    songs_with_index = zip(range(len(songs)), songs)
-    return render_template('live.html', songs_with_index=songs_with_index)
-
-@app.route('/live/<int:num>')
-def live_song(num: int):
-    songs = songs_list()
-    #print(songs)
-    index_error_message = 'Invalid index, return back! <br>'
-    if num < 0 : return index_error_message
-    try:
-        song_title = songs[num]
-    except:
-        return index_error_message
-    try:
-        id = get_id_by_title(song_title)
-        return song_transpose(id, live = 1, live_id = num)
-    except:
-        return f'{song_title} does not exist in the Database, try to find lyrics somewhere else! <br>'
-    
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
