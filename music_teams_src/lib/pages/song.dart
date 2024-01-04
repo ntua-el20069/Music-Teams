@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/url.dart';
 
-String finalUrl = baseUrl + '/API/4/song-transpose';
 
 // POST
-Future<Album> createAlbum(String transporto) async {
+Future<Album> createAlbum(int song_id, String transporto) async {
+  String finalUrl = baseUrl + '/API/'+ song_id.toString() +'/song-transpose';
   final response = await http.post(
     Uri.parse(finalUrl),
     headers: <String, String>{
@@ -35,7 +35,8 @@ Future<Album> createAlbum(String transporto) async {
 
 
 //  GET 
-Future<Album> fetchAlbum() async {
+Future<Album> fetchAlbum(int song_id) async {
+  String finalUrl = baseUrl + '/API/'+ song_id.toString() +'/song-transpose';
   final response = await http
       //.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
       .get(Uri.parse(finalUrl));
@@ -97,7 +98,9 @@ class Album {
 
 
 class SongPage extends StatefulWidget {
-  const SongPage({super.key});
+  final Future<int> songId;
+
+  SongPage({required this.songId, Key? key}) : super(key: key);
 
   @override
   State<SongPage> createState() => _SongState();
@@ -107,15 +110,25 @@ class _SongState extends State<SongPage> {
   late Future<Album> futureAlbum;
   TextEditingController transportoController = TextEditingController();
   Future<Album>? _futureAlbum;
+  int? selectedSongId;
 
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
+    // Get the integer value from the Future<int>
+    widget.songId.then((value) {
+      setState(() {
+        selectedSongId = value;
+        futureAlbum = fetchAlbum(selectedSongId!);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (selectedSongId == null) {
+      return Center(child: CircularProgressIndicator());
+    }
     return MaterialApp(
       title: 'Create Data Example',
       theme: ThemeData(
@@ -197,7 +210,7 @@ class _SongState extends State<SongPage> {
                       onPressed: () {
                         String transporto = transportoController.text;
                         setState(() {
-                          _futureAlbum = createAlbum(transporto);
+                          _futureAlbum = createAlbum(selectedSongId ?? 0,transporto);
                         });
                       },
                       child: Text('Transporto'),

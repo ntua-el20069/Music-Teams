@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SongPage(),                 // here change the page you want to see first
+      home: TeamHomePage(),                 // here change the page you want to see first
     );
   }
 }
