@@ -6,6 +6,7 @@ from add_lyrics_chords import *
 from help_routes import *
 from transporto import *
 from __init__ import list_url
+from web_scrape import scrape_from_html_to_json
 
 #from .accept import *
 
@@ -50,6 +51,11 @@ def add_chords_route_json(song_id):
 @app.route('/API/<song_id>/song-transpose', methods = ['GET', 'POST'])
 def song_transpose_route_json(song_id):
     return song_transpose_json(song_id)
+
+@app.route('/API/webscrape', methods = ['POST'])
+def webscrape_route():
+    html = request.data.decode('utf-8')
+    return scrape_from_html_to_json(html)
 
 
 

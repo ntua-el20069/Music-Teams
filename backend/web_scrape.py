@@ -3,6 +3,7 @@ import urllib.error
 import socket 
 from bs4 import BeautifulSoup 
 import re
+import json
 
 
 greek = "ΑΆάαΒβΓγΔδΕΈέεΖζΗΉήηΘθΙΊΪίϊιΚκΛλΜμΝνΞξΟΌόοΠπΡρΣσΤτΥΎΫύϋυΦφΧχΨψΩΏώω"
@@ -181,3 +182,80 @@ def take_from_greeklyrics(search_title: str, show = False) -> (str, str, str, st
 
 #x = take_from_greeklyrics('Κιφ')
 #print(x)
+
+#################################################################################
+
+def take_from_greeklyrics_mobile(search_title: str, show = False) -> (str, str, str, str):
+    '''
+    Takes as argument a search title (exact title in greek) e.g. "Ρόζα" 
+    and returns (title, composer, lyricist, lyrics)
+    using "www.greeklyrics.gr" 
+    '''
+    empty_result = ('','','','')  # return this in case of an error
+    modified_title = ""
+    for c in search_title:      
+        modified_title += d[c]        # greek -> greeklish for the url(Ρόζα -> roza)
+    url = "https://www.greeklyrics.gr/stixoi/"   
+    url += modified_title
+        # timeout : wait time in seconds
+    timeout = 10
+    socket.setdefaulttimeout(timeout) 
+    # The call of urllib.request.urlopen uses timeout
+    # defined in library socket
+
+    req = urllib.request.Request(url)
+    try: 
+        with urllib.request.urlopen(req) as response:
+            char_set = response.headers.get_content_charset()
+            html = response.read().decode(char_set)
+        #print(html)
+        return html
+    
+    except urllib.error.HTTPError as e:
+        print('HTTP Error:', e.code)
+        return "HTTP Error"
+    except urllib.error.URLError as e:
+        print('Cannot connect to the server')
+        print('Cause: ', e)
+        return "URL Error"
+    else:
+        print('Page loaded successfully')
+
+
+def scrape_from_html_to_json(html, show=False):
+    if "Error" == html[-5:]:
+        return json.dumps({'title': '', 'composer': '', 'lyricist': '', 'lyrics': '', 'error': f"{html}"})
+
+    soup = BeautifulSoup(html, 'html.parser')
+
+    title_element = soup.find('h1', class_="elementor-heading-title elementor-size-default")
+    title = title_element.text.strip() if title_element else ''
+    if not title:
+        return json.dumps({'title': '', 'composer': '', 'lyricist': '', 'lyrics': '', 'error': 'Title not found'})
+
+    composer_tag = soup.find('b', string='Συνθέτης:')
+    composer_name = composer_tag.find_next('a').text.strip() if composer_tag else ''
+    if not composer_name:
+        return json.dumps({'title': title, 'composer': '', 'lyricist': '', 'lyrics': '', 'error': 'Composer not found'})
+
+    lyricist_tag = soup.find('b', string='Στιχουργός:')
+    lyricist_name = lyricist_tag.find_next('a').text.strip() if lyricist_tag else ''
+    if not lyricist_name:
+        return json.dumps({'title': title, 'composer': composer_name, 'lyricist': '', 'lyrics': '', 'error': 'Lyricist not found'})
+
+    class_name = "elementor-element elementor-element-a7a6650 elementor-widget elementor-widget-theme-post-content"
+    div_bs4 = soup.find('div', class_=class_name)
+    lyrics = str(div_bs4)
+    lyrics = re.sub(r'<div[^>]*>', '', lyrics)
+    lyrics = re.sub(r'</div>', '', lyrics)
+    lyrics = re.sub(r'<div[^\n]*\n', '', lyrics)
+    new_lines = ['<br>', '<br/>', '<br />', '<BR>', '<BR />', '</br>', '</BR>', '</p>']
+    lyrics = lyrics.replace('<p>', '\n')
+
+    for c in new_lines:
+        lyrics = lyrics.replace(c, '')
+    if not lyrics:
+        return json.dumps({'title': title, 'composer': composer_name, 'lyricist': lyricist_name, 'lyrics': '', 'error': 'Lyrics not found'})
+
+    lyrics = "Intro\n" + lyrics
+    return json.dumps({'title': title, 'composer': composer_name, 'lyricist': lyricist_name, 'lyrics': lyrics, 'error': ''})

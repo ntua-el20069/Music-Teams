@@ -3,12 +3,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/pages/song.dart';
-import 'package:myapp/prototype/song-page.dart';
 import 'package:myapp/url.dart';
 
-String finalUrl = baseUrl + '/API/home';
-
 int returnValue = 1;
+
+String finalUrl = baseUrl + '/API/home';
 
 Future<int> selectSong(String title) async {
   http.Response response = await http.post(
@@ -80,8 +79,6 @@ class TeamHomePage extends StatefulWidget {
   _TeamHomeState createState() => _TeamHomeState();
 }
 
-// ... (Other code remains the same)
-
 class _TeamHomeState extends State<TeamHomePage> {
   late Future<Album> futureAlbum;
   TextEditingController _controller = TextEditingController();
@@ -98,24 +95,20 @@ class _TeamHomeState extends State<TeamHomePage> {
   void filterSongs(String value) {
     setState(() {
       if (value.isEmpty) {
-        filteredSongs = songs; // Show all songs if input is empty
+        filteredSongs = List.from(songs); // Show all songs if input is empty
       } else {
         filteredSongs = songs
             .where((song) =>
                 song.toLowerCase().startsWith(value.toLowerCase()))
             .toList();
-            print(filteredSongs);
+        print(filteredSongs);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    String title;
     return Scaffold(
-      /*appBar: AppBar(
-        title: Text('Song Finder'),
-      ),*/
       body: Center(
         child: FutureBuilder<Album>(
           future: futureAlbum,
@@ -126,7 +119,7 @@ class _TeamHomeState extends State<TeamHomePage> {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
               songs = snapshot.data!.songs;
-              filteredSongs = songs; // Initial population of filtered songs
+              //filteredSongs = List.from(songs); // Initial population of filtered songs
 
               return Padding(
                 padding: EdgeInsets.all(16.0),
@@ -142,21 +135,22 @@ class _TeamHomeState extends State<TeamHomePage> {
                       },
                     ),
                     Expanded(
-                      child: Builder(
-                        builder: (context) {
-                          return ListView.builder(
-                            itemCount: filteredSongs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                title: Text(filteredSongs[index]),
-                                onTap: () {
-                                  //_controller.text = filteredSongs[index];
-                                  title = filteredSongs[index];
-                                  print(title);
-                                  Navigator.push(context,MaterialPageRoute(builder: (context) => SongPage(songId: selectSong(title),)),);
-                                  print('############################################');
-                                },
+                      child: ListView.builder(
+                        itemCount: filteredSongs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            title: Text(filteredSongs[index]),
+                            onTap: () {
+                              //_controller.text = filteredSongs[index];
+                              final title = filteredSongs[index];
+                              print(title);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SongPage(songId: selectSong(title)),
+                                ),
                               );
+                              print('############################################');
                             },
                           );
                         },
