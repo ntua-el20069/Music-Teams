@@ -57,6 +57,27 @@ def webscrape_route():
     html = request.data.decode('utf-8')
     return scrape_from_html_to_json(html)
 
+# Set the upload folder
+#base_url = '/home/nikolaospapa3/Documents/web-dev/Mobile/Music-Teams/backend/'
+base_url = '/home/nikolaospapa3/Music-Teams/backend/'
+app.config['UPLOAD_FOLDER'] = base_url + 'recordings'
+
+@app.route('/<song_id>/add-recording')
+def recording(song_id):
+    return render_template('recording.html', song_id = song_id)
+
+@app.route('/API/<song_id>/upload', methods=['POST'])
+def upload_file_json(song_id):
+    if request.method == 'POST':
+        uploaded_file = request.files['file']
+        if uploaded_file:
+            file_path = f"{app.config['UPLOAD_FOLDER']}/{song_id}-{uploaded_file.filename}"
+            uploaded_file.save(file_path)
+            return jsonify({"message": "File uploaded successfully!", "file_path": file_path})
+
+    return jsonify({"error": "No file uploaded or something went wrong."})
+
+
 
 
 

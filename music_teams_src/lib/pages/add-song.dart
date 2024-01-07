@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/components/button.dart';
+import 'package:myapp/functions/greekLyrics.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/prototype/add-chords-page.dart';
+import 'package:myapp/prototype/add-song-page.dart';
 import 'package:myapp/utils.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -36,6 +39,35 @@ Future<Album> createAlbum(String title, String composer, String lyricist, String
   }
 }
 
+Future<ScrapedSong> sendHTMLviaPostRequest({String title = 'Ρόζα'}) async {
+  //String htmlContent = '<html><body><h1>Hello, World!</h1></body></html>'; // Replace this with your HTML content
+  String? htmlContent = await takeFromGreekLyricsMobile(title);
+
+  var url = Uri.parse(baseUrl + '/API/webscrape'); // Replace with your server endpoint
+
+  try {
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'text/html', // Set the content type to text/html
+      },
+      body: htmlContent,
+    );
+
+    if (response.statusCode == 200) {
+      print('HTML sent successfully');
+      print('Response: ${response.body}');
+      return ScrapedSong.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    } else {
+      print('Failed to send HTML. Status code: ${response.statusCode}');
+      return ScrapedSong.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    }
+  } catch (error) {
+    print('Error sending HTML: $error');
+    throw Exception('Error sending HTML: $error');
+  }
+}
+
 class Album {
   final String message;
   final String error;
@@ -59,6 +91,41 @@ class Album {
   }
 }
 
+class ScrapedSong {
+  final String title;
+  final String composer;
+  final String lyricist;
+  final String lyrics;
+  final String error;
+
+  const ScrapedSong({
+    required this.title,
+    required this.composer,
+    required this.lyricist,
+    required this.lyrics,
+    required this.error,
+  });
+
+  factory ScrapedSong.fromJson(Map<String, dynamic> json) {
+    if (json.containsKey('title') &&
+        json.containsKey('composer') &&
+        json.containsKey('lyricist') &&
+        json.containsKey('lyrics')) {
+      return ScrapedSong(
+        title: json['title'] as String,
+        composer: json['composer'] as String,
+        lyricist: json['lyricist'] as String,
+        lyrics: json['lyrics'] as String,
+        error: json['error'] == '' ? 'All OK' : json['error'] as String,
+      );
+    } else {
+      throw FormatException('Failed to load scraped song.');
+    }
+  }
+}
+
+
+
 class AddSongPage extends StatefulWidget {
   @override
   _AddSongPage createState() => _AddSongPage();
@@ -66,18 +133,26 @@ class AddSongPage extends StatefulWidget {
 
 class _AddSongPage extends State<AddSongPage> {
   Future<Album>? _futureAlbum;
+  Future<ScrapedSong>? _futureScrapedSong;
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: (_futureAlbum == null) ? buildColumn() : buildFutureBuilder(),
-        ),
+  home: Scaffold(
+    body: SingleChildScrollView(
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8),
+        child: (_futureAlbum == null && _futureScrapedSong == null)
+            ? buildColumn()
+            : (_futureAlbum == null)
+                ? buildColumn(futureScrapedSong: _futureScrapedSong)
+                : buildFutureBuilder(),
       ),
-    );
+    ),
+  ),
+);
+
   }
 
 TextEditingController titleController = TextEditingController();
@@ -87,10 +162,21 @@ TextEditingController lyricsController = TextEditingController();
 
 
 
-  Column buildColumn() {
+  Column buildColumn({Future<ScrapedSong>? futureScrapedSong}) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+
+  if (futureScrapedSong != null) {
+    futureScrapedSong.then((scrapedSong) {
+      if (true) {
+        titleController.text = scrapedSong.title;
+        composerController.text = scrapedSong.composer;
+        lyricistController.text = scrapedSong.lyricist;
+        lyricsController.text = scrapedSong.lyrics;
+      }
+    });
+  }
     return Column(
       
       mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +192,7 @@ TextEditingController lyricsController = TextEditingController();
               ),
               child: Container(
                 width: double.infinity,
-                height: 250*fem,
+                height: 100*fem,
                 child: Stack(
                   children: [
                     Positioned(
@@ -161,10 +247,26 @@ TextEditingController lyricsController = TextEditingController();
           ),
         ), */
 
-        TextField(
-          controller: titleController,
-          decoration: const InputDecoration(hintText: 'Title'),
+TextField(
+  controller: titleController,
+  decoration: const InputDecoration(
+    hintText: 'Title',
+    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0), // Adjust top and bottom padding
+  ),
+),
+
+        
+        CustomGradientButton(
+          onPressed: () {
+            String title = titleController.text;
+            setState(() {  
+               _futureScrapedSong = sendHTMLviaPostRequest(title: title);
+            });
+          },
+          buttonText: 'Find greek lyrics from title',
+          fontSize: 14,
         ),
+
         /* Text(
           'Composer',
           style: SafeGoogleFont (
@@ -210,70 +312,22 @@ TextEditingController lyricsController = TextEditingController();
           decoration: const InputDecoration(hintText: 'Lyrics'),
         ),
         
+        CustomGradientButton(
+            onPressed: () {
+              String title = titleController.text;
+              String composer = composerController.text;
+              String lyricist = lyricistController.text;
+              String lyrics = lyricsController.text;
 
-                    TextButton(
-                      onPressed: () {
-                                    
-
-                        String title = titleController.text;
-                        String composer = composerController.text;
-                        String lyricist = lyricistController.text;
-                        String lyrics = lyricsController.text;
-
-                        setState(() {
-                          _futureAlbum = createAlbum(title, composer, lyricist, lyrics);
-                        });
-          
-                        //Navigator.push( context, MaterialPageRoute(builder: (context) => AddChords()), );
-                      },
-                      style: TextButton.styleFrom (
-                        padding: EdgeInsets.zero,
-                      ),
-                      child: Container(
-                        width: 200*fem,
-                        height: 64*fem,
-                        decoration: BoxDecoration (
-                          borderRadius: BorderRadius.circular(32*fem),
-                          gradient: LinearGradient (
-                            begin: Alignment(1, -1),
-                            end: Alignment(-1, 1),
-                            colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
-                            stops: <double>[0, 1],
-                          ),
-                        ),
-                        child: Stack(
-                          children: [
-                            
-                            Positioned(
-                              // buttongzY (I80:519;59:262)
-                              left: 32.5*fem,
-                              top: 13*fem,
-                              child: Center(
-                                child: Align(
-                                  child: SizedBox(
-                                    width: 146*fem,
-                                    height: 29*fem,
-                                    child: Text(
-                                      'Add chords',
-                                      textAlign: TextAlign.center,
-                                      style: SafeGoogleFont (
-                                        'Zilla Slab',
-                                        fontSize: 24*ffem,
-                                        fontWeight: FontWeight.w700,
-                                        height: 1.2*ffem/fem,
-                                        letterSpacing: 2.4*fem,
-                                        color: Color(0xffffffff),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  
+              setState(() {
+                _futureAlbum = createAlbum(title, composer, lyricist, lyrics);
+                //sendHTMLviaPostRequest(title: title);
+              });
+            },
+            buttonText: 'Add chords',
+            fontSize: 24,
+          ),
+    
       ],
     );
   }
@@ -283,22 +337,30 @@ TextEditingController lyricsController = TextEditingController();
       future: _futureAlbum,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return AddChords(); 
-          /*Stack( 
-            children: [
-            Text(snapshot.data!.message) ,
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddChords()),
-              );
-              
-              },
-              child: Container (child: Text('Add Chords'))
-            )
-            ]
-          );*/
+
+          if (snapshot.data!.message == 'Successful Insertion!') {
+            return AddChords(); 
+          } else {
+            // Handle other cases or show an error message
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(snapshot.data!.message),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AddSongPage()),
+                      );
+                    },
+                    child: Text('Back'),
+                  ),
+                ],
+              ),
+            );
+
+          }
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
