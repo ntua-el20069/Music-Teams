@@ -15,8 +15,3 @@ Organize your own lyrics, chords, small recordings and share them with your musi
 ```bash
 source ~/Music-Teams/backup_db_instance/musicteams-backup-2-11-2023.sql;
 ```
-
-<clipboard-copy for="blob-path" class="btn btn-sm BtnGroup-item">
-  Copy path
-</clipboard-copy>
-<div id="blob-path">src/index.js</div>
