@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:myapp/components/back-title-options.dart';
+import 'package:myapp/components/backpage-title.dart';
+import 'package:myapp/components/button.dart';
+import 'package:myapp/components/options-button.dart';
 import 'package:myapp/pages/song.dart';
+import 'package:myapp/prototype/live-team-1.dart';
+import 'package:myapp/prototype/options-page.dart';
 import 'package:myapp/url.dart';
 
 int returnValue = 1;
@@ -108,6 +114,9 @@ class _TeamHomeState extends State<TeamHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double baseWidth = 450; //500; //450; //500; //430; //322.1;
+    double fem = MediaQuery.of(context).size.width / baseWidth;
+    double ffem = fem * 0.97;
     return Scaffold(
       body: Center(
         child: FutureBuilder<Album>(
@@ -119,12 +128,17 @@ class _TeamHomeState extends State<TeamHomePage> {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
               songs = snapshot.data!.songs;
-              //filteredSongs = List.from(songs); // Initial population of filtered songs
+              if (_controller.text == '') filteredSongs = List.from(songs); // Initial population of filtered songs
 
               return Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
                   children: [
+                    
+                    CustomAppBarWithOptions(text: 'Team Home', navigateTo: TeamHomePage(), optionsNavigateTo: Options(), fem: fem, ffem: ffem),
+
+                    CustomGradientButton(onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context) => Live()),), buttonText: 'Live', fontSize: 24),
+
                     TextFormField(
                       controller: _controller,
                       decoration: InputDecoration(

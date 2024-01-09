@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:myapp/prototype/live-team-1.dart';
 import 'package:myapp/url.dart';
 
 
@@ -129,10 +130,23 @@ class _SongState extends State<SongPage> {
     if (selectedSongId == null) {
       return Center(child: CircularProgressIndicator());
     }
-    return MaterialApp(
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        // Sensitivity is used to determine the sensitivity of the swipe
+        final double sensitivity = 10;
+        if (details.delta.dx > sensitivity) {
+          // Right Swipe
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => Live()),
+          );
+        } else if (details.delta.dx < -sensitivity) {
+          // Left Swipe
+        }
+      },
+    child: MaterialApp(
       title: 'Create Data Example',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF451475)),
       ),
       home: Scaffold(
         body: Container(
@@ -141,6 +155,7 @@ class _SongState extends State<SongPage> {
           child: _futureAlbum == null ? buildFutureBuilder(futureAlbum) : buildFutureBuilder(_futureAlbum!),
         ),
       ),
+    )
     );
   }
 

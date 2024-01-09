@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
 import 'package:myapp/functions/greekLyrics.dart';
 import 'package:myapp/pages/team-home.dart';
@@ -127,6 +128,7 @@ class ScrapedSong {
 
 
 class AddSongPage extends StatefulWidget {
+  
   @override
   _AddSongPage createState() => _AddSongPage();
 }
@@ -137,6 +139,7 @@ class _AddSongPage extends State<AddSongPage> {
 
  @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
   home: Scaffold(
     body: SingleChildScrollView(
@@ -182,60 +185,7 @@ TextEditingController lyricsController = TextEditingController();
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
 
-        TextButton(
-              // backbuttontextuNt (121:6397)
-              onPressed: () {
-                Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHomePage()), );
-              },
-              style: TextButton.styleFrom (
-                padding: EdgeInsets.zero,
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 100*fem,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      // backbuttonbarr3E (I121:6397;64:383)
-                      left: 15*fem,
-                      top: 0*fem,
-                      child: Align(
-                        child: SizedBox(
-                          width: 384.7*fem,
-                          height: 80*fem,
-                          child: Image.asset(
-                            'assets/prototype/images/back-button-bar-Ktx.png',
-                            width: 384.7*fem,
-                            height: 80*fem,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      // textXQG (I121:6397;64:372)
-                      left: 111*fem,
-                      top: 10*fem,
-                      child: Align(
-                        child: SizedBox(
-                          width: 155*fem,
-                          height: 50*fem,
-                          child: Text(
-                            'New song',
-                            style: SafeGoogleFont (
-                              'Zilla Slab',
-                              fontSize: 36*ffem,
-                              fontWeight: FontWeight.w700,
-                              height: 1.3888888889*ffem/fem,
-                              color: Color(0xff451475),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+        CustomNavigationButton(buttonText: 'New Song', navigateTo: TeamHomePage(), fem: fem, ffem: ffem),
         /* Text(
           'Title',
           style: SafeGoogleFont (
@@ -307,7 +257,7 @@ TextField(
         ),  */
         TextField(
           controller: lyricsController,
-          minLines: 10,
+          minLines: 18,
           maxLines: 1000,
           decoration: const InputDecoration(hintText: 'Lyrics'),
         ),
@@ -336,6 +286,9 @@ TextField(
     return FutureBuilder<Album>(
       future: _futureAlbum,
       builder: (context, snapshot) {
+            double baseWidth = 450; //500; //450; //500; //430; //322.1;
+            double fem = MediaQuery.of(context).size.width / baseWidth;
+            double ffem = fem * 0.97;
         if (snapshot.hasData) {
 
           if (snapshot.data!.message == 'Successful Insertion!') {
@@ -345,8 +298,9 @@ TextField(
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(snapshot.data!.message),
+                  Text('\n\n\n\n\n' + snapshot.data!.message),
                   TextButton(
                     onPressed: () {
                       Navigator.push(
@@ -359,6 +313,7 @@ TextField(
                 ],
               ),
             );
+
 
           }
         } else if (snapshot.hasError) {
