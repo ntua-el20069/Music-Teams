@@ -12,11 +12,9 @@ Organize your own lyrics, chords, small recordings and share them with your musi
 7. Reload website
 
 # Restore Database from the backup In the host database console (MySQL interpreter) 
-        ```bash
-source ~/Music-Teams/backup_db_instance/musicteams-backup-2-11-2023.sql;
-```
+```source ~/Music-Teams/backup_db_instance/musicteams-backup-2-11-2023.sql;```
 
-<clipboard-copy for="blob-path" class="btn btn-sm BtnGroup-item">
+<!-- <clipboard-copy for="blob-path" class="btn btn-sm BtnGroup-item">
   Copy path
 </clipboard-copy>
-<div id="blob-path">src/index.js</div>
+<div id="blob-path">src/index.js</div> -->
