@@ -1,7 +1,7 @@
 # Music-Teams
 Organize your own lyrics, chords, small recordings and share them with your musical partners.
 
-# Web host Code
+## Web host Code
 
 1. In the local code `lib/url.dart` change `baseUrl` for requests from `http://10.0.2.2:5001` to `https://nikolaospapa3.pythonanywhere.com` and git add, commit, push
 2. In pythonanywhere, Open a console  and  remove `Music-Teams`
@@ -14,13 +14,15 @@ Organize your own lyrics, chords, small recordings and share them with your musi
 ### Bash commands for 2,3,4
 ```bash
 rm -r /home/nikolaospapa3/Music-Teams
+```
+```bash
 cd /home/nikolaospapa3/
 git clone https://github.com/ntua-el20069/Music-Teams.git
 cd Music-Teams
 rm -r music_teams_src
 ```
 
-# Restore Database from the backup In the host database console (MySQL interpreter) 
+## Restore Database from the backup In the host database console (MySQL interpreter) 
 ```bash
 source ~/Music-Teams/backup_db_instance/musicteams-backup-2-11-2023.sql;
 ```

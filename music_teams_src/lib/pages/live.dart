@@ -15,7 +15,7 @@ import 'package:myapp/prototype/options-page.dart';
 import 'package:myapp/url.dart';
 
 
-String finalUrl = baseUrl + '/API/song-demands';
+String finalUrl = baseUrl + '/API/recent-song-demands';
 
 Future<SongDemandAlbum> fetchAlbum() async {
   final response = await http.get(Uri.parse(finalUrl));
@@ -69,7 +69,7 @@ class _LiveState extends State<LivePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Live'),
+        title: Text('Live (Recent Song Demands)'),
         backgroundColor: Color(0xff451475),
       ),
       body: FutureBuilder<SongDemandAlbum>(

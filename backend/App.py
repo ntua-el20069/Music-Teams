@@ -85,17 +85,24 @@ def make_song_demand():
     demanded = request_data.get('title')
     with open(song_demands_url(), 'a') as file: file.write('') # just to make the file if it does not exist
     with open(song_demands_url(), 'r') as file:
-        if demanded in file.read(): return jsonify({"error": "This song has been already demanded"}), 400  # Bad Request
+        #if demanded in file.read(): return jsonify({"error": "This song has been already demanded"}), 400  # Bad Request
+        songs = file.read().split('\n')
+        if len(songs) > 11: 
+            last_songs = songs[-2:-12:-1]
+            if demanded in last_songs: return jsonify({"error": "This song has been already demanded"}), 400  # Bad Request
     with open(song_demands_url(), 'a') as file:
         file.write(demanded + '\n')
     return jsonify({"message": f"Demanded song {demanded}"}), 200  
 
-@app.route('/API/song-demands', methods=['GET'])
-def song_demands():
+@app.route('/API/recent-song-demands', methods=['GET'])
+def recent_song_demands():
     with open(song_demands_url(), 'r') as file:
         demanded = file.read().split('\n')
     print(demanded)
-    demanded_songs = '\n'.join(demanded[-2::-1]) if len(demanded) >= 2  else ''
+    if len(demanded) > 11:
+        demanded = demanded[-11::1] # take only the 10 last song demands 
+    demanded_songs = '\n'.join(demanded[-2::-1]) if len(demanded) >= 2  else '' # the inverse list with [0][1] ... [len] from the most recent to the older
+
     print(demanded_songs)
     return jsonify({"demanded-songs": f"{demanded_songs}"}), 200 
 
