@@ -95,9 +95,9 @@ def song_demands():
     with open(song_demands_url(), 'r') as file:
         demanded = file.read().split('\n')
     print(demanded)
-    demanded_songs = demanded[-2::-1] if len(demanded) >= 2  else []
+    demanded_songs = '\n'.join(demanded[-2::-1]) if len(demanded) >= 2  else ''
     print(demanded_songs)
-    return jsonify({"demanded-songs": {demanded_songs}}), 200 
+    return jsonify({"demanded-songs": f"{demanded_songs}"}), 200 
 
 ################################################################
 
