@@ -68,7 +68,7 @@ class OptionsPage extends StatelessWidget {
                         child: Container(
                           
                           child: Text(
-                            'Team-code (disclaimer)',
+                            'Disclaimer',
                             textAlign: TextAlign.center,
                             style: SafeGoogleFont (
                               'Zilla Slab',
@@ -107,7 +107,7 @@ class OptionsPage extends StatelessWidget {
                   child: Center(
                     child: Center(
                       child: Text(
-                        'Back (Team Home)',
+                        'Team Home',
                         textAlign: TextAlign.center,
                         style: SafeGoogleFont (
                           'Zilla Slab',
@@ -166,7 +166,7 @@ class OptionsPage extends StatelessWidget {
               top: 166*fem,
               child: TextButton(
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => Disclaimer()), );
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHomePage(mode: 'SongDemand',)), );
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
@@ -181,7 +181,7 @@ class OptionsPage extends StatelessWidget {
                   child: Center(
                     child: Center(
                       child: Text(
-                        'Rename (disclaimer)',
+                        'Song Demand',
                         textAlign: TextAlign.center,
                         style: SafeGoogleFont (
                           'Zilla Slab',

@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LivePage(),//TeamHomePage(mode: 'SongDemand',),                 // here change the page you want to see first
+      home: TeamHomePage(),                 // here change the page you want to see first
     );
   }
 }

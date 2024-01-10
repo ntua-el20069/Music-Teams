@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:myapp/pages/live.dart';
+import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/prototype/live-team-1.dart';
 import 'package:myapp/url.dart';
 
@@ -137,14 +139,17 @@ class _SongState extends State<SongPage> {
         if (details.delta.dx > sensitivity) {
           // Right Swipe
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => Live()),
+            MaterialPageRoute(builder: (_) => LivePage()),
           );
         } else if (details.delta.dx < -sensitivity) {
           // Left Swipe
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => TeamHomePage(mode: 'SongDemand',)),
+          );
         }
       },
     child: MaterialApp(
-      title: 'Create Data Example',
+      title: 'Song Page',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF451475)),
       ),
@@ -176,33 +181,53 @@ class _SongState extends State<SongPage> {
               title: Text(title),
               backgroundColor: Color(0xff451475),
             ),
-            body: ListView.builder(
-              itemCount: lyrics.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        chords[index],
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.red,
-                          fontFamily: 'monospace',
-                        ),
-                      ),
-                      Text(
-                        lyrics[index],
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'monospace',
-                        ),
-                      ),
-                    ],
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Swipe for Live >>    << Swipe for Song Demand',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'monospace',
+                      color: Color(0xff451475),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                );
-              },
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: lyrics.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              chords[index],
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.red,
+                                fontFamily: 'monospace',
+                              ),
+                            ),
+                            Text(
+                              lyrics[index],
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'monospace',
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
             bottomNavigationBar: Padding(
               padding: EdgeInsets.all(8.0),
@@ -222,23 +247,24 @@ class _SongState extends State<SongPage> {
                       ),
                     ),
                     SizedBox(width: 8.0),
-                      ElevatedButton(
-                        onPressed: () {
-                          String transporto = transportoController.text;
-                          setState(() {
-                            _futureAlbum = createAlbum(selectedSongId ?? 0, transporto);
-                          });
-                        },
-                        child: Text('Transporto'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xff451475), // Set background color here
-                        ),
+                    ElevatedButton(
+                      onPressed: () {
+                        String transporto = transportoController.text;
+                        setState(() {
+                          _futureAlbum = createAlbum(selectedSongId ?? 0, transporto);
+                        });
+                      },
+                      child: Text('Transporto'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xff451475), // Set background color here
                       ),
+                    ),
                   ],
                 ),
               ),
             ),
           );
+
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else {

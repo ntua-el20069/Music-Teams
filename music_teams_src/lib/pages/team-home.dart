@@ -7,6 +7,7 @@ import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
 import 'package:myapp/components/error.dart';
 import 'package:myapp/components/options-button.dart';
+import 'package:myapp/pages/live.dart';
 import 'package:myapp/pages/options.dart';
 import 'package:myapp/pages/song.dart';
 import 'package:myapp/prototype/live-team-1.dart';
@@ -171,11 +172,11 @@ class _TeamHomeState extends State<TeamHomePage> {
                     
                     CustomAppBarWithOptions(
                       text: (widget.mode == 'TeamHome') ? 'Team Home' : 'Song Demand', 
-                      navigateTo: (widget.mode == 'TeamHome') ? TeamHomePage() : Live(), 
+                      navigateTo: (widget.mode == 'TeamHome') ? TeamHomePage() : LivePage(), 
                       optionsNavigateTo: OptionsPage(), fem: fem, ffem: ffem
                     ),
 
-                    CustomGradientButton(onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context) => Live()),), buttonText: 'Live', fontSize: 24),
+                    CustomGradientButton(onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context) => LivePage()),), buttonText: 'Live', fontSize: 24),
 
                     TextFormField(
                       controller: _controller,
@@ -201,7 +202,7 @@ class _TeamHomeState extends State<TeamHomePage> {
                               }
                               else { // mode = 'SongDemand'
                                 DemandSong(title).then((result)  {
-                                    if (result == 'OK') Navigator.push(context, MaterialPageRoute(builder: (context) => Live(),),);
+                                    if (result == 'OK') Navigator.push(context, MaterialPageRoute(builder: (context) => LivePage(),),);
                                     else Navigator.push(context, MaterialPageRoute(builder: (context) => CustomError(errorText: result, navigateTo: TeamHomePage(mode: 'SongDemand'),),),);
                                 });
                                 

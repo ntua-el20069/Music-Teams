@@ -15,37 +15,29 @@ import 'package:myapp/prototype/options-page.dart';
 import 'package:myapp/url.dart';
 
 
-String finalUrl = baseUrl + '/API/home';
+String finalUrl = baseUrl + '/API/song-demands';
 
-Future<Album> fetchAlbum() async {
+Future<SongDemandAlbum> fetchAlbum() async {
   final response = await http.get(Uri.parse(finalUrl));
 
   if (response.statusCode == 200) {
-    return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return SongDemandAlbum.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   } else {
     throw Exception('Failed to load album');
   }
 }
 
-class Album {
-  final List<dynamic> ids;
-  final String selected;
+class SongDemandAlbum {
   final List<dynamic> songs;
 
-  const Album({
-    required this.ids,
-    required this.selected,
+  const SongDemandAlbum({
     required this.songs,
   });
 
-  factory Album.fromJson(Map<String, dynamic> json) {
-    if (json.containsKey('ids') &&
-        json.containsKey('selected') &&
-        json.containsKey('songs')) {
-      return Album(
-        ids: json['ids'] as List<dynamic>,
-        selected: json['selected'] as String,
-        songs: json['songs'] as List<dynamic>,
+  factory SongDemandAlbum.fromJson(Map<String, dynamic> json) {
+    if (json.containsKey('demanded-songs')) {
+      return SongDemandAlbum(
+        songs: json['demanded-songs'].split('\n') as List<dynamic>,
       );
     } else {
       throw FormatException('Failed to load album.');
@@ -59,7 +51,7 @@ class LivePage extends StatefulWidget {
 }
 
 class _LiveState extends State<LivePage> {
-  Future<Album>? futureAlbum;
+  Future<SongDemandAlbum>? futureAlbum;
   List<dynamic> songs = [];
 
   @override
@@ -78,8 +70,9 @@ class _LiveState extends State<LivePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Live'),
+        backgroundColor: Color(0xff451475),
       ),
-      body: FutureBuilder<Album>(
+      body: FutureBuilder<SongDemandAlbum>(
         future: futureAlbum,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -105,7 +98,7 @@ class _LiveState extends State<LivePage> {
                         );
                       },
                       buttonText: title,
-                      fontSize: 24,
+                      fontSize: 14,
                       // Other button properties...
                     ),
                   ),
