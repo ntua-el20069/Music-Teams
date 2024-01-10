@@ -54,7 +54,7 @@ class CustomNavigationButton extends StatelessWidget {
                   child: Text(
                     buttonText,
                     style: TextStyle(
-                      fontSize: 28 * ffem,
+                      fontSize: 30 * ffem,
                       fontWeight: FontWeight.w700,
                       height: 1.3888888889 * ffem / fem,
                       color: Color(0xff451475),

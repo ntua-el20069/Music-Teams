@@ -5,7 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:myapp/components/back-title-options.dart';
 import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
+import 'package:myapp/components/error.dart';
 import 'package:myapp/components/options-button.dart';
+import 'package:myapp/pages/options.dart';
 import 'package:myapp/pages/song.dart';
 import 'package:myapp/prototype/live-team-1.dart';
 import 'package:myapp/prototype/options-page.dart';
@@ -14,6 +16,7 @@ import 'package:myapp/url.dart';
 int returnValue = 1;
 
 String finalUrl = baseUrl + '/API/home';
+String demandUrl = baseUrl + '/API/make-song-demand';
 
 Future<int> selectSong(String title) async {
   http.Response response = await http.post(
@@ -42,6 +45,33 @@ Future<int> selectSong(String title) async {
   return returnValue;
 }
 
+Future<String> DemandSong(String title) async {
+  try {
+    http.Response response = await http.post(
+      Uri.parse(demandUrl),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({'title': title}),
+    );
+
+    Map<String, dynamic> json = jsonDecode(response.body) as Map<String, dynamic>;
+    print(json);
+    if (response.statusCode == 200) {
+        print("ok response");
+        return 'OK';
+    } else {
+      // Handle cases for other response status codes
+      print("Another status code");
+      return json['error'] as String;
+      //return 'Failed to find song. ${response.statusCode} status code. ${json['error']}';
+    }
+  } catch (e) {
+    // Handle exceptions thrown during the HTTP request
+    print('Catch:::${e}');
+    return 'Exception occurred: ${e}';
+  }
+}
 
 
 Future<Album> fetchAlbum() async {
@@ -81,6 +111,10 @@ class Album {
 }
 
 class TeamHomePage extends StatefulWidget {
+final String mode;
+
+  // Constructor for TeamHomePage that accepts a mode parameter
+  TeamHomePage({this.mode = 'TeamHome'});
   @override
   _TeamHomeState createState() => _TeamHomeState();
 }
@@ -135,7 +169,11 @@ class _TeamHomeState extends State<TeamHomePage> {
                 child: Column(
                   children: [
                     
-                    CustomAppBarWithOptions(text: 'Team Home', navigateTo: TeamHomePage(), optionsNavigateTo: Options(), fem: fem, ffem: ffem),
+                    CustomAppBarWithOptions(
+                      text: (widget.mode == 'TeamHome') ? 'Team Home' : 'Song Demand', 
+                      navigateTo: (widget.mode == 'TeamHome') ? TeamHomePage() : Live(), 
+                      optionsNavigateTo: OptionsPage(), fem: fem, ffem: ffem
+                    ),
 
                     CustomGradientButton(onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context) => Live()),), buttonText: 'Live', fontSize: 24),
 
@@ -158,12 +196,16 @@ class _TeamHomeState extends State<TeamHomePage> {
                               //_controller.text = filteredSongs[index];
                               final title = filteredSongs[index];
                               print(title);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SongPage(songId: selectSong(title)),
-                                ),
-                              );
+                              if (widget.mode == 'TeamHome') {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SongPage(songId: selectSong(title)),),);
+                              }
+                              else { // mode = 'SongDemand'
+                                DemandSong(title).then((result)  {
+                                    if (result == 'OK') Navigator.push(context, MaterialPageRoute(builder: (context) => Live(),),);
+                                    else Navigator.push(context, MaterialPageRoute(builder: (context) => CustomError(errorText: result, navigateTo: TeamHomePage(mode: 'SongDemand'),),),);
+                                });
+                                
+                              }
                               print('############################################');
                             },
                           );

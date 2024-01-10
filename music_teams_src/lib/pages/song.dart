@@ -174,6 +174,7 @@ class _SongState extends State<SongPage> {
           return Scaffold(
             appBar: AppBar(
               title: Text(title),
+              backgroundColor: Color(0xff451475),
             ),
             body: ListView.builder(
               itemCount: lyrics.length,
@@ -221,15 +222,18 @@ class _SongState extends State<SongPage> {
                       ),
                     ),
                     SizedBox(width: 8.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        String transporto = transportoController.text;
-                        setState(() {
-                          _futureAlbum = createAlbum(selectedSongId ?? 0,transporto);
-                        });
-                      },
-                      child: Text('Transporto'),
-                    ),
+                      ElevatedButton(
+                        onPressed: () {
+                          String transporto = transportoController.text;
+                          setState(() {
+                            _futureAlbum = createAlbum(selectedSongId ?? 0, transporto);
+                          });
+                        },
+                        child: Text('Transporto'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xff451475), // Set background color here
+                        ),
+                      ),
                   ],
                 ),
               ),

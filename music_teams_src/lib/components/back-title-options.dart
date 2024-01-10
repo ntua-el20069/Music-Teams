@@ -118,7 +118,7 @@ class CustomAppBarWithOptions extends StatelessWidget {
                 child: Text(
                   text,
                   style: TextStyle(
-                    fontSize: 36 * ffem,
+                    fontSize: 30 * ffem,
                     fontWeight: FontWeight.w700,
                     height: 1.3888888889 * ffem / fem,
                     color: Color(0xff000000),

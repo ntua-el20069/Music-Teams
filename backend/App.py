@@ -5,7 +5,7 @@ import mysql.connector
 from add_lyrics_chords import *
 from help_routes import *
 from transporto import *
-from __init__ import list_url
+from __init__ import list_url, song_demands_url
 from web_scrape import scrape_from_html_to_json
 
 #from .accept import *
@@ -77,9 +77,27 @@ def upload_file_json(song_id):
 
     return jsonify({"error": "No file uploaded or something went wrong."})
 
+@app.route('/API/make-song-demand', methods=['POST'])
+def make_song_demand():
+    request_data = request.get_json()
+    if request_data is None or 'title' not in request_data:
+        return jsonify({"error": "Invalid JSON format or missing 'title' key"}), 400  # Bad Request
+    demanded = request_data.get('title')
+    with open(song_demands_url(), 'a') as file: file.write('') # just to make the file if it does not exist
+    with open(song_demands_url(), 'r') as file:
+        if demanded in file.read(): return jsonify({"error": "This song has been already demanded"}), 400  # Bad Request
+    with open(song_demands_url(), 'a') as file:
+        file.write(demanded + '\n')
+    return jsonify({"message": f"Demanded song {demanded}"}), 200  
 
-
-
+@app.route('/API/song-demands', methods=['GET'])
+def song_demands():
+    with open(song_demands_url(), 'r') as file:
+        demanded = file.read().split('\n')
+    print(demanded)
+    demanded_songs = demanded[-2::-1] if len(demanded) >= 2  else []
+    print(demanded_songs)
+    return jsonify({"demanded-songs": {demanded_songs}}), 200 
 
 ################################################################
 

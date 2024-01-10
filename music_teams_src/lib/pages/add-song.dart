@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
+import 'package:myapp/components/error.dart';
 import 'package:myapp/functions/greekLyrics.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/prototype/add-chords-page.dart';
@@ -77,11 +78,13 @@ class Album {
 
   factory Album.fromJson(Map<String, dynamic> json) {
     if (json.containsKey('message') ) {
+      print('Response message: ${json['message']}');
       return Album(
         message: json['message'] as String,
         error: 'All OK'
       );
     } else if (json.containsKey('error')){
+      print('Response error: ${json['error']}');
       return Album(
         message: 'Error',
         error: json['error'] as String
@@ -140,21 +143,34 @@ class _AddSongPage extends State<AddSongPage> {
  @override
   Widget build(BuildContext context) {
     
-    return MaterialApp(
-  home: Scaffold(
-    body: SingleChildScrollView(
-      child: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(8),
-        child: (_futureAlbum == null && _futureScrapedSong == null)
-            ? buildColumn()
-            : (_futureAlbum == null)
-                ? buildColumn(futureScrapedSong: _futureScrapedSong)
-                : buildFutureBuilder(),
-      ),
-    ),
-  ),
-);
+    return (_futureAlbum == null && _futureScrapedSong == null) 
+                        ?  MaterialApp(
+                        home: Scaffold(
+                          body: SingleChildScrollView(
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(8),
+                              child: 
+                                  buildColumn()
+                            ),
+                          ),
+                        ),
+                      )
+                      : (_futureAlbum == null)
+                      ? MaterialApp(
+                        home: Scaffold(
+                          body: SingleChildScrollView(
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(8),
+                              child: 
+                                       buildColumn(futureScrapedSong: _futureScrapedSong)
+                                      
+                            ),
+                          ),
+                        ),
+                      )
+                      : buildFutureBuilder();
 
   }
 
@@ -284,45 +300,26 @@ TextField(
 
   FutureBuilder<Album> buildFutureBuilder() {
     return FutureBuilder<Album>(
-      future: _futureAlbum,
-      builder: (context, snapshot) {
-            double baseWidth = 450; //500; //450; //500; //430; //322.1;
-            double fem = MediaQuery.of(context).size.width / baseWidth;
-            double ffem = fem * 0.97;
-        if (snapshot.hasData) {
-
-          if (snapshot.data!.message == 'Successful Insertion!') {
-            return AddChords(); 
-          } else {
-            // Handle other cases or show an error message
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('\n\n\n\n\n' + snapshot.data!.message),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AddSongPage()),
-                      );
-                    },
-                    child: Text('Back'),
-                  ),
-                ],
-              ),
-            );
-
-
-          }
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-
-        return const CircularProgressIndicator();
-      },
-    );
+  future: _futureAlbum,
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return CircularProgressIndicator();
+    } else if (snapshot.hasError) {
+      return Text('${snapshot.error}');
+    } else if (snapshot.hasData) {
+      if (snapshot.data!.message == 'Successful Insertion!') {
+        return AddChords(); // or any other success screen/widget
+      } else {
+        return CustomError(
+          errorText: snapshot.data!.message.toString(),
+          navigateTo: AddSongPage(), // Replace with the appropriate widget
+          errorTitle: 'Error', // Customize error title if needed
+        );
+      }
+    }
+    return CircularProgressIndicator(); // or any default widget
+  },
+);
   }
 }
 

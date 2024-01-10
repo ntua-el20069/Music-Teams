@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/examples/get.dart';
 import 'package:myapp/examples/post.dart';
 import 'package:myapp/pages/add-song.dart';
+import 'package:myapp/pages/live.dart';
 import 'package:myapp/pages/song.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/utils.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: AddSongPage(),                 // here change the page you want to see first
+      home: LivePage(),//TeamHomePage(mode: 'SongDemand',),                 // here change the page you want to see first
     );
   }
 }

@@ -25,3 +25,7 @@ def get_db():
 def list_url():
     #return '/home/nikolaospapa3/ChordPose/list.txt'
     return 'list.txt'
+
+def song_demands_url():
+    return 'backend/lists/song-demands.txt'
+    return '/home/nikolaospapa3/Music-Teams/backend/lists/song-demands.txt'
