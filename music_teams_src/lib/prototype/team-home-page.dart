@@ -6,19 +6,21 @@ import 'package:myapp/prototype/song-page.dart';
 import 'package:myapp/utils.dart';
 
 class TeamHome extends StatelessWidget {
+  const TeamHome({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // teamhomepageFoJ (5:15)
         padding: EdgeInsets.fromLTRB(15*fem, 33*fem, 15*fem, 0*fem),
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Column(
@@ -35,7 +37,7 @@ class TeamHome extends StatelessWidget {
                     // backbuttonbarS76 (60:6225)
                     left: 0*fem,
                     top: 5*fem,
-                    child: Container(
+                    child: SizedBox(
                       width: 384.7*fem,
                       height: 80*fem,
                       child: Row(
@@ -46,7 +48,7 @@ class TeamHome extends StatelessWidget {
                             margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                             child: TextButton(
                               onPressed: () {
-                                Navigator.push( context, MaterialPageRoute(builder: (context) => Home()), );
+                                Navigator.push( context, MaterialPageRoute(builder: (context) => const Home()), );
                               },
                               style: TextButton.styleFrom (
                                 padding: EdgeInsets.zero,
@@ -54,11 +56,11 @@ class TeamHome extends StatelessWidget {
                               child: Container(
                                 padding: EdgeInsets.fromLTRB(16.1*fem, 35*fem, 16.8*fem, 35*fem),
                                 decoration: BoxDecoration (
-                                  color: Color(0xff451475),
+                                  color: const Color(0xff451475),
                                   borderRadius: BorderRadius.circular(35*fem),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Color(0x3f000000),
+                                      color: const Color(0x3f000000),
                                       offset: Offset(0*fem, 4*fem),
                                       blurRadius: 2*fem,
                                     ),
@@ -88,7 +90,7 @@ class TeamHome extends StatelessWidget {
                     top: 0*fem,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => Options()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const Options()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -97,7 +99,7 @@ class TeamHome extends StatelessWidget {
                         padding: EdgeInsets.fromLTRB(9.62*fem, 18.75*fem, 9.62*fem, 18.75*fem),
                         width: 76.93*fem,
                         height: 75*fem,
-                        decoration: BoxDecoration (
+                        decoration: const BoxDecoration (
                           image: DecorationImage (
                             fit: BoxFit.cover,
                             image: AssetImage (
@@ -135,7 +137,7 @@ class TeamHome extends StatelessWidget {
                             fontSize: 36*ffem,
                             fontWeight: FontWeight.w700,
                             height: 1.3888888889*ffem/fem,
-                            color: Color(0xff000000),
+                            color: const Color(0xff000000),
                           ),
                         ),
                       ),
@@ -155,7 +157,7 @@ class TeamHome extends StatelessWidget {
                     // frame1Ej6 (60:309)
                     left: 67*fem,
                     top: 439*fem,
-                    child: Container(
+                    child: SizedBox(
                       width: 100*fem,
                       height: 100*fem,
                     ),
@@ -166,7 +168,7 @@ class TeamHome extends StatelessWidget {
                     top: 539*fem,
                     child: TextButton(// TextButton
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => Live()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const Live()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -176,7 +178,7 @@ class TeamHome extends StatelessWidget {
                         height: 64*fem,
                         decoration: BoxDecoration (
                           borderRadius: BorderRadius.circular(32*fem),
-                          gradient: LinearGradient (
+                          gradient: const LinearGradient (
                             begin: Alignment(1, -1),
                             end: Alignment(-1, 1),
                             colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -196,7 +198,7 @@ class TeamHome extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration (
                                       borderRadius: BorderRadius.circular(32*fem),
-                                      gradient: LinearGradient (
+                                      gradient: const LinearGradient (
                                         begin: Alignment(1, -1),
                                         end: Alignment(-1, 1),
                                         colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -216,7 +218,7 @@ class TeamHome extends StatelessWidget {
                                   // Navigate to the desired screen when the text is tapped
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => Live()), // Replace LiveScreen() with your desired screen
+                                    MaterialPageRoute(builder: (context) => const Live()), // Replace LiveScreen() with your desired screen
                                   );
                                 },
                                 child: Center(
@@ -233,7 +235,7 @@ class TeamHome extends StatelessWidget {
                                           fontWeight: FontWeight.w700,
                                           height: 1.2 * ffem / fem,
                                           letterSpacing: 2.4 * fem,
-                                          color: Color(0xffffffff),
+                                          color: const Color(0xffffffff),
                                         ),
                                       ),
                                     ),
@@ -258,7 +260,7 @@ class TeamHome extends StatelessWidget {
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
                       ),
-                      child: Container(
+                      child: SizedBox(
                         width: 369*fem,
                         height: 754*fem,
                         child: Stack(
@@ -285,7 +287,7 @@ class TeamHome extends StatelessWidget {
                                       width: double.infinity,
                                       height: 64*fem,
                                       decoration: BoxDecoration (
-                                        border: Border.all(color: Color(0xff6750a4)),
+                                        border: Border.all(color: const Color(0xff6750a4)),
                                         borderRadius: BorderRadius.circular(4*fem),
                                       ),
                                       child: Container(
@@ -313,7 +315,7 @@ class TeamHome extends StatelessWidget {
                                                     margin: EdgeInsets.fromLTRB(8*fem, 0*fem, 0*fem, 0*fem),
                                                     width: 48*fem,
                                                     height: 16*fem,
-                                                    decoration: BoxDecoration (
+                                                    decoration: const BoxDecoration (
                                                       color: Color(0xfffef7ff),
                                                     ),
                                                     child: Center(
@@ -324,12 +326,12 @@ class TeamHome extends StatelessWidget {
                                                           fontSize: 12*ffem,
                                                           fontWeight: FontWeight.w400,
                                                           height: 1.3333333333*ffem/fem,
-                                                          color: Color(0xff6750a4),
+                                                          color: const Color(0xff6750a4),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                  Container(
+                                                  SizedBox(
                                                     // leadingiconYSG (I60:6169;60:4017;52798:24697)
                                                     width: 40*fem,
                                                     height: 40*fem,
@@ -367,7 +369,7 @@ class TeamHome extends StatelessWidget {
                                           fontSize: 12*ffem,
                                           fontWeight: FontWeight.w400,
                                           height: 1.3333333333*ffem/fem,
-                                          color: Color(0xff49454f),
+                                          color: const Color(0xff49454f),
                                         ),
                                       ),
                                     ),
@@ -384,29 +386,29 @@ class TeamHome extends StatelessWidget {
                                 width: 280*fem,
                                 height: 300*fem, // 690
                                 decoration: BoxDecoration (
-                                  color: Color(0xffe6e0e9),
+                                  color: const Color(0xffe6e0e9),
                                   borderRadius: BorderRadius.circular(4*fem),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Color(0x26000000),
+                                      color: const Color(0x26000000),
                                       offset: Offset(0*fem, 2*fem),
                                       blurRadius: 3*fem,
                                     ),
                                     BoxShadow(
-                                      color: Color(0x4c000000),
+                                      color: const Color(0x4c000000),
                                       offset: Offset(0*fem, 1*fem),
                                       blurRadius: 1*fem,
                                     ),
                                   ],
                                 ),
-                                child: Container(
+                                child: SizedBox(
                                   // menulistfoi (I60:6169;60:4019)
                                   width: double.infinity,
                                   height: double.infinity,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         // autogroupjob2dEk (F9x9wFQJKyD7KQNjngjob2)
                                         width: double.infinity,
                                         height: 570*fem, // 570
@@ -418,7 +420,7 @@ class TeamHome extends StatelessWidget {
                                               top: 0*fem,
                                               child: TextButton(
                                                 onPressed: () {
-                                                  Navigator.push( context, MaterialPageRoute(builder: (context) => Song()), );
+                                                  Navigator.push( context, MaterialPageRoute(builder: (context) => const Song()), );
                                                 },
                                                 style: TextButton.styleFrom (
                                                   padding: EdgeInsets.zero,
@@ -437,7 +439,7 @@ class TeamHome extends StatelessWidget {
                                                       margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 67*fem, 0*fem),
                                                       width: 100*fem,
                                                       height: double.infinity,
-                                                      child: Container(
+                                                      child: SizedBox(
                                                         // content5W4 (I60:6169;60:4020;54116:34990)
                                                         width: double.infinity,
                                                         height: double.infinity,
@@ -449,7 +451,7 @@ class TeamHome extends StatelessWidget {
                                                             fontWeight: FontWeight.w400,
                                                             height: 1.5*ffem/fem,
                                                             letterSpacing: 0.5*fem,
-                                                            color: Color(0xff1d1b20),
+                                                            color: const Color(0xff1d1b20),
                                                           ),
                                                         ),
                                                       ),
@@ -464,7 +466,7 @@ class TeamHome extends StatelessWidget {
                                               top: 56*fem,
                                               child: TextButton(
                                                 onPressed: () {
-                                                  Navigator.push( context, MaterialPageRoute(builder: (context) => Song()), );
+                                                  Navigator.push( context, MaterialPageRoute(builder: (context) => const Song()), );
                                                 },
                                                 style: TextButton.styleFrom (
                                                   padding: EdgeInsets.zero,
@@ -483,7 +485,7 @@ class TeamHome extends StatelessWidget {
                                                       margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 67*fem, 0*fem),
                                                       width: 100*fem,
                                                       height: double.infinity,
-                                                      child: Container(
+                                                      child: SizedBox(
                                                         // contentz2g (I60:6169;60:4021;54116:34990)
                                                         width: double.infinity,
                                                         height: double.infinity,
@@ -495,7 +497,7 @@ class TeamHome extends StatelessWidget {
                                                             fontWeight: FontWeight.w400,
                                                             height: 1.5*ffem/fem,
                                                             letterSpacing: 0.5*fem,
-                                                            color: Color(0xff1d1b20),
+                                                            color: const Color(0xff1d1b20),
                                                           ),
                                                         ),
                                                       ),
@@ -510,7 +512,7 @@ class TeamHome extends StatelessWidget {
                                               top: 112*fem,
                                               child: TextButton(
                                                 onPressed: () {
-                                                  Navigator.push( context, MaterialPageRoute(builder: (context) => Song()), );
+                                                  Navigator.push( context, MaterialPageRoute(builder: (context) => const Song()), );
                                                 },
                                                 style: TextButton.styleFrom (
                                                   padding: EdgeInsets.zero,
@@ -529,7 +531,7 @@ class TeamHome extends StatelessWidget {
                                                       margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 67*fem, 0*fem),
                                                       width: 100*fem,
                                                       height: double.infinity,
-                                                      child: Container(
+                                                      child: SizedBox(
                                                         // content5TS (I60:6169;60:4022;54116:34990)
                                                         width: double.infinity,
                                                         height: double.infinity,
@@ -541,7 +543,7 @@ class TeamHome extends StatelessWidget {
                                                             fontWeight: FontWeight.w400,
                                                             height: 1.5*ffem/fem,
                                                             letterSpacing: 0.5*fem,
-                                                            color: Color(0xff1d1b20),
+                                                            color: const Color(0xff1d1b20),
                                                           ),
                                                         ),
                                                       ),
@@ -553,7 +555,7 @@ class TeamHome extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         // autogroupjnzp16C (F9xBvMmAW9SXHxkdcejNzp)
                                         width: double.infinity,
                                         height: 112*fem,

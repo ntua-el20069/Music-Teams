@@ -5,7 +5,7 @@ class CustomError extends StatelessWidget {
   final String errorText;
   final Widget navigateTo;
 
-  CustomError({
+  const CustomError({super.key, 
     required this.errorText,
     this.errorTitle = 'Error',
     required this.navigateTo,
@@ -20,13 +20,13 @@ class CustomError extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(errorTitle),
-        backgroundColor: Color(0xff451475),
+        backgroundColor: const Color(0xff451475),
       ),
       body: Container(
         width: double.infinity,
         //height: double.infinity,
         padding: EdgeInsets.all(16.0 * fem),
-        color: Color(0xfff3edf7),
+        color: const Color(0xfff3edf7),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,10 +55,10 @@ class CustomError extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => navigateTo),
                   );
                 },
-                child: Text('Return'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff451475),
+                  backgroundColor: const Color(0xff451475),
                 ),
+                child: const Text('Return'),
               ),
             ],
           ),

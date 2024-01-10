@@ -5,18 +5,20 @@ import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
 class AddChords extends StatelessWidget {
+  const AddChords({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // addchordspageqZW (5:20)
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Column(
@@ -25,12 +27,12 @@ class AddChords extends StatelessWidget {
             TextButton(
               // backbuttontextKzU (80:3565)
               onPressed: () {
-                Navigator.push( context, MaterialPageRoute(builder: (context) => AddSong()), );
+                Navigator.push( context, MaterialPageRoute(builder: (context) => const AddSong()), );
               },
               style: TextButton.styleFrom (
                 padding: EdgeInsets.zero,
               ),
-              child: Container(
+              child: SizedBox(
                 width: double.infinity,
                 height: 165*fem,
                 child: Stack(
@@ -66,7 +68,7 @@ class AddChords extends StatelessWidget {
                               fontSize: 36*ffem,
                               fontWeight: FontWeight.w700,
                               height: 1.3888888889*ffem/fem,
-                              color: Color(0xff451475),
+                              color: const Color(0xff451475),
                             ),
                           ),
                         ),
@@ -96,7 +98,7 @@ class AddChords extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(26.5*fem, 9*fem, 26.5*fem, 2.66*fem),
                           width: double.infinity,
                           decoration: BoxDecoration (
-                            border: Border.all(color: Color(0xff4e36b0)),
+                            border: Border.all(color: const Color(0xff4e36b0)),
                             borderRadius: BorderRadius.circular(4*fem),
                           ),
                           child: Text(
@@ -107,7 +109,7 @@ class AddChords extends StatelessWidget {
                               fontSize: 32*ffem,
                               fontWeight: FontWeight.w700,
                               height: 1.5625*ffem/fem,
-                              color: Color(0xffff0202),
+                              color: const Color(0xffff0202),
                             ),
                           ),
                         ),
@@ -120,7 +122,7 @@ class AddChords extends StatelessWidget {
                             fontSize: 32*ffem,
                             fontWeight: FontWeight.w700,
                             height: 1.5625*ffem/fem,
-                            color: Color(0xff000000),
+                            color: const Color(0xff000000),
                           ),
                         ),
                       ],
@@ -139,7 +141,7 @@ class AddChords extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(0*fem, 9*fem, 0*fem, 2.66*fem),
                           width: double.infinity,
                           decoration: BoxDecoration (
-                            border: Border.all(color: Color(0xff4e36b0)),
+                            border: Border.all(color: const Color(0xff4e36b0)),
                             borderRadius: BorderRadius.circular(4*fem),
                           ),
                           child: Text(
@@ -150,7 +152,7 @@ class AddChords extends StatelessWidget {
                               fontSize: 32*ffem,
                               fontWeight: FontWeight.w700,
                               height: 1.5625*ffem/fem,
-                              color: Color(0xffff0202),
+                              color: const Color(0xffff0202),
                             ),
                           ),
                         ),
@@ -163,7 +165,7 @@ class AddChords extends StatelessWidget {
                             fontSize: 32*ffem,
                             fontWeight: FontWeight.w700,
                             height: 1.5625*ffem/fem,
-                            color: Color(0xff000000),
+                            color: const Color(0xff000000),
                           ),
                         ),
                       ],
@@ -174,7 +176,7 @@ class AddChords extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 10*fem, 21*fem),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => AddRecording()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const AddRecording()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -184,7 +186,7 @@ class AddChords extends StatelessWidget {
                         height: 64*fem,
                         decoration: BoxDecoration (
                           borderRadius: BorderRadius.circular(32*fem),
-                          gradient: LinearGradient (
+                          gradient: const LinearGradient (
                             begin: Alignment(1, -1),
                             end: Alignment(-1, 1),
                             colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -204,7 +206,7 @@ class AddChords extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration (
                                       borderRadius: BorderRadius.circular(32*fem),
-                                      gradient: LinearGradient (
+                                      gradient: const LinearGradient (
                                         begin: Alignment(1, -1),
                                         end: Alignment(-1, 1),
                                         colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -233,7 +235,7 @@ class AddChords extends StatelessWidget {
                                         fontWeight: FontWeight.w700,
                                         height: 1.2*ffem/fem,
                                         letterSpacing: 2.4*fem,
-                                        color: Color(0xffffffff),
+                                        color: const Color(0xffffffff),
                                       ),
                                     ),
                                   ),
@@ -250,7 +252,7 @@ class AddChords extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 10*fem, 0*fem),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamHome()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -260,7 +262,7 @@ class AddChords extends StatelessWidget {
                         height: 64*fem,
                         decoration: BoxDecoration (
                           borderRadius: BorderRadius.circular(32*fem),
-                          gradient: LinearGradient (
+                          gradient: const LinearGradient (
                             begin: Alignment(1, -1),
                             end: Alignment(-1, 1),
                             colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -280,7 +282,7 @@ class AddChords extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration (
                                       borderRadius: BorderRadius.circular(32*fem),
-                                      gradient: LinearGradient (
+                                      gradient: const LinearGradient (
                                         begin: Alignment(1, -1),
                                         end: Alignment(-1, 1),
                                         colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -309,7 +311,7 @@ class AddChords extends StatelessWidget {
                                         fontWeight: FontWeight.w700,
                                         height: 1.2*ffem/fem,
                                         letterSpacing: 2.4*fem,
-                                        color: Color(0xffffffff),
+                                        color: const Color(0xffffffff),
                                       ),
                                     ),
                                   ),

@@ -3,21 +3,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/components/back-title-options.dart';
-import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
 import 'package:myapp/components/error.dart';
-import 'package:myapp/components/options-button.dart';
 import 'package:myapp/pages/live.dart';
 import 'package:myapp/pages/options.dart';
 import 'package:myapp/pages/song.dart';
-import 'package:myapp/prototype/live-team-1.dart';
-import 'package:myapp/prototype/options-page.dart';
 import 'package:myapp/url.dart';
 
 int returnValue = 1;
 
-String finalUrl = baseUrl + '/API/home';
-String demandUrl = baseUrl + '/API/make-song-demand';
+String finalUrl = '$baseUrl/API/home';
+String demandUrl = '$baseUrl/API/make-song-demand';
 
 Future<int> selectSong(String title) async {
   http.Response response = await http.post(
@@ -69,8 +65,8 @@ Future<String> DemandSong(String title) async {
     }
   } catch (e) {
     // Handle exceptions thrown during the HTTP request
-    print('Catch:::${e}');
-    return 'Exception occurred: ${e}';
+    print('Catch:::$e');
+    return 'Exception occurred: $e';
   }
 }
 
@@ -106,7 +102,7 @@ class Album {
         songs: json['songs'] as List<dynamic>,
       );
     } else {
-      throw FormatException('Failed to load album.');
+      throw const FormatException('Failed to load album.');
     }
   }
 }
@@ -115,14 +111,14 @@ class TeamHomePage extends StatefulWidget {
 final String mode;
 
   // Constructor for TeamHomePage that accepts a mode parameter
-  TeamHomePage({this.mode = 'TeamHome'});
+  const TeamHomePage({super.key, this.mode = 'TeamHome'});
   @override
   _TeamHomeState createState() => _TeamHomeState();
 }
 
 class _TeamHomeState extends State<TeamHomePage> {
   late Future<Album> futureAlbum;
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   List<dynamic> songs = [];
   List<dynamic> filteredSongs = []; // Updated list based on search
 
@@ -158,7 +154,7 @@ class _TeamHomeState extends State<TeamHomePage> {
           future: futureAlbum,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
@@ -166,21 +162,21 @@ class _TeamHomeState extends State<TeamHomePage> {
               if (_controller.text == '') filteredSongs = List.from(songs); // Initial population of filtered songs
 
               return Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
                     
                     CustomAppBarWithOptions(
                       text: (widget.mode == 'TeamHome') ? 'Team Home' : 'Song Demand', 
-                      navigateTo: (widget.mode == 'TeamHome') ? TeamHomePage() : LivePage(), 
-                      optionsNavigateTo: OptionsPage(), fem: fem, ffem: ffem
+                      navigateTo: (widget.mode == 'TeamHome') ? const TeamHomePage() : const LivePage(), 
+                      optionsNavigateTo: const OptionsPage(), fem: fem, ffem: ffem
                     ),
 
-                    CustomGradientButton(onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context) => LivePage()),), buttonText: 'Live', fontSize: 24),
+                    CustomGradientButton(onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context) => const LivePage()),), buttonText: 'Live', fontSize: 24),
 
                     TextFormField(
                       controller: _controller,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Find Song',
                       ),
                       onChanged: (value) {
@@ -202,8 +198,11 @@ class _TeamHomeState extends State<TeamHomePage> {
                               }
                               else { // mode = 'SongDemand'
                                 DemandSong(title).then((result)  {
-                                    if (result == 'OK') Navigator.push(context, MaterialPageRoute(builder: (context) => LivePage(),),);
-                                    else Navigator.push(context, MaterialPageRoute(builder: (context) => CustomError(errorText: result, navigateTo: TeamHomePage(mode: 'SongDemand'),),),);
+                                    if (result == 'OK') {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LivePage(),),);
+                                    } else {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => CustomError(errorText: result, navigateTo: const TeamHomePage(mode: 'SongDemand'),),),);
+                                    }
                                 });
                                 
                               }

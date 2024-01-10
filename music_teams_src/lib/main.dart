@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/examples/get.dart';
-import 'package:myapp/examples/post.dart';
-import 'package:myapp/pages/add-song.dart';
-import 'package:myapp/pages/live.dart';
-import 'package:myapp/pages/song.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/utils.dart';
 import 'package:myapp/prototype/opening-page.dart';
@@ -14,10 +9,12 @@ import 'package:myapp/prototype/opening-page.dart';
 // MyAppDemo()  for the demo app (figma with navigation)
 // Get()        for the GET example
 // Post()       for the POST example
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 
-class MyAppDemo extends StatelessWidget {  // MyAppDemo is running all pages from prototype folder (as a figma with navigations)
+class MyAppDemo extends StatelessWidget {
+  const MyAppDemo({super.key});
+  // MyAppDemo is running all pages from prototype folder (as a figma with navigations)
 	@override
 	Widget build(BuildContext context) {
 	return MaterialApp(
@@ -27,7 +24,7 @@ class MyAppDemo extends StatelessWidget {  // MyAppDemo is running all pages fro
 		theme: ThemeData(
 		primarySwatch: Colors.blue,
 		),
-		home: Scaffold(
+		home: const Scaffold(
 		body: SingleChildScrollView(
 			child: Opening(),
 		),
@@ -38,9 +35,11 @@ class MyAppDemo extends StatelessWidget {  // MyAppDemo is running all pages fro
 
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: TeamHomePage(),                 // here change the page you want to see first
     );
   }

@@ -4,19 +4,21 @@ import 'package:myapp/prototype/opening-page.dart';
 import 'package:myapp/prototype/home-page.dart';
 
 class SignUp extends StatelessWidget {
+  const SignUp({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // signuppagek5r (5:13)
         padding: EdgeInsets.fromLTRB(18*fem, 38*fem, 27.3*fem, 48*fem),
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Column(
@@ -34,7 +36,7 @@ class SignUp extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => Opening()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const Opening()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -42,11 +44,11 @@ class SignUp extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.fromLTRB(16.1*fem, 35*fem, 16.8*fem, 35*fem),
                         decoration: BoxDecoration (
-                          color: Color(0xff451475),
+                          color: const Color(0xff451475),
                           borderRadius: BorderRadius.circular(35*fem),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0x3f000000),
+                              color: const Color(0x3f000000),
                               offset: Offset(0*fem, 4*fem),
                               blurRadius: 2*fem,
                             ),
@@ -79,7 +81,7 @@ class SignUp extends StatelessWidget {
                   fontSize: 36*ffem,
                   fontWeight: FontWeight.w700,
                   height: 1.3888888889*ffem/fem,
-                  color: Color(0xff000000),
+                  color: const Color(0xff000000),
                 ),
               ),
             ),
@@ -100,7 +102,7 @@ class SignUp extends StatelessWidget {
                         fontSize: 20*ffem,
                         fontWeight: FontWeight.w400,
                         height: 1.2*ffem/fem,
-                        color: Color(0xff4e36b0),
+                        color: const Color(0xff4e36b0),
                       ),
                     ),
                   ),
@@ -109,7 +111,7 @@ class SignUp extends StatelessWidget {
                     width: double.infinity,
                     height: 59.78*fem,
                     decoration: BoxDecoration (
-                      border: Border.all(color: Color(0xff4e36b0)),
+                      border: Border.all(color: const Color(0xff4e36b0)),
                       borderRadius: BorderRadius.circular(4*fem),
                     ),
                   ),
@@ -133,7 +135,7 @@ class SignUp extends StatelessWidget {
                         fontSize: 20*ffem,
                         fontWeight: FontWeight.w400,
                         height: 1.2*ffem/fem,
-                        color: Color(0xff4e36b0),
+                        color: const Color(0xff4e36b0),
                       ),
                     ),
                   ),
@@ -142,7 +144,7 @@ class SignUp extends StatelessWidget {
                     width: double.infinity,
                     height: 59.78*fem,
                     decoration: BoxDecoration (
-                      border: Border.all(color: Color(0xff4e36b0)),
+                      border: Border.all(color: const Color(0xff4e36b0)),
                       borderRadius: BorderRadius.circular(4*fem),
                     ),
                   ),
@@ -166,7 +168,7 @@ class SignUp extends StatelessWidget {
                         fontSize: 20*ffem,
                         fontWeight: FontWeight.w400,
                         height: 1.2*ffem/fem,
-                        color: Color(0xff4e36b0),
+                        color: const Color(0xff4e36b0),
                       ),
                     ),
                   ),
@@ -175,7 +177,7 @@ class SignUp extends StatelessWidget {
                     width: double.infinity,
                     height: 59.78*fem,
                     decoration: BoxDecoration (
-                      border: Border.all(color: Color(0xff4e36b0)),
+                      border: Border.all(color: const Color(0xff4e36b0)),
                       borderRadius: BorderRadius.circular(4*fem),
                     ),
                   ),
@@ -207,7 +209,7 @@ class SignUp extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               height: 1.2*ffem/fem,
                               letterSpacing: 2.4*fem,
-                              color: Color(0xffffffff),
+                              color: const Color(0xffffffff),
                             ),
                           ),
                         ),
@@ -220,7 +222,7 @@ class SignUp extends StatelessWidget {
                     top: 0*fem,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => Home()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const Home()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -230,7 +232,7 @@ class SignUp extends StatelessWidget {
                         height: 64*fem,
                         decoration: BoxDecoration (
                           borderRadius: BorderRadius.circular(32*fem),
-                          gradient: LinearGradient (
+                          gradient: const LinearGradient (
                             begin: Alignment(1, -1),
                             end: Alignment(-1, 1),
                             colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -250,7 +252,7 @@ class SignUp extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration (
                                       borderRadius: BorderRadius.circular(32*fem),
-                                      gradient: LinearGradient (
+                                      gradient: const LinearGradient (
                                         begin: Alignment(1, -1),
                                         end: Alignment(-1, 1),
                                         colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -279,7 +281,7 @@ class SignUp extends StatelessWidget {
                                         fontWeight: FontWeight.w700,
                                         height: 1.2*ffem/fem,
                                         letterSpacing: 2.4*fem,
-                                        color: Color(0xffffffff),
+                                        color: const Color(0xffffffff),
                                       ),
                                     ),
                                   ),

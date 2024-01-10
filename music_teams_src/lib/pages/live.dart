@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:myapp/components/back-title-options.dart';
-import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
-import 'package:myapp/components/error.dart';
-import 'package:myapp/components/options-button.dart';
-import 'package:myapp/pages/options.dart';
 import 'package:myapp/pages/song.dart';
 import 'package:myapp/pages/team-home.dart';
-import 'package:myapp/prototype/live-team-1.dart';
-import 'package:myapp/prototype/options-page.dart';
 import 'package:myapp/url.dart';
 
 
+<<<<<<< Updated upstream
 String finalUrl = baseUrl + '/API/recent-song-demands';
+=======
+String finalUrl = '$baseUrl/API/song-demands';
+>>>>>>> Stashed changes
 
 Future<SongDemandAlbum> fetchAlbum() async {
   final response = await http.get(Uri.parse(finalUrl));
@@ -40,12 +37,14 @@ class SongDemandAlbum {
         songs: json['demanded-songs'].split('\n') as List<dynamic>,
       );
     } else {
-      throw FormatException('Failed to load album.');
+      throw const FormatException('Failed to load album.');
     }
   }
 }
 
 class LivePage extends StatefulWidget {
+  const LivePage({super.key});
+
   @override
   _LiveState createState() => _LiveState();
 }
@@ -69,14 +68,19 @@ class _LiveState extends State<LivePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< Updated upstream
         title: Text('Live (Recent Song Demands)'),
         backgroundColor: Color(0xff451475),
+=======
+        title: const Text('Live'),
+        backgroundColor: const Color(0xff451475),
+>>>>>>> Stashed changes
       ),
       body: FutureBuilder<SongDemandAlbum>(
         future: futureAlbum,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
@@ -86,7 +90,7 @@ class _LiveState extends State<LivePage> {
               itemBuilder: (BuildContext context, int index) {
                 String title = songs[index];
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 8.0),
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
                   child: SizedBox(
                     width: 200, // Specify your desired width
                     height: 50, // Specify your desired height
@@ -106,7 +110,7 @@ class _LiveState extends State<LivePage> {
               },
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),

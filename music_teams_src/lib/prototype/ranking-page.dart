@@ -3,19 +3,21 @@ import 'package:myapp/prototype/home-page.dart';
 import 'package:myapp/utils.dart';
 
 class Ranking extends StatelessWidget {
+  const Ranking({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // rankingpagetmi (5:18)
         padding: EdgeInsets.fromLTRB(15*fem, 38*fem, 17*fem, 0*fem),
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Column(
@@ -37,7 +39,7 @@ class Ranking extends StatelessWidget {
                         // Navigate to the desired screen when the image is tapped
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Home()), // Replace NextScreen() with your desired screen
+                          MaterialPageRoute(builder: (context) => const Home()), // Replace NextScreen() with your desired screen
                         );
                       },
                       child: Align(
@@ -69,7 +71,7 @@ class Ranking extends StatelessWidget {
                             fontSize: 36*ffem,
                             fontWeight: FontWeight.w700,
                             height: 1.3888888889*ffem/fem,
-                            color: Color(0xff451475),
+                            color: const Color(0xff451475),
                           ),
                         ),
                       ),
@@ -96,7 +98,7 @@ class Ranking extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration (
                             borderRadius: BorderRadius.circular(32*fem),
-                            gradient: LinearGradient (
+                            gradient: const LinearGradient (
                               begin: Alignment(1, -1),
                               end: Alignment(-1, 1),
                               colors: <Color>[Color(0xffd527e9), Color(0xfffb9931)],
@@ -118,7 +120,7 @@ class Ranking extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration (
                             borderRadius: BorderRadius.circular(32*fem),
-                            gradient: LinearGradient (
+                            gradient: const LinearGradient (
                               begin: Alignment(1.085, -0.951),
                               end: Alignment(-1, 1),
                               colors: <Color>[Color(0xffd01afe), Color(0xfffa6137), Color(0xffffa51e)],
@@ -162,7 +164,7 @@ class Ranking extends StatelessWidget {
                   fontSize: 36*ffem,
                   fontWeight: FontWeight.w700,
                   height: 1.3888888889*ffem/fem,
-                  color: Color(0xff000000),
+                  color: const Color(0xff000000),
                 ),
               ),
             ),
@@ -176,7 +178,7 @@ class Ranking extends StatelessWidget {
                   fontSize: 36*ffem,
                   fontWeight: FontWeight.w700,
                   height: 1.3888888889*ffem/fem,
-                  color: Color(0xff000000),
+                  color: const Color(0xff000000),
                 ),
               ),
             ),
@@ -187,26 +189,26 @@ class Ranking extends StatelessWidget {
               width: double.infinity,
               height: 690*fem,
               decoration: BoxDecoration (
-                color: Color(0xfff3edf7),
+                color: const Color(0xfff3edf7),
                 borderRadius: BorderRadius.circular(4*fem),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0x26000000),
+                    color: const Color(0x26000000),
                     offset: Offset(0*fem, 2*fem),
                     blurRadius: 3*fem,
                   ),
                   BoxShadow(
-                    color: Color(0x4c000000),
+                    color: const Color(0x4c000000),
                     offset: Offset(0*fem, 1*fem),
                     blurRadius: 1*fem,
                   ),
                 ],
               ),
-              child: Container(
+              child: SizedBox(
                 // menulistF5n (I121:6361;54061:36965)
                 width: double.infinity,
                 height: double.infinity,
-                child: Container(
+                child: SizedBox(
                   // autogroupy1241Kr (F9xKfoWwkHA4shV94gy124)
                   width: double.infinity,
                   height: 570*fem,
@@ -226,7 +228,7 @@ class Ranking extends StatelessWidget {
                             padding: EdgeInsets.fromLTRB(12*fem, 16*fem, 21*fem, 6*fem),
                             width: 200*fem,
                             height: 66*fem,
-                            child: Container(
+                            child: SizedBox(
                               // statelayerrLU (I121:6361;54061:36966;54061:37028)
                               width: double.infinity,
                               height: double.infinity,
@@ -235,7 +237,7 @@ class Ranking extends StatelessWidget {
                                 margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 14*fem, 0*fem),
                                 width: 153*fem,
                                 height: double.infinity,
-                                child: Container(
+                                child: SizedBox(
                                   // contentYDJ (I121:6361;54061:36966;54116:34990)
                                   width: double.infinity,
                                   height: double.infinity,
@@ -247,7 +249,7 @@ class Ranking extends StatelessWidget {
                                       fontWeight: FontWeight.w400,
                                       height: 1.5*ffem/fem,
                                       letterSpacing: 0.5*fem,
-                                      color: Color(0xff1d1b20),
+                                      color: const Color(0xff1d1b20),
                                     ),
                                   ),
                                 ),
@@ -269,7 +271,7 @@ class Ranking extends StatelessWidget {
                             padding: EdgeInsets.fromLTRB(12*fem, 16*fem, 21*fem, 6*fem),
                             width: 200*fem,
                             height: 66*fem,
-                            child: Container(
+                            child: SizedBox(
                               // statelayer68L (I121:6361;54061:36967;54061:37028)
                               width: double.infinity,
                               height: double.infinity,
@@ -278,7 +280,7 @@ class Ranking extends StatelessWidget {
                                 margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 31*fem, 0*fem),
                                 width: 136*fem,
                                 height: double.infinity,
-                                child: Container(
+                                child: SizedBox(
                                   // contentM4G (I121:6361;54061:36967;54116:34990)
                                   width: double.infinity,
                                   height: double.infinity,
@@ -290,7 +292,7 @@ class Ranking extends StatelessWidget {
                                       fontWeight: FontWeight.w400,
                                       height: 1.5*ffem/fem,
                                       letterSpacing: 0.5*fem,
-                                      color: Color(0xff1d1b20),
+                                      color: const Color(0xff1d1b20),
                                     ),
                                   ),
                                 ),
@@ -312,7 +314,7 @@ class Ranking extends StatelessWidget {
                             padding: EdgeInsets.fromLTRB(12*fem, 16*fem, 21*fem, 6*fem),
                             width: 200*fem,
                             height: 66*fem,
-                            child: Container(
+                            child: SizedBox(
                               // statelayerahi (I121:6361;54061:36968;54061:37028)
                               width: double.infinity,
                               height: double.infinity,
@@ -321,7 +323,7 @@ class Ranking extends StatelessWidget {
                                 margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 47*fem, 0*fem),
                                 width: 120*fem,
                                 height: double.infinity,
-                                child: Container(
+                                child: SizedBox(
                                   // contentG4k (I121:6361;54061:36968;54116:34990)
                                   width: double.infinity,
                                   height: double.infinity,
@@ -333,7 +335,7 @@ class Ranking extends StatelessWidget {
                                       fontWeight: FontWeight.w400,
                                       height: 1.5*ffem/fem,
                                       letterSpacing: 0.5*fem,
-                                      color: Color(0xff1d1b20),
+                                      color: const Color(0xff1d1b20),
                                     ),
                                   ),
                                 ),

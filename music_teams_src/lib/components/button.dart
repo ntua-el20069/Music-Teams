@@ -27,7 +27,7 @@ class CustomGradientButton extends StatelessWidget {
         height: 64 * fem,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32 * fem),
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             begin: Alignment(1, -1),
             end: Alignment(-1, 1),
             colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -53,7 +53,7 @@ class CustomGradientButton extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         height: 1.2 * ffem / fem,
                         letterSpacing: 2.4 * fem,
-                        color: Color(0xffffffff),
+                        color: const Color(0xffffffff),
                       ),
                     ),
                   ),

@@ -27,7 +27,7 @@ class CustomAppBarWithOptions extends StatelessWidget {
           Positioned(
             left: 0 * fem,
             top: 5 * fem,
-            child: Container(
+            child: SizedBox(
               width: 450 * fem,
               height: 80 * fem,
               child: Row(
@@ -86,7 +86,7 @@ class CustomAppBarWithOptions extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(9.62 * fem, 18.75 * fem, 9.62 * fem, 18.75 * fem),
                 width: 76.93 * fem,
                 height: 75 * fem,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: AssetImage(
@@ -121,7 +121,7 @@ class CustomAppBarWithOptions extends StatelessWidget {
                     fontSize: 30 * ffem,
                     fontWeight: FontWeight.w700,
                     height: 1.3888888889 * ffem / fem,
-                    color: Color(0xff000000),
+                    color: const Color(0xff000000),
                   ),
                 ),
               ),

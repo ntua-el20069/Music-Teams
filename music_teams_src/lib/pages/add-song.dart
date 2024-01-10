@@ -5,8 +5,6 @@ import 'package:myapp/components/error.dart';
 import 'package:myapp/functions/greekLyrics.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/prototype/add-chords-page.dart';
-import 'package:myapp/prototype/add-song-page.dart';
-import 'package:myapp/utils.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -15,7 +13,7 @@ import 'package:myapp/url.dart';
 
 Future<Album> createAlbum(String title, String composer, String lyricist, String lyrics, ) async {
   final response = await http.post(
-    Uri.parse(baseUrl + '/API/add-song'),
+    Uri.parse('$baseUrl/API/add-song'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -45,7 +43,7 @@ Future<ScrapedSong> sendHTMLviaPostRequest({String title = 'Ρόζα'}) async {
   //String htmlContent = '<html><body><h1>Hello, World!</h1></body></html>'; // Replace this with your HTML content
   String? htmlContent = await takeFromGreekLyricsMobile(title);
 
-  var url = Uri.parse(baseUrl + '/API/webscrape'); // Replace with your server endpoint
+  var url = Uri.parse('$baseUrl/API/webscrape'); // Replace with your server endpoint
 
   try {
     var response = await http.post(
@@ -90,7 +88,7 @@ class Album {
         error: json['error'] as String
       );
     } else {
-      throw FormatException('Failed to load album.');
+      throw const FormatException('Failed to load album.');
     }
   }
 }
@@ -123,7 +121,7 @@ class ScrapedSong {
         error: json['error'] == '' ? 'All OK' : json['error'] as String,
       );
     } else {
-      throw FormatException('Failed to load scraped song.');
+      throw const FormatException('Failed to load scraped song.');
     }
   }
 }
@@ -131,6 +129,8 @@ class ScrapedSong {
 
 
 class AddSongPage extends StatefulWidget {
+  const AddSongPage({super.key});
+
   
   @override
   _AddSongPage createState() => _AddSongPage();
@@ -201,7 +201,7 @@ TextEditingController lyricsController = TextEditingController();
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
 
-        CustomNavigationButton(buttonText: 'New Song', navigateTo: TeamHomePage(), fem: fem, ffem: ffem),
+        CustomNavigationButton(buttonText: 'New Song', navigateTo: const TeamHomePage(), fem: fem, ffem: ffem),
         /* Text(
           'Title',
           style: SafeGoogleFont (
@@ -303,21 +303,21 @@ TextField(
   future: _futureAlbum,
   builder: (context, snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
-      return CircularProgressIndicator();
+      return const CircularProgressIndicator();
     } else if (snapshot.hasError) {
       return Text('${snapshot.error}');
     } else if (snapshot.hasData) {
       if (snapshot.data!.message == 'Successful Insertion!') {
-        return AddChords(); // or any other success screen/widget
+        return const AddChords(); // or any other success screen/widget
       } else {
         return CustomError(
           errorText: snapshot.data!.message.toString(),
-          navigateTo: AddSongPage(), // Replace with the appropriate widget
+          navigateTo: const AddSongPage(), // Replace with the appropriate widget
           errorTitle: 'Error', // Customize error title if needed
         );
       }
     }
-    return CircularProgressIndicator(); // or any default widget
+    return const CircularProgressIndicator(); // or any default widget
   },
 );
   }

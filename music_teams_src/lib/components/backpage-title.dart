@@ -24,7 +24,7 @@ class CustomNavigationButton extends StatelessWidget {
         MaterialPageRoute(builder: (context) => navigateTo),
       ),
       style: TextButton.styleFrom(padding: EdgeInsets.zero),
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: 100 * fem,
         child: Stack(
@@ -57,7 +57,7 @@ class CustomNavigationButton extends StatelessWidget {
                       fontSize: 30 * ffem,
                       fontWeight: FontWeight.w700,
                       height: 1.3888888889 * ffem / fem,
-                      color: Color(0xff451475),
+                      color: const Color(0xff451475),
                     ),
                   ),
                 ),

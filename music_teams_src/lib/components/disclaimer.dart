@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Disclaimer extends StatelessWidget {
+  const Disclaimer({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450;
@@ -9,14 +11,14 @@ class Disclaimer extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Disclaimer'),
-        backgroundColor: Color(0xff451475),
+        title: const Text('Disclaimer'),
+        backgroundColor: const Color(0xff451475),
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
         padding: EdgeInsets.all(16.0 * fem), // Adjust padding as needed
-        color: Color(0xfff3edf7),
+        color: const Color(0xfff3edf7),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

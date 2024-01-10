@@ -6,18 +6,20 @@ import 'package:myapp/utils.dart';
 import 'package:myapp/prototype/opening-page.dart';
 
 class Home extends StatelessWidget {
+  const Home({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // homepagenGL (5:14)
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Column(
@@ -43,7 +45,7 @@ class Home extends StatelessWidget {
                           top: 18*fem,
                           child: TextButton(
                             onPressed: () {
-                              Navigator.push( context, MaterialPageRoute(builder: (context) => Ranking()), );
+                              Navigator.push( context, MaterialPageRoute(builder: (context) => const Ranking()), );
                             },
                             style: TextButton.styleFrom (
                               padding: EdgeInsets.zero,
@@ -53,11 +55,11 @@ class Home extends StatelessWidget {
                               width: 100*fem,
                               height: 100*fem,
                               decoration: BoxDecoration (
-                                color: Color(0xff451475),
+                                color: const Color(0xff451475),
                                 borderRadius: BorderRadius.circular(50*fem),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Color(0x3f000000),
+                                    color: const Color(0x3f000000),
                                     offset: Offset(0*fem, 4*fem),
                                     blurRadius: 2*fem,
                                   ),
@@ -103,7 +105,7 @@ class Home extends StatelessWidget {
                           // backbuttonbarxP6 (150:1051)
                           left: 0*fem,
                           top: 37*fem,
-                          child: Container(
+                          child: SizedBox(
                             width: 384.7*fem,
                             height: 80*fem,
                             child: Row(
@@ -114,7 +116,7 @@ class Home extends StatelessWidget {
                                   margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                                   child: TextButton(
                                     onPressed: () {
-                                      Navigator.push( context, MaterialPageRoute(builder: (context) => Opening()), );
+                                      Navigator.push( context, MaterialPageRoute(builder: (context) => const Opening()), );
                                     },
                                     style: TextButton.styleFrom (
                                       padding: EdgeInsets.zero,
@@ -122,11 +124,11 @@ class Home extends StatelessWidget {
                                     child: Container(
                                       padding: EdgeInsets.fromLTRB(16.1*fem, 35*fem, 16.8*fem, 35*fem),
                                       decoration: BoxDecoration (
-                                        color: Color(0xff451475),
+                                        color: const Color(0xff451475),
                                         borderRadius: BorderRadius.circular(35*fem),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color(0x3f000000),
+                                            color: const Color(0x3f000000),
                                             offset: Offset(0*fem, 4*fem),
                                             blurRadius: 2*fem,
                                           ),
@@ -160,7 +162,7 @@ class Home extends StatelessWidget {
                     height: 64*fem,
                     decoration: BoxDecoration (
                       borderRadius: BorderRadius.circular(32*fem),
-                      gradient: LinearGradient (
+                      gradient: const LinearGradient (
                         begin: Alignment(1, -1),
                         end: Alignment(-1, 1),
                         colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -180,7 +182,7 @@ class Home extends StatelessWidget {
                               child: Container(
                                 decoration: BoxDecoration (
                                   borderRadius: BorderRadius.circular(32*fem),
-                                  gradient: LinearGradient (
+                                  gradient: const LinearGradient (
                                     begin: Alignment(1, -1),
                                     end: Alignment(-1, 1),
                                     colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -209,7 +211,7 @@ class Home extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     height: 1.2*ffem/fem,
                                     letterSpacing: 2.4*fem,
-                                    color: Color(0xffffffff),
+                                    color: const Color(0xffffffff),
                                   ),
                                 ),
                               ),
@@ -224,7 +226,7 @@ class Home extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(100*fem, 0*fem, 111*fem, 106*fem),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamHome()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -234,7 +236,7 @@ class Home extends StatelessWidget {
                         height: 64*fem,
                         decoration: BoxDecoration (
                           borderRadius: BorderRadius.circular(32*fem),
-                          gradient: LinearGradient (
+                          gradient: const LinearGradient (
                             begin: Alignment(1, -1),
                             end: Alignment(-1, 1),
                             colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -254,7 +256,7 @@ class Home extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration (
                                       borderRadius: BorderRadius.circular(32*fem),
-                                      gradient: LinearGradient (
+                                      gradient: const LinearGradient (
                                         begin: Alignment(1, -1),
                                         end: Alignment(-1, 1),
                                         colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -283,7 +285,7 @@ class Home extends StatelessWidget {
                                         fontWeight: FontWeight.w700,
                                         height: 1.2*ffem/fem,
                                         letterSpacing: 2.4*fem,
-                                        color: Color(0xffffffff),
+                                        color: const Color(0xffffffff),
                                       ),
                                     ),
                                   ),
@@ -302,7 +304,7 @@ class Home extends StatelessWidget {
                     height: 64*fem,
                     decoration: BoxDecoration (
                       borderRadius: BorderRadius.circular(32*fem),
-                      gradient: LinearGradient (
+                      gradient: const LinearGradient (
                         begin: Alignment(1, -1),
                         end: Alignment(-1, 1),
                         colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -322,7 +324,7 @@ class Home extends StatelessWidget {
                               child: Container(
                                 decoration: BoxDecoration (
                                   borderRadius: BorderRadius.circular(32*fem),
-                                  gradient: LinearGradient (
+                                  gradient: const LinearGradient (
                                     begin: Alignment(1, -1),
                                     end: Alignment(-1, 1),
                                     colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -351,7 +353,7 @@ class Home extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     height: 1.2*ffem/fem,
                                     letterSpacing: 2.4*fem,
-                                    color: Color(0xffffffff),
+                                    color: const Color(0xffffffff),
                                   ),
                                 ),
                               ),
@@ -370,18 +372,18 @@ class Home extends StatelessWidget {
               width: double.infinity,
               height: 213*fem,
               decoration: BoxDecoration (
-                color: Color(0xff451475),
+                color: const Color(0xff451475),
                 borderRadius: BorderRadius.circular(5*fem),
               ),
               child: TextButton(
                 // fabfpY (62:1007)
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => NewTeam()), );
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => const NewTeam()), );
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
                 ),
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   height: double.infinity,
                   child: Stack(
@@ -397,7 +399,7 @@ class Home extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration (
                                 borderRadius: BorderRadius.circular(50*fem),
-                                gradient: LinearGradient (
+                                gradient: const LinearGradient (
                                   begin: Alignment(0, -1),
                                   end: Alignment(0, 1),
                                   colors: <Color>[Color(0xffd01afe), Color(0xffec271b), Color(0xffffa825)],
@@ -405,7 +407,7 @@ class Home extends StatelessWidget {
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Color(0x3f000000),
+                                    color: const Color(0x3f000000),
                                     offset: Offset(0*fem, 4*fem),
                                     blurRadius: 2*fem,
                                   ),
@@ -433,7 +435,7 @@ class Home extends StatelessWidget {
                                   fontWeight: FontWeight.w700,
                                   height: 1.2*ffem/fem,
                                   letterSpacing: 12.8*fem,
-                                  color: Color(0xffffffff),
+                                  color: const Color(0xffffffff),
                                 ),
                               ),
                             ),

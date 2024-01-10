@@ -10,7 +10,7 @@ import 'package:myapp/url.dart';
 Future<Album> fetchAlbum() async {
   final response = await http
       //.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-      .get(Uri.parse(baseUrl + '/API/home'));
+      .get(Uri.parse('$baseUrl/API/home'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -45,7 +45,7 @@ class Album {
         songs: json['songs'] as List<dynamic>,
       );
     } else {
-      throw FormatException('Failed to load album.');
+      throw const FormatException('Failed to load album.');
     }
   }
 }
@@ -92,7 +92,7 @@ class _GetState extends State<Get> {
                   itemBuilder: (BuildContext context, int index) {
                     return Text(
                       songs[index],
-                      style: TextStyle(fontSize: 16), // Customize the text style if needed
+                      style: const TextStyle(fontSize: 16), // Customize the text style if needed
                     );
                   },
                 );
@@ -101,7 +101,7 @@ class _GetState extends State<Get> {
               }
                 else {
                   // Return some default widget if data is not available
-                  return CircularProgressIndicator(); // Placeholder or loading indicator
+                  return const CircularProgressIndicator(); // Placeholder or loading indicator
                 }
             },
           ),

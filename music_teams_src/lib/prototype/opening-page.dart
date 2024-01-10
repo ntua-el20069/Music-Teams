@@ -4,19 +4,21 @@ import 'package:myapp/prototype/sign-in-page.dart';
 import 'package:myapp/prototype/sign-up-page.dart';
 
 class Opening extends StatelessWidget {
+  const Opening({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // openingpageuBS (5:2)
         padding: EdgeInsets.fromLTRB(29*fem, 59*fem, 28*fem, 387*fem),
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
           image: DecorationImage (
             fit: BoxFit.cover,
@@ -50,7 +52,7 @@ class Opening extends StatelessWidget {
                   // Navigate to the 'signin.dart' screen
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SignIn()),
+                    MaterialPageRoute(builder: (context) => const SignIn()),
                   );
                 },
                 style: TextButton.styleFrom (
@@ -61,7 +63,7 @@ class Opening extends StatelessWidget {
                   height: 64*fem,
                   decoration: BoxDecoration (
                     borderRadius: BorderRadius.circular(32*fem),
-                    gradient: LinearGradient (
+                    gradient: const LinearGradient (
                       begin: Alignment(1, -1),
                       end: Alignment(-1, 1),
                       colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -81,7 +83,7 @@ class Opening extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration (
                                 borderRadius: BorderRadius.circular(32*fem),
-                                gradient: LinearGradient (
+                                gradient: const LinearGradient (
                                   begin: Alignment(1, -1),
                                   end: Alignment(-1, 1),
                                   colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -110,7 +112,7 @@ class Opening extends StatelessWidget {
                                   fontWeight: FontWeight.w700,
                                   height: 1.2*ffem/fem,
                                   letterSpacing: 2.4*fem,
-                                  color: Color(0xffffffff),
+                                  color: const Color(0xffffffff),
                                 ),
                               ),
                             ),
@@ -130,7 +132,7 @@ class Opening extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(86*fem, 0*fem, 87*fem, 0*fem),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => SignUp()), );
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => const SignUp()), );
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
@@ -140,7 +142,7 @@ class Opening extends StatelessWidget {
                   height: 64*fem,
                   decoration: BoxDecoration (
                     borderRadius: BorderRadius.circular(32*fem),
-                    gradient: LinearGradient (
+                    gradient: const LinearGradient (
                       begin: Alignment(1, -1),
                       end: Alignment(-1, 1),
                       colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -160,7 +162,7 @@ class Opening extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration (
                                 borderRadius: BorderRadius.circular(32*fem),
-                                gradient: LinearGradient (
+                                gradient: const LinearGradient (
                                   begin: Alignment(1, -1),
                                   end: Alignment(-1, 1),
                                   colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -189,7 +191,7 @@ class Opening extends StatelessWidget {
                                   fontWeight: FontWeight.w700,
                                   height: 1.2*ffem/fem,
                                   letterSpacing: 2.4*fem,
-                                  color: Color(0xffffffff),
+                                  color: const Color(0xffffffff),
                                 ),
                               ),
                             ),

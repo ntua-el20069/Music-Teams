@@ -88,10 +88,10 @@ Future<String?> takeFromGreekLyricsMobile(String searchTitle, {bool show = false
 
 
   String modifiedTitle = '';
-  searchTitle.runes.forEach((int rune) {
+  for (var rune in searchTitle.runes) {
     var character = String.fromCharCode(rune);
     modifiedTitle += (d[character] ?? character); // greek -> greeklish for the url (Ρόζα -> roza)
-  });
+  }
 
   String url = 'https://www.greeklyrics.gr/stixoi/$modifiedTitle';
   int timeout = 10;

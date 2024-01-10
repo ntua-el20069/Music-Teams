@@ -3,19 +3,21 @@ import 'package:myapp/prototype/live-team-1.dart';
 import 'package:myapp/utils.dart';
 
 class SongDemand extends StatelessWidget {
+  const SongDemand({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // songdemandazY (29:96)
         padding: EdgeInsets.fromLTRB(15*fem, 38*fem, 15*fem, 0*fem),
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Column(
@@ -37,7 +39,7 @@ class SongDemand extends StatelessWidget {
                         // Navigate to the desired screen when the image is tapped
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Live()), // Replace BackScreen() with your desired screen
+                          MaterialPageRoute(builder: (context) => const Live()), // Replace BackScreen() with your desired screen
                         );
                       },
                       child: Align(
@@ -69,7 +71,7 @@ class SongDemand extends StatelessWidget {
                             fontSize: 36*ffem,
                             fontWeight: FontWeight.w700,
                             height: 1.3888888889*ffem/fem,
-                            color: Color(0xff451475),
+                            color: const Color(0xff451475),
                           ),
                         ),
                       ),
@@ -91,7 +93,7 @@ class SongDemand extends StatelessWidget {
                     top: 558*fem,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => Live()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const Live()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -101,7 +103,7 @@ class SongDemand extends StatelessWidget {
                         height: 64*fem,
                         decoration: BoxDecoration (
                           borderRadius: BorderRadius.circular(32*fem),
-                          gradient: LinearGradient (
+                          gradient: const LinearGradient (
                             begin: Alignment(1, -1),
                             end: Alignment(-1, 1),
                             colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -121,7 +123,7 @@ class SongDemand extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration (
                                       borderRadius: BorderRadius.circular(32*fem),
-                                      gradient: LinearGradient (
+                                      gradient: const LinearGradient (
                                         begin: Alignment(1, -1),
                                         end: Alignment(-1, 1),
                                         colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -150,7 +152,7 @@ class SongDemand extends StatelessWidget {
                                         fontWeight: FontWeight.w700,
                                         height: 1.2*ffem/fem,
                                         letterSpacing: 2.4*fem,
-                                        color: Color(0xffffffff),
+                                        color: const Color(0xffffffff),
                                       ),
                                     ),
                                   ),
@@ -166,7 +168,7 @@ class SongDemand extends StatelessWidget {
                     // searchsongHT2 (60:6113)
                     left: 0*fem,
                     top: 0*fem,
-                    child: Container(
+                    child: SizedBox(
                       width: 369*fem,
                       height: 754*fem,
                       child: Stack(
@@ -193,7 +195,7 @@ class SongDemand extends StatelessWidget {
                                     width: double.infinity,
                                     height: 64*fem,
                                     decoration: BoxDecoration (
-                                      border: Border.all(color: Color(0xff6750a4)),
+                                      border: Border.all(color: const Color(0xff6750a4)),
                                       borderRadius: BorderRadius.circular(4*fem),
                                     ),
                                     child: Container(
@@ -221,7 +223,7 @@ class SongDemand extends StatelessWidget {
                                                   margin: EdgeInsets.fromLTRB(8*fem, 0*fem, 0*fem, 0*fem),
                                                   width: 76*fem,
                                                   height: 16*fem,
-                                                  decoration: BoxDecoration (
+                                                  decoration: const BoxDecoration (
                                                     color: Color(0xfffef7ff),
                                                   ),
                                                   child: Center(
@@ -232,12 +234,12 @@ class SongDemand extends StatelessWidget {
                                                         fontSize: 12*ffem,
                                                         fontWeight: FontWeight.w400,
                                                         height: 1.3333333333*ffem/fem,
-                                                        color: Color(0xff6750a4),
+                                                        color: const Color(0xff6750a4),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   // leadingiconKwS (I60:6113;60:4017;52798:24697)
                                                   width: 40*fem,
                                                   height: 40*fem,
@@ -275,7 +277,7 @@ class SongDemand extends StatelessWidget {
                                         fontSize: 12*ffem,
                                         fontWeight: FontWeight.w400,
                                         height: 1.3333333333*ffem/fem,
-                                        color: Color(0xff49454f),
+                                        color: const Color(0xff49454f),
                                       ),
                                     ),
                                   ),
@@ -292,29 +294,29 @@ class SongDemand extends StatelessWidget {
                               width: 280*fem,
                               height: 690*fem,
                               decoration: BoxDecoration (
-                                color: Color(0xfff3edf7),
+                                color: const Color(0xfff3edf7),
                                 borderRadius: BorderRadius.circular(4*fem),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Color(0x26000000),
+                                    color: const Color(0x26000000),
                                     offset: Offset(0*fem, 2*fem),
                                     blurRadius: 3*fem,
                                   ),
                                   BoxShadow(
-                                    color: Color(0x4c000000),
+                                    color: const Color(0x4c000000),
                                     offset: Offset(0*fem, 1*fem),
                                     blurRadius: 1*fem,
                                   ),
                                 ],
                               ),
-                              child: Container(
+                              child: SizedBox(
                                 // menulistuHN (I60:6113;60:4019)
                                 width: double.infinity,
                                 height: double.infinity,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       // autogrouptgw83eU (F9xZBVqSmuk4UCdSDFtGW8)
                                       width: double.infinity,
                                       height: 570*fem,
@@ -345,7 +347,7 @@ class SongDemand extends StatelessWidget {
                                                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 67*fem, 0*fem),
                                                     width: 100*fem,
                                                     height: double.infinity,
-                                                    child: Container(
+                                                    child: SizedBox(
                                                       // contentxur (I60:6113;60:4020;54116:34990)
                                                       width: double.infinity,
                                                       height: double.infinity,
@@ -357,7 +359,7 @@ class SongDemand extends StatelessWidget {
                                                           fontWeight: FontWeight.w400,
                                                           height: 1.5*ffem/fem,
                                                           letterSpacing: 0.5*fem,
-                                                          color: Color(0xff1d1b20),
+                                                          color: const Color(0xff1d1b20),
                                                         ),
                                                       ),
                                                     ),
@@ -389,7 +391,7 @@ class SongDemand extends StatelessWidget {
                                                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 67*fem, 0*fem),
                                                     width: 100*fem,
                                                     height: double.infinity,
-                                                    child: Container(
+                                                    child: SizedBox(
                                                       // contentdPi (I60:6113;60:4021;54116:34990)
                                                       width: double.infinity,
                                                       height: double.infinity,
@@ -401,7 +403,7 @@ class SongDemand extends StatelessWidget {
                                                           fontWeight: FontWeight.w400,
                                                           height: 1.5*ffem/fem,
                                                           letterSpacing: 0.5*fem,
-                                                          color: Color(0xff1d1b20),
+                                                          color: const Color(0xff1d1b20),
                                                         ),
                                                       ),
                                                     ),
@@ -433,7 +435,7 @@ class SongDemand extends StatelessWidget {
                                                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 67*fem, 0*fem),
                                                     width: 100*fem,
                                                     height: double.infinity,
-                                                    child: Container(
+                                                    child: SizedBox(
                                                       // contentLxL (I60:6113;60:4022;54116:34990)
                                                       width: double.infinity,
                                                       height: double.infinity,
@@ -445,7 +447,7 @@ class SongDemand extends StatelessWidget {
                                                           fontWeight: FontWeight.w400,
                                                           height: 1.5*ffem/fem,
                                                           letterSpacing: 0.5*fem,
-                                                          color: Color(0xff1d1b20),
+                                                          color: const Color(0xff1d1b20),
                                                         ),
                                                       ),
                                                     ),
@@ -457,7 +459,7 @@ class SongDemand extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       // autogroupyuunTXA (F9xbNwB6x12WFrucfkYuun)
                                       width: double.infinity,
                                       height: 112*fem,

@@ -4,19 +4,21 @@ import 'package:myapp/prototype/home-page.dart';
 import 'package:myapp/utils.dart';
 
 class NewTeam extends StatelessWidget {
+  const NewTeam({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // newteampagepopupAgL (5:17)
         padding: EdgeInsets.fromLTRB(15*fem, 36*fem, 15*fem, 149*fem),
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Column(
@@ -34,7 +36,7 @@ class NewTeam extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => Home()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const Home()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -42,11 +44,11 @@ class NewTeam extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.fromLTRB(16.1*fem, 35*fem, 16.8*fem, 35*fem),
                         decoration: BoxDecoration (
-                          color: Color(0xff451475),
+                          color: const Color(0xff451475),
                           borderRadius: BorderRadius.circular(35*fem),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0x3f000000),
+                              color: const Color(0x3f000000),
                               offset: Offset(0*fem, 4*fem),
                               blurRadius: 2*fem,
                             ),
@@ -77,7 +79,7 @@ class NewTeam extends StatelessWidget {
               decoration: BoxDecoration (
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0x3f000000),
+                    color: const Color(0x3f000000),
                     offset: Offset(0*fem, 4*fem),
                     blurRadius: 2*fem,
                   ),
@@ -89,7 +91,7 @@ class NewTeam extends StatelessWidget {
                 width: double.infinity,
                 height: double.infinity,
                 decoration: BoxDecoration (
-                  color: Color(0xffece6f0),
+                  color: const Color(0xffece6f0),
                   borderRadius: BorderRadius.circular(28*fem),
                 ),
                 child: Column(
@@ -106,7 +108,7 @@ class NewTeam extends StatelessWidget {
                             // titledescriptionBFz (I61:1404;61:1094;61:464;50723:10950)
                             left: 0*fem,
                             top: 0*fem,
-                            child: Container(
+                            child: SizedBox(
                               width: 312*fem,
                               height: 44*fem,
                             ),
@@ -141,7 +143,7 @@ class NewTeam extends StatelessWidget {
                           fontSize: 24*ffem,
                           fontWeight: FontWeight.w400,
                           height: 1.1666666667*ffem/fem,
-                          color: Color(0xff000000),
+                          color: const Color(0xff000000),
                         ),
                       ),
                     ),
@@ -158,7 +160,7 @@ class NewTeam extends StatelessWidget {
                             padding: EdgeInsets.fromLTRB(247.06*fem, 14.41*fem, 8.16*fem, 13.78*fem),
                             width: double.infinity,
                             decoration: BoxDecoration (
-                              border: Border.all(color: Color(0xff4e36b0)),
+                              border: Border.all(color: const Color(0xff4e36b0)),
                               borderRadius: BorderRadius.circular(4*fem),
                             ),
                             child: Align(
@@ -169,7 +171,7 @@ class NewTeam extends StatelessWidget {
                                 height: 20.26*fem,
                                 child: TextButton(
                                   onPressed: () {
-                                    Navigator.push( context, MaterialPageRoute(builder: (context) => Home()), );
+                                    Navigator.push( context, MaterialPageRoute(builder: (context) => const Home()), );
                                   },
                                   style: TextButton.styleFrom (
                                     padding: EdgeInsets.zero,
@@ -183,7 +185,7 @@ class NewTeam extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             // actionsLq2 (I61:1404;61:515)
                             width: double.infinity,
                             height: 72*fem,
@@ -195,7 +197,7 @@ class NewTeam extends StatelessWidget {
                                   margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 12*fem),
                                   child: TextButton(
                                     onPressed: () {
-                                      Navigator.push( context, MaterialPageRoute(builder: (context) => Home()), );
+                                      Navigator.push( context, MaterialPageRoute(builder: (context) => const Home()), );
                                     },
                                     style: TextButton.styleFrom (
                                       padding: EdgeInsets.zero,
@@ -217,7 +219,7 @@ class NewTeam extends StatelessWidget {
                                               fontWeight: FontWeight.w500,
                                               height: 1.4285714286*ffem/fem,
                                               letterSpacing: 0.1000000015*fem,
-                                              color: Color(0xff6750a4),
+                                              color: const Color(0xff6750a4),
                                             ),
                                           ),
                                         ),
@@ -233,7 +235,7 @@ class NewTeam extends StatelessWidget {
                                   child: TextButton(
                                     // secondarybuttonGMJ (I61:1404;61:517)
                                     onPressed: () {
-                                      Navigator.push( context, MaterialPageRoute(builder: (context) => Home()), );
+                                      Navigator.push( context, MaterialPageRoute(builder: (context) => const Home()), );
                                     },
                                     style: TextButton.styleFrom (
                                       padding: EdgeInsets.zero,
@@ -255,7 +257,7 @@ class NewTeam extends StatelessWidget {
                                             fontWeight: FontWeight.w500,
                                             height: 1.4285714286*ffem/fem,
                                             letterSpacing: 0.1000000015*fem,
-                                            color: Color(0xff6750a4),
+                                            color: const Color(0xff6750a4),
                                           ),
                                         ),
                                       ),
@@ -277,7 +279,7 @@ class NewTeam extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(94*fem, 0*fem, 106*fem, 0*fem),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => CreateTeam()), );
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => const CreateTeam()), );
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
@@ -287,7 +289,7 @@ class NewTeam extends StatelessWidget {
                   height: 104*fem,
                   decoration: BoxDecoration (
                     borderRadius: BorderRadius.circular(32*fem),
-                    gradient: LinearGradient (
+                    gradient: const LinearGradient (
                       begin: Alignment(1, -1),
                       end: Alignment(-1, 1),
                       colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -307,7 +309,7 @@ class NewTeam extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration (
                                 borderRadius: BorderRadius.circular(32*fem),
-                                gradient: LinearGradient (
+                                gradient: const LinearGradient (
                                   begin: Alignment(1, -1),
                                   end: Alignment(-1, 1),
                                   colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -336,7 +338,7 @@ class NewTeam extends StatelessWidget {
                                   fontWeight: FontWeight.w700,
                                   height: 1.2*ffem/fem,
                                   letterSpacing: 2.4*fem,
-                                  color: Color(0xffffffff),
+                                  color: const Color(0xffffffff),
                                 ),
                               ),
                             ),

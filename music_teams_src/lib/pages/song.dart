@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/pages/live.dart';
 import 'package:myapp/pages/team-home.dart';
-import 'package:myapp/prototype/live-team-1.dart';
 import 'package:myapp/url.dart';
 
 
 // POST
-Future<Album> createAlbum(int song_id, String transporto) async {
-  String finalUrl = baseUrl + '/API/'+ song_id.toString() +'/song-transpose';
+Future<Album> createAlbum(int songId, String transporto) async {
+  String finalUrl = '$baseUrl/API/$songId/song-transpose';
   final response = await http.post(
     Uri.parse(finalUrl),
     headers: <String, String>{
@@ -38,8 +37,8 @@ Future<Album> createAlbum(int song_id, String transporto) async {
 
 
 //  GET 
-Future<Album> fetchAlbum(int song_id) async {
-  String finalUrl = baseUrl + '/API/'+ song_id.toString() +'/song-transpose';
+Future<Album> fetchAlbum(int songId) async {
+  String finalUrl = '$baseUrl/API/$songId/song-transpose';
   final response = await http
       //.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
       .get(Uri.parse(finalUrl));
@@ -93,7 +92,7 @@ class Album {
               type_transporto: json['type_transporto'] as String,
             );
     } else {
-      throw FormatException('Failed to load album.');
+      throw const FormatException('Failed to load album.');
     }
   }
 }
@@ -103,7 +102,7 @@ class Album {
 class SongPage extends StatefulWidget {
   final Future<int> songId;
 
-  SongPage({required this.songId, Key? key}) : super(key: key);
+  const SongPage({required this.songId, Key? key}) : super(key: key);
 
   @override
   State<SongPage> createState() => _SongState();
@@ -130,28 +129,28 @@ class _SongState extends State<SongPage> {
   @override
   Widget build(BuildContext context) {
     if (selectedSongId == null) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
         // Sensitivity is used to determine the sensitivity of the swipe
-        final double sensitivity = 10;
+        const double sensitivity = 10;
         if (details.delta.dx > sensitivity) {
           // Right Swipe
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => LivePage()),
+            MaterialPageRoute(builder: (_) => const LivePage()),
           );
         } else if (details.delta.dx < -sensitivity) {
           // Left Swipe
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => TeamHomePage(mode: 'SongDemand',)),
+            MaterialPageRoute(builder: (_) => const TeamHomePage(mode: 'SongDemand',)),
           );
         }
       },
     child: MaterialApp(
       title: 'Song Page',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF451475)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF451475)),
       ),
       home: Scaffold(
         body: Container(
@@ -169,7 +168,7 @@ class _SongState extends State<SongPage> {
       future: albumFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasData) {
           // Display fetched data
           List<String> lyrics = snapshot.data!.lyrics.split('\n');
@@ -179,12 +178,12 @@ class _SongState extends State<SongPage> {
           return Scaffold(
             appBar: AppBar(
               title: Text(title),
-              backgroundColor: Color(0xff451475),
+              backgroundColor: const Color(0xff451475),
             ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Swipe for Live >>    << Swipe for Song Demand',
@@ -202,13 +201,13 @@ class _SongState extends State<SongPage> {
                     itemCount: lyrics.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               chords[index],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.red,
                                 fontFamily: 'monospace',
@@ -216,7 +215,7 @@ class _SongState extends State<SongPage> {
                             ),
                             Text(
                               lyrics[index],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'monospace',
                               ),
@@ -230,7 +229,7 @@ class _SongState extends State<SongPage> {
               ],
             ),
             bottomNavigationBar: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Container(
                 color: Colors.purple[100],
                 child: Row(
@@ -240,13 +239,13 @@ class _SongState extends State<SongPage> {
                       child: TextField(
                         controller: transportoController,
                         keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Number',
                           border: OutlineInputBorder(),
                         ),
                       ),
                     ),
-                    SizedBox(width: 8.0),
+                    const SizedBox(width: 8.0),
                     ElevatedButton(
                       onPressed: () {
                         String transporto = transportoController.text;
@@ -254,10 +253,10 @@ class _SongState extends State<SongPage> {
                           _futureAlbum = createAlbum(selectedSongId ?? 0, transporto);
                         });
                       },
-                      child: Text('Transporto'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff451475), // Set background color here
+                        backgroundColor: const Color(0xff451475), // Set background color here
                       ),
+                      child: const Text('Transporto'),
                     ),
                   ],
                 ),
@@ -268,7 +267,7 @@ class _SongState extends State<SongPage> {
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else {
-          return Center(
+          return const Center(
             child: Text('No data available'),
           );
         }

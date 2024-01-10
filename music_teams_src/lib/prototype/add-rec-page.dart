@@ -4,19 +4,21 @@ import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
 class AddRecording extends StatelessWidget {
+  const AddRecording({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // addrecpageS3v (61:1909)
         padding: EdgeInsets.fromLTRB(15*fem, 0*fem, 15*fem, 393*fem),
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Column(
@@ -77,7 +79,7 @@ class AddRecording extends StatelessWidget {
                     // backbuttonbarLS8 (202:3482)
                     left: 0*fem,
                     top: 0*fem,
-                    child: Container(
+                    child: SizedBox(
                       width: 384.7*fem,
                       height: 168*fem,
                       child: Stack(
@@ -86,7 +88,7 @@ class AddRecording extends StatelessWidget {
                             // backbuttonbarfzC (202:3483)
                             left: 0*fem,
                             top: 49*fem,
-                            child: Container(
+                            child: SizedBox(
                               width: 384.7*fem,
                               height: 80*fem,
                               child: Row(
@@ -97,7 +99,7 @@ class AddRecording extends StatelessWidget {
                                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                                     child: TextButton(
                                       onPressed: () {
-                                        Navigator.push( context, MaterialPageRoute(builder: (context) => AddChords()), );
+                                        Navigator.push( context, MaterialPageRoute(builder: (context) => const AddChords()), );
                                       },
                                       style: TextButton.styleFrom (
                                         padding: EdgeInsets.zero,
@@ -105,11 +107,11 @@ class AddRecording extends StatelessWidget {
                                       child: Container(
                                         padding: EdgeInsets.fromLTRB(16.1*fem, 35*fem, 16.8*fem, 35*fem),
                                         decoration: BoxDecoration (
-                                          color: Color(0xff451475),
+                                          color: const Color(0xff451475),
                                           borderRadius: BorderRadius.circular(35*fem),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Color(0x3f000000),
+                                              color: const Color(0x3f000000),
                                               offset: Offset(0*fem, 4*fem),
                                               blurRadius: 2*fem,
                                             ),
@@ -169,7 +171,7 @@ class AddRecording extends StatelessWidget {
               decoration: BoxDecoration (
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0x3f000000),
+                    color: const Color(0x3f000000),
                     offset: Offset(0*fem, 4*fem),
                     blurRadius: 2*fem,
                   ),
@@ -182,7 +184,7 @@ class AddRecording extends StatelessWidget {
                 decoration: BoxDecoration (
                   boxShadow: [
                     BoxShadow(
-                      color: Color(0x3f000000),
+                      color: const Color(0x3f000000),
                       offset: Offset(0*fem, 4*fem),
                       blurRadius: 2*fem,
                     ),
@@ -194,7 +196,7 @@ class AddRecording extends StatelessWidget {
                   width: double.infinity,
                   height: double.infinity,
                   decoration: BoxDecoration (
-                    color: Color(0xffece6f0),
+                    color: const Color(0xffece6f0),
                     borderRadius: BorderRadius.circular(28*fem),
                   ),
                   child: Column(
@@ -211,7 +213,7 @@ class AddRecording extends StatelessWidget {
                               // titledescriptionpRA (I202:3180;186:1144;61:1094;61:464;50723:10950)
                               left: 0*fem,
                               top: 0*fem,
-                              child: Container(
+                              child: SizedBox(
                                 width: 312*fem,
                                 height: 44*fem,
                               ),
@@ -246,7 +248,7 @@ class AddRecording extends StatelessWidget {
                             fontSize: 24*ffem,
                             fontWeight: FontWeight.w400,
                             height: 1.1666666667*ffem/fem,
-                            color: Color(0xff000000),
+                            color: const Color(0xff000000),
                           ),
                         ),
                       ),
@@ -256,8 +258,8 @@ class AddRecording extends StatelessWidget {
                         padding: EdgeInsets.fromLTRB(16.98*fem, 13.42*fem, 17.56*fem, 13.67*fem),
                         width: double.infinity,
                         decoration: BoxDecoration (
-                          border: Border.all(color: Color(0xff451475)),
-                          color: Color(0x00ffffff),
+                          border: Border.all(color: const Color(0xff451475)),
+                          color: const Color(0x00ffffff),
                           borderRadius: BorderRadius.circular(30*fem),
                         ),
                         child: Center(
@@ -273,7 +275,7 @@ class AddRecording extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         // autogroupnzclBYY (F9xhjW5yeZNCiimpiTNzcL)
                         width: double.infinity,
                         height: 175*fem,
@@ -283,7 +285,7 @@ class AddRecording extends StatelessWidget {
                               // actionsfic (I202:3180;186:1144;61:515)
                               left: 0*fem,
                               top: 103*fem,
-                              child: Container(
+                              child: SizedBox(
                                 width: 312*fem,
                                 height: 72*fem,
                                 child: Column(
@@ -294,7 +296,7 @@ class AddRecording extends StatelessWidget {
                                       margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 12*fem),
                                       child: TextButton(
                                         onPressed: () {
-                                          Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                                          Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamHome()), );
                                         },
                                         style: TextButton.styleFrom (
                                           padding: EdgeInsets.zero,
@@ -316,7 +318,7 @@ class AddRecording extends StatelessWidget {
                                                   fontWeight: FontWeight.w500,
                                                   height: 1.4285714286*ffem/fem,
                                                   letterSpacing: 0.1000000015*fem,
-                                                  color: Color(0xff6750a4),
+                                                  color: const Color(0xff6750a4),
                                                 ),
                                               ),
                                             ),
@@ -332,7 +334,7 @@ class AddRecording extends StatelessWidget {
                                       child: TextButton(
                                         // secondarybuttonLiG (I202:3180;186:1144;61:517)
                                         onPressed: () {
-                                          Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                                          Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamHome()), );
                                         },
                                         style: TextButton.styleFrom (
                                           padding: EdgeInsets.zero,
@@ -354,7 +356,7 @@ class AddRecording extends StatelessWidget {
                                                 fontWeight: FontWeight.w500,
                                                 height: 1.4285714286*ffem/fem,
                                                 letterSpacing: 0.1000000015*fem,
-                                                color: Color(0xff6750a4),
+                                                color: const Color(0xff6750a4),
                                               ),
                                             ),
                                           ),
@@ -373,14 +375,14 @@ class AddRecording extends StatelessWidget {
                                 width: 230*fem,
                                 height: 76*fem,
                                 decoration: BoxDecoration (
-                                  border: Border.all(color: Color(0xff4e36b0)),
+                                  border: Border.all(color: const Color(0xff4e36b0)),
                                   borderRadius: BorderRadius.only (
                                     topLeft: Radius.circular(4*fem),
                                     topRight: Radius.circular(4*fem),
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Color(0x3f000000),
+                                      color: const Color(0x3f000000),
                                       offset: Offset(0*fem, 4*fem),
                                       blurRadius: 2*fem,
                                     ),
@@ -394,7 +396,7 @@ class AddRecording extends StatelessWidget {
                                       width: double.infinity,
                                       height: 56*fem,
                                       decoration: BoxDecoration (
-                                        color: Color(0xffe6e0e9),
+                                        color: const Color(0xffe6e0e9),
                                         borderRadius: BorderRadius.only (
                                           topLeft: Radius.circular(4*fem),
                                           topRight: Radius.circular(4*fem),
@@ -426,11 +428,11 @@ class AddRecording extends StatelessWidget {
                                                   fontWeight: FontWeight.w400,
                                                   height: 1.5*ffem/fem,
                                                   letterSpacing: 0.5*fem,
-                                                  color: Color(0xff1d1b20),
+                                                  color: const Color(0xff1d1b20),
                                                 ),
                                               ),
                                             ),
-                                            Container(
+                                            SizedBox(
                                               // autogroup5q3nADS (F9xiNjWwVgNLwGKANg5Q3n)
                                               width: 48.93*fem,
                                               height: 40*fem,
@@ -455,7 +457,7 @@ class AddRecording extends StatelessWidget {
                                           fontSize: 12*ffem,
                                           fontWeight: FontWeight.w400,
                                           height: 1.3333333333*ffem/fem,
-                                          color: Color(0xff49454f),
+                                          color: const Color(0xff49454f),
                                         ),
                                       ),
                                     ),
@@ -469,7 +471,7 @@ class AddRecording extends StatelessWidget {
                               top: 103*fem,
                               child: TextButton(
                                 onPressed: () {
-                                  Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                                  Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamHome()), );
                                 },
                                 style: TextButton.styleFrom (
                                   padding: EdgeInsets.zero,
@@ -491,7 +493,7 @@ class AddRecording extends StatelessWidget {
                                           fontWeight: FontWeight.w500,
                                           height: 1.4285714286*ffem/fem,
                                           letterSpacing: 0.1000000015*fem,
-                                          color: Color(0xff6750a4),
+                                          color: const Color(0xff6750a4),
                                         ),
                                       ),
                                     ),
@@ -515,7 +517,7 @@ class AddRecording extends StatelessWidget {
                                       fontSize: 24*ffem,
                                       fontWeight: FontWeight.w400,
                                       height: 1.1666666667*ffem/fem,
-                                      color: Color(0xff000000),
+                                      color: const Color(0xff000000),
                                     ),
                                   ),
                                 ),
@@ -530,8 +532,8 @@ class AddRecording extends StatelessWidget {
                                 width: 60*fem,
                                 height: 60*fem,
                                 decoration: BoxDecoration (
-                                  border: Border.all(color: Color(0xff451475)),
-                                  color: Color(0x00ffffff),
+                                  border: Border.all(color: const Color(0xff451475)),
+                                  color: const Color(0x00ffffff),
                                   borderRadius: BorderRadius.circular(30*fem),
                                 ),
                                 child: Center(

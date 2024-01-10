@@ -6,19 +6,21 @@ import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
 class Options extends StatelessWidget {
+  const Options({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // optionspagesXz (5:16)
         width: double.infinity,
         height: 932*fem,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Stack(
@@ -32,7 +34,7 @@ class Options extends StatelessWidget {
                 height: 64*fem,
                 decoration: BoxDecoration (
                   borderRadius: BorderRadius.circular(32*fem),
-                  gradient: LinearGradient (
+                  gradient: const LinearGradient (
                     begin: Alignment(1, -1),
                     end: Alignment(-1, 1),
                     colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -52,7 +54,7 @@ class Options extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration (
                               borderRadius: BorderRadius.circular(32*fem),
-                              gradient: LinearGradient (
+                              gradient: const LinearGradient (
                                 begin: Alignment(1, -1),
                                 end: Alignment(-1, 1),
                                 colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -81,7 +83,7 @@ class Options extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                                 height: 1.2*ffem/fem,
                                 letterSpacing: 2.4*fem,
-                                color: Color(0xffffffff),
+                                color: const Color(0xffffffff),
                               ),
                             ),
                           ),
@@ -96,7 +98,7 @@ class Options extends StatelessWidget {
               // backbuttonbarwpg (61:405)
               left: 15*fem,
               top: 39*fem,
-              child: Container(
+              child: SizedBox(
                 width: 384.7*fem,
                 height: 80*fem,
                 child: Row(
@@ -107,7 +109,7 @@ class Options extends StatelessWidget {
                       margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                       child: TextButton(
                         onPressed: () {
-                          Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                          Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamHome()), );
                         },
                         style: TextButton.styleFrom (
                           padding: EdgeInsets.zero,
@@ -115,11 +117,11 @@ class Options extends StatelessWidget {
                         child: Container(
                           padding: EdgeInsets.fromLTRB(16.1*fem, 35*fem, 16.8*fem, 35*fem),
                           decoration: BoxDecoration (
-                            color: Color(0xff451475),
+                            color: const Color(0xff451475),
                             borderRadius: BorderRadius.circular(35*fem),
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0x3f000000),
+                                color: const Color(0x3f000000),
                                 offset: Offset(0*fem, 4*fem),
                                 blurRadius: 2*fem,
                               ),
@@ -147,7 +149,7 @@ class Options extends StatelessWidget {
               // inputelementwbi (80:905)
               left: 29*fem,
               top: 245*fem,
-              child: Container(
+              child: SizedBox(
                 width: 372*fem,
                 height: 95*fem,
                 child: Column(
@@ -163,7 +165,7 @@ class Options extends StatelessWidget {
                           fontSize: 20*ffem,
                           fontWeight: FontWeight.w400,
                           height: 1.2*ffem/fem,
-                          color: Color(0xff4e36b0),
+                          color: const Color(0xff4e36b0),
                         ),
                       ),
                     ),
@@ -172,7 +174,7 @@ class Options extends StatelessWidget {
                       padding: EdgeInsets.fromLTRB(0*fem, 0*fem, 11*fem, 0*fem),
                       width: double.infinity,
                       decoration: BoxDecoration (
-                        border: Border.all(color: Color(0xff4e36b0)),
+                        border: Border.all(color: const Color(0xff4e36b0)),
                         borderRadius: BorderRadius.circular(5*fem),
                       ),
                       child: Row(
@@ -216,7 +218,7 @@ class Options extends StatelessWidget {
                   width: 209*fem,
                   height: 932*fem,
                   child: Container(
-                    decoration: BoxDecoration (
+                    decoration: const BoxDecoration (
                       color: Color(0xff451475),
                     ),
                   ),
@@ -229,7 +231,7 @@ class Options extends StatelessWidget {
               top: 249*fem,
               child: TextButton(
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => TeamCode()), );
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamCode()), );
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
@@ -239,8 +241,8 @@ class Options extends StatelessWidget {
                   width: 209*fem,
                   height: 83*fem,
                   decoration: BoxDecoration (
-                    border: Border.all(color: Color(0xff000000)),
-                    color: Color(0xff451475),
+                    border: Border.all(color: const Color(0xff000000)),
+                    color: const Color(0xff451475),
                   ),
                   child: Center(
                     // textHL8 (I80:979;80:959)
@@ -259,7 +261,7 @@ class Options extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               height: 1.2*ffem/fem,
                               letterSpacing: 2.4*fem,
-                              color: Color(0xffffffff),
+                              color: const Color(0xffffffff),
                             ),
                           ),
                         ),
@@ -275,7 +277,7 @@ class Options extends StatelessWidget {
               top: 333*fem,
               child: TextButton(
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamHome()), );
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
@@ -284,8 +286,8 @@ class Options extends StatelessWidget {
                   width: 209*fem,
                   height: 83*fem,
                   decoration: BoxDecoration (
-                    border: Border.all(color: Color(0xff000000)),
-                    color: Color(0xff451475),
+                    border: Border.all(color: const Color(0xff000000)),
+                    color: const Color(0xff451475),
                   ),
                   child: Center(
                     child: Center(
@@ -298,7 +300,7 @@ class Options extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           height: 1.2*ffem/fem,
                           letterSpacing: 2.4*fem,
-                          color: Color(0xffffffff),
+                          color: const Color(0xffffffff),
                         ),
                       ),
                     ),
@@ -312,7 +314,7 @@ class Options extends StatelessWidget {
               top: 83*fem,
               child: TextButton(
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => AddSong()), );
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => const AddSong()), );
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
@@ -321,8 +323,8 @@ class Options extends StatelessWidget {
                   width: 209*fem,
                   height: 83*fem,
                   decoration: BoxDecoration (
-                    border: Border.all(color: Color(0xff000000)),
-                    color: Color(0xff451475),
+                    border: Border.all(color: const Color(0xff000000)),
+                    color: const Color(0xff451475),
                   ),
                   child: Center(
                     child: Center(
@@ -335,7 +337,7 @@ class Options extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           height: 1.2*ffem/fem,
                           letterSpacing: 2.4*fem,
-                          color: Color(0xffffffff),
+                          color: const Color(0xffffffff),
                         ),
                       ),
                     ),
@@ -349,7 +351,7 @@ class Options extends StatelessWidget {
               top: 166*fem,
               child: TextButton(
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => Rename()), );
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => const Rename()), );
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
@@ -358,8 +360,8 @@ class Options extends StatelessWidget {
                   width: 209*fem,
                   height: 83*fem,
                   decoration: BoxDecoration (
-                    border: Border.all(color: Color(0xff000000)),
-                    color: Color(0xff451475),
+                    border: Border.all(color: const Color(0xff000000)),
+                    color: const Color(0xff451475),
                   ),
                   child: Center(
                     child: Center(
@@ -372,7 +374,7 @@ class Options extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           height: 1.2*ffem/fem,
                           letterSpacing: 2.4*fem,
-                          color: Color(0xffffffff),
+                          color: const Color(0xffffffff),
                         ),
                       ),
                     ),
@@ -388,8 +390,8 @@ class Options extends StatelessWidget {
                 width: 209*fem,
                 height: 83*fem,
                 decoration: BoxDecoration (
-                  border: Border.all(color: Color(0xff000000)),
-                  color: Color(0xff451475),
+                  border: Border.all(color: const Color(0xff000000)),
+                  color: const Color(0xff451475),
                 ),
                 child: Center(
                   child: Center(
@@ -402,7 +404,7 @@ class Options extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         height: 1.2*ffem/fem,
                         letterSpacing: 2.4*fem,
-                        color: Color(0xffffffff),
+                        color: const Color(0xffffffff),
                       ),
                     ),
                   ),

@@ -4,13 +4,15 @@ import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
 class Song extends StatelessWidget {
+  const Song({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: TextButton(
         // songpageVMv (5:22)
@@ -23,7 +25,7 @@ class Song extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.fromLTRB(11*fem, 37*fem, 15*fem, 38*fem),
           width: double.infinity,
-          decoration: BoxDecoration (
+          decoration: const BoxDecoration (
             color: Color(0xfff3edf7),
           ),
           child: Column(
@@ -40,7 +42,7 @@ class Song extends StatelessWidget {
                       // backbuttontextJqA (80:3736)
                       left: 0*fem,
                       top: 1*fem,
-                      child: Container(
+                      child: SizedBox(
                         width: 384.7*fem,
                         height: 80*fem,
                         child: Stack(
@@ -76,7 +78,7 @@ class Song extends StatelessWidget {
                                       fontSize: 36*ffem,
                                       fontWeight: FontWeight.w700,
                                       height: 1.3888888889*ffem/fem,
-                                      color: Color(0xff451475),
+                                      color: const Color(0xff451475),
                                     ),
                                   ),
                                 ),
@@ -90,7 +92,7 @@ class Song extends StatelessWidget {
                       // backbuttonbarMS4 (202:3528)
                       left: 4*fem,
                       top: 0*fem,
-                      child: Container(
+                      child: SizedBox(
                         width: 384.7*fem,
                         height: 80*fem,
                         child: Row(
@@ -101,7 +103,7 @@ class Song extends StatelessWidget {
                               margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 258*fem, 10*fem),
                               child: TextButton(
                                 onPressed: () {
-                                  Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                                  Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamHome()), );
                                 },
                                 style: TextButton.styleFrom (
                                   padding: EdgeInsets.zero,
@@ -109,11 +111,11 @@ class Song extends StatelessWidget {
                                 child: Container(
                                   padding: EdgeInsets.fromLTRB(16.1*fem, 35*fem, 16.8*fem, 35*fem),
                                   decoration: BoxDecoration (
-                                    color: Color(0xff451475),
+                                    color: const Color(0xff451475),
                                     borderRadius: BorderRadius.circular(35*fem),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Color(0x3f000000),
+                                        color: const Color(0x3f000000),
                                         offset: Offset(0*fem, 4*fem),
                                         blurRadius: 2*fem,
                                       ),
@@ -157,7 +159,7 @@ class Song extends StatelessWidget {
                         decoration: BoxDecoration (
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0x3f000000),
+                              color: const Color(0x3f000000),
                               offset: Offset(0*fem, 4*fem),
                               blurRadius: 2*fem,
                             ),
@@ -168,7 +170,7 @@ class Song extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(120*fem, 0*fem, 0*fem, 0*fem),
                           width: double.infinity,
                           height: double.infinity,
-                          decoration: BoxDecoration (
+                          decoration: const BoxDecoration (
                             color: Color(0xfff3edf7),
                           ),
                           child: Container(
@@ -185,7 +187,7 @@ class Song extends StatelessWidget {
                                   width: 33.99*fem,
                                   height: double.infinity,
                                   decoration: BoxDecoration (
-                                    border: Border.all(color: Color(0xff451475)),
+                                    border: Border.all(color: const Color(0xff451475)),
                                     borderRadius: BorderRadius.circular(2*fem),
                                   ),
                                   child: Center(
@@ -199,7 +201,7 @@ class Song extends StatelessWidget {
                                           fontWeight: FontWeight.w500,
                                           height: 1.4285714286*ffem/fem,
                                           letterSpacing: 0.1000000015*fem,
-                                          color: Color(0xff451475),
+                                          color: const Color(0xff451475),
                                         ),
                                       ),
                                     ),
@@ -216,7 +218,7 @@ class Song extends StatelessWidget {
                                     height: 30*fem,
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   // iconremovecircleoutlinemZe (I219:3574;61:7832;61:7625)
                                   width: 33.99*fem,
                                   height: 30*fem,
@@ -247,7 +249,7 @@ class Song extends StatelessWidget {
                               fontSize: 27*ffem,
                               fontWeight: FontWeight.w500,
                               height: 1.8518518519*ffem/fem,
-                              color: Color(0xff451475),
+                              color: const Color(0xff451475),
                             ),
                           ),
                         ),
@@ -269,7 +271,7 @@ class Song extends StatelessWidget {
                       margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 4*fem, 0*fem),
                       child: TextButton(
                         onPressed: () {
-                          Navigator.push( context, MaterialPageRoute(builder: (context) => TeamHome()), );
+                          Navigator.push( context, MaterialPageRoute(builder: (context) => const TeamHome()), );
                         },
                         style: TextButton.styleFrom (
                           padding: EdgeInsets.zero,
@@ -279,7 +281,7 @@ class Song extends StatelessWidget {
                           height: double.infinity,
                           decoration: BoxDecoration (
                             borderRadius: BorderRadius.circular(32*fem),
-                            gradient: LinearGradient (
+                            gradient: const LinearGradient (
                               begin: Alignment(1, -1),
                               end: Alignment(-1, 1),
                               colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -299,7 +301,7 @@ class Song extends StatelessWidget {
                                     child: Container(
                                       decoration: BoxDecoration (
                                         borderRadius: BorderRadius.circular(32*fem),
-                                        gradient: LinearGradient (
+                                        gradient: const LinearGradient (
                                           begin: Alignment(1, -1),
                                           end: Alignment(-1, 1),
                                           colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -328,7 +330,7 @@ class Song extends StatelessWidget {
                                           fontWeight: FontWeight.w700,
                                           height: 1.2*ffem/fem,
                                           letterSpacing: 2.4*fem,
-                                          color: Color(0xffffffff),
+                                          color: const Color(0xffffffff),
                                         ),
                                       ),
                                     ),
@@ -343,7 +345,7 @@ class Song extends StatelessWidget {
                     TextButton(
                       // buttonelement4UC (121:6350)
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => Live()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const Live()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -353,7 +355,7 @@ class Song extends StatelessWidget {
                         height: double.infinity,
                         decoration: BoxDecoration (
                           borderRadius: BorderRadius.circular(32*fem),
-                          gradient: LinearGradient (
+                          gradient: const LinearGradient (
                             begin: Alignment(1, -1),
                             end: Alignment(-1, 1),
                             colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -373,7 +375,7 @@ class Song extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration (
                                       borderRadius: BorderRadius.circular(32*fem),
-                                      gradient: LinearGradient (
+                                      gradient: const LinearGradient (
                                         begin: Alignment(1, -1),
                                         end: Alignment(-1, 1),
                                         colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -402,7 +404,7 @@ class Song extends StatelessWidget {
                                         fontWeight: FontWeight.w700,
                                         height: 1.2*ffem/fem,
                                         letterSpacing: 2.4*fem,
-                                        color: Color(0xffffffff),
+                                        color: const Color(0xffffffff),
                                       ),
                                     ),
                                   ),
@@ -426,7 +428,7 @@ class Song extends StatelessWidget {
                     fontSize: 20*ffem,
                     fontWeight: FontWeight.w400,
                     height: 1.2*ffem/fem,
-                    color: Color(0xff4e36b0),
+                    color: const Color(0xff4e36b0),
                   ),
                 ),
               ),
@@ -453,7 +455,7 @@ class Song extends StatelessWidget {
                               fontSize: 32*ffem,
                               fontWeight: FontWeight.w700,
                               height: 1.5625*ffem/fem,
-                              color: Color(0xff000000),
+                              color: const Color(0xff000000),
                             ),
                           ),
                         ),
@@ -475,7 +477,7 @@ class Song extends StatelessWidget {
                               fontSize: 32*ffem,
                               fontWeight: FontWeight.w700,
                               height: 1.5625*ffem/fem,
-                              color: Color(0xffff0202),
+                              color: const Color(0xffff0202),
                             ),
                           ),
                         ),
@@ -507,7 +509,7 @@ class Song extends StatelessWidget {
                               fontSize: 32*ffem,
                               fontWeight: FontWeight.w700,
                               height: 1.5625*ffem/fem,
-                              color: Color(0xff000000),
+                              color: const Color(0xff000000),
                             ),
                           ),
                         ),
@@ -529,7 +531,7 @@ class Song extends StatelessWidget {
                               fontSize: 32*ffem,
                               fontWeight: FontWeight.w700,
                               height: 1.5625*ffem/fem,
-                              color: Color(0xffff0202),
+                              color: const Color(0xffff0202),
                             ),
                           ),
                         ),
@@ -553,7 +555,7 @@ class Song extends StatelessWidget {
                         fontSize: 36*ffem,
                         fontWeight: FontWeight.w700,
                         height: 1.3888888889*ffem/fem,
-                        color: Color(0xff000000),
+                        color: const Color(0xff000000),
                       ),
                     ),
                     Container(

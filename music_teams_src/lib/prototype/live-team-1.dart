@@ -5,18 +5,20 @@ import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
 class Live extends StatelessWidget {
+  const Live({super.key});
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-    child: Container(
+    child: SizedBox(
       width: double.infinity,
       child: Container(
         // liveteam1Nrg (5:23)
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff3edf7),
         ),
         child: Column(
@@ -51,7 +53,7 @@ class Live extends StatelessWidget {
                                   fontSize: 36*ffem,
                                   fontWeight: FontWeight.w700,
                                   height: 1.3888888889*ffem/fem,
-                                  color: Color(0xff451475),
+                                  color: const Color(0xff451475),
                                 ),
                               ),
                             ),
@@ -66,10 +68,10 @@ class Live extends StatelessWidget {
                               // Navigate to the desired screen when the image is tapped
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => TeamHome()), // Replace BackScreen() with your desired screen
+                                MaterialPageRoute(builder: (context) => const TeamHome()), // Replace BackScreen() with your desired screen
                               );
                             },
-                            child: Container(
+                            child: SizedBox(
                               width: 384.7 * fem,
                               height: 80 * fem,
                               child: Center(
@@ -101,7 +103,7 @@ class Live extends StatelessWidget {
                         fontSize: 36*ffem,
                         fontWeight: FontWeight.w700,
                         height: 1.3888888889*ffem/fem,
-                        color: Color(0xff000000),
+                        color: const Color(0xff000000),
                       ),
                     ),
                   ),
@@ -110,7 +112,7 @@ class Live extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(100*fem, 0*fem, 90*fem, 44*fem),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => Song()), );
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => const Song()), );
                       },
                       style: TextButton.styleFrom (
                         padding: EdgeInsets.zero,
@@ -120,7 +122,7 @@ class Live extends StatelessWidget {
                         height: 64*fem,
                         decoration: BoxDecoration (
                           borderRadius: BorderRadius.circular(32*fem),
-                          gradient: LinearGradient (
+                          gradient: const LinearGradient (
                             begin: Alignment(1, -1),
                             end: Alignment(-1, 1),
                             colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -140,7 +142,7 @@ class Live extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration (
                                       borderRadius: BorderRadius.circular(32*fem),
-                                      gradient: LinearGradient (
+                                      gradient: const LinearGradient (
                                         begin: Alignment(1, -1),
                                         end: Alignment(-1, 1),
                                         colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -169,7 +171,7 @@ class Live extends StatelessWidget {
                                         fontWeight: FontWeight.w700,
                                         height: 1.2*ffem/fem,
                                         letterSpacing: 2.4*fem,
-                                        color: Color(0xffffffff),
+                                        color: const Color(0xffffffff),
                                       ),
                                     ),
                                   ),
@@ -188,7 +190,7 @@ class Live extends StatelessWidget {
                     height: 64*fem,
                     decoration: BoxDecoration (
                       borderRadius: BorderRadius.circular(32*fem),
-                      gradient: LinearGradient (
+                      gradient: const LinearGradient (
                         begin: Alignment(1, -1),
                         end: Alignment(-1, 1),
                         colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -208,7 +210,7 @@ class Live extends StatelessWidget {
                               child: Container(
                                 decoration: BoxDecoration (
                                   borderRadius: BorderRadius.circular(32*fem),
-                                  gradient: LinearGradient (
+                                  gradient: const LinearGradient (
                                     begin: Alignment(1, -1),
                                     end: Alignment(-1, 1),
                                     colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -237,7 +239,7 @@ class Live extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     height: 1.2*ffem/fem,
                                     letterSpacing: 2.4*fem,
-                                    color: Color(0xffffffff),
+                                    color: const Color(0xffffffff),
                                   ),
                                 ),
                               ),
@@ -254,7 +256,7 @@ class Live extends StatelessWidget {
                     height: 64*fem,
                     decoration: BoxDecoration (
                       borderRadius: BorderRadius.circular(32*fem),
-                      gradient: LinearGradient (
+                      gradient: const LinearGradient (
                         begin: Alignment(1, -1),
                         end: Alignment(-1, 1),
                         colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -274,7 +276,7 @@ class Live extends StatelessWidget {
                               child: Container(
                                 decoration: BoxDecoration (
                                   borderRadius: BorderRadius.circular(32*fem),
-                                  gradient: LinearGradient (
+                                  gradient: const LinearGradient (
                                     begin: Alignment(1, -1),
                                     end: Alignment(-1, 1),
                                     colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -303,7 +305,7 @@ class Live extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     height: 1.2*ffem/fem,
                                     letterSpacing: 2.4*fem,
-                                    color: Color(0xffffffff),
+                                    color: const Color(0xffffffff),
                                   ),
                                 ),
                               ),
@@ -322,13 +324,13 @@ class Live extends StatelessWidget {
               width: double.infinity,
               height: 213*fem,
               decoration: BoxDecoration (
-                color: Color(0xff451475),
+                color: const Color(0xff451475),
                 borderRadius: BorderRadius.circular(2*fem),
               ),
               child: TextButton(
                 // linebuttonKoA (80:528)
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => SongDemand()), );
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => const SongDemand()), );
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
@@ -338,7 +340,7 @@ class Live extends StatelessWidget {
                   height: double.infinity,
                   decoration: BoxDecoration (
                     borderRadius: BorderRadius.circular(32*fem),
-                    gradient: LinearGradient (
+                    gradient: const LinearGradient (
                       begin: Alignment(1, -1),
                       end: Alignment(-1, 1),
                       colors: <Color>[Color(0xfffe9a1a), Color(0xffc5087e)],
@@ -358,7 +360,7 @@ class Live extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration (
                                 borderRadius: BorderRadius.circular(32*fem),
-                                gradient: LinearGradient (
+                                gradient: const LinearGradient (
                                   begin: Alignment(1, -1),
                                   end: Alignment(-1, 1),
                                   colors: <Color>[Color(0xfffe9a1a), Color(0xffff1e74)],
@@ -387,7 +389,7 @@ class Live extends StatelessWidget {
                                   fontWeight: FontWeight.w700,
                                   height: 1.2*ffem/fem,
                                   letterSpacing: 2.4*fem,
-                                  color: Color(0xffffffff),
+                                  color: const Color(0xffffffff),
                                 ),
                               ),
                             ),
