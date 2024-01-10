@@ -14,6 +14,7 @@ Organize your own lyrics, chords, small recordings and share them with your musi
 ### Bash commands for 2,3,4
 ```bash
 rm -r /home/nikolaospapa3/Music-Teams
+cd /home/nikolaospapa3/
 git clone https://github.com/ntua-el20069/Music-Teams.git
 cd Music-Teams
 rm -r music_teams_src
