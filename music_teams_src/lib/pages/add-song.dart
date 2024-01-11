@@ -5,13 +5,18 @@ import 'package:myapp/components/error.dart';
 import 'package:myapp/functions/greekLyrics.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/prototype/add-chords-page.dart';
+import 'package:myapp/pages/add_chords.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/url.dart';
 
-
-Future<Album> createAlbum(String title, String composer, String lyricist, String lyrics, ) async {
+Future<Album> createAlbum(
+  String title,
+  String composer,
+  String lyricist,
+  String lyrics,
+) async {
   final response = await http.post(
     Uri.parse('$baseUrl/API/add-song'),
     headers: <String, String>{
@@ -19,11 +24,11 @@ Future<Album> createAlbum(String title, String composer, String lyricist, String
     },
     body: jsonEncode(<String, String>{
       'title': title,
-      'composer' : composer,
-      'lyricist' : lyricist,
-      'lyrics' : lyrics,
-      'search_title' : title,
-      'button-info' : ''
+      'composer': composer,
+      'lyricist': lyricist,
+      'lyrics': lyrics,
+      'search_title': title,
+      'button-info': ''
     }),
   );
 
@@ -43,7 +48,8 @@ Future<ScrapedSong> sendHTMLviaPostRequest({String title = 'Ρόζα'}) async {
   //String htmlContent = '<html><body><h1>Hello, World!</h1></body></html>'; // Replace this with your HTML content
   String? htmlContent = await takeFromGreekLyricsMobile(title);
 
-  var url = Uri.parse('$baseUrl/API/webscrape'); // Replace with your server endpoint
+  var url =
+      Uri.parse('$baseUrl/API/webscrape'); // Replace with your server endpoint
 
   try {
     var response = await http.post(
@@ -57,10 +63,12 @@ Future<ScrapedSong> sendHTMLviaPostRequest({String title = 'Ρόζα'}) async {
     if (response.statusCode == 200) {
       print('HTML sent successfully');
       print('Response: ${response.body}');
-      return ScrapedSong.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      return ScrapedSong.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
     } else {
       print('Failed to send HTML. Status code: ${response.statusCode}');
-      return ScrapedSong.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      return ScrapedSong.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
     }
   } catch (error) {
     print('Error sending HTML: $error');
@@ -75,18 +83,12 @@ class Album {
   const Album({required this.message, required this.error});
 
   factory Album.fromJson(Map<String, dynamic> json) {
-    if (json.containsKey('message') ) {
+    if (json.containsKey('message')) {
       print('Response message: ${json['message']}');
-      return Album(
-        message: json['message'] as String,
-        error: 'All OK'
-      );
-    } else if (json.containsKey('error')){
+      return Album(message: json['message'] as String, error: 'All OK');
+    } else if (json.containsKey('error')) {
       print('Response error: ${json['error']}');
-      return Album(
-        message: 'Error',
-        error: json['error'] as String
-      );
+      return Album(message: 'Error', error: json['error'] as String);
     } else {
       throw const FormatException('Failed to load album.');
     }
@@ -126,12 +128,9 @@ class ScrapedSong {
   }
 }
 
-
-
 class AddSongPage extends StatefulWidget {
   const AddSongPage({super.key});
 
-  
   @override
   _AddSongPage createState() => _AddSongPage();
 }
@@ -140,68 +139,62 @@ class _AddSongPage extends State<AddSongPage> {
   Future<Album>? _futureAlbum;
   Future<ScrapedSong>? _futureScrapedSong;
 
- @override
+  @override
   Widget build(BuildContext context) {
-    
-    return (_futureAlbum == null && _futureScrapedSong == null) 
-                        ?  MaterialApp(
-                        home: Scaffold(
-                          body: SingleChildScrollView(
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.all(8),
-                              child: 
-                                  buildColumn()
-                            ),
-                          ),
-                        ),
-                      )
-                      : (_futureAlbum == null)
-                      ? MaterialApp(
-                        home: Scaffold(
-                          body: SingleChildScrollView(
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.all(8),
-                              child: 
-                                       buildColumn(futureScrapedSong: _futureScrapedSong)
-                                      
-                            ),
-                          ),
-                        ),
-                      )
-                      : buildFutureBuilder();
-
+    return (_futureAlbum == null && _futureScrapedSong == null)
+        ? MaterialApp(
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(8),
+                    child: buildColumn()),
+              ),
+            ),
+          )
+        : (_futureAlbum == null)
+            ? MaterialApp(
+                home: Scaffold(
+                  body: SingleChildScrollView(
+                    child: Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(8),
+                        child:
+                            buildColumn(futureScrapedSong: _futureScrapedSong)),
+                  ),
+                ),
+              )
+            : buildFutureBuilder();
   }
 
-TextEditingController titleController = TextEditingController();
-TextEditingController composerController = TextEditingController();
-TextEditingController lyricistController = TextEditingController();
-TextEditingController lyricsController = TextEditingController();
-
-
+  TextEditingController titleController = TextEditingController();
+  TextEditingController composerController = TextEditingController();
+  TextEditingController lyricistController = TextEditingController();
+  TextEditingController lyricsController = TextEditingController();
 
   Column buildColumn({Future<ScrapedSong>? futureScrapedSong}) {
     double baseWidth = 450; //500; //450; //500; //430; //322.1;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
 
-  if (futureScrapedSong != null) {
-    futureScrapedSong.then((scrapedSong) {
-      if (true) {
-        titleController.text = scrapedSong.title;
-        composerController.text = scrapedSong.composer;
-        lyricistController.text = scrapedSong.lyricist;
-        lyricsController.text = scrapedSong.lyrics;
-      }
-    });
-  }
+    if (futureScrapedSong != null) {
+      futureScrapedSong.then((scrapedSong) {
+        if (true) {
+          titleController.text = scrapedSong.title;
+          composerController.text = scrapedSong.composer;
+          lyricistController.text = scrapedSong.lyricist;
+          lyricsController.text = scrapedSong.lyrics;
+        }
+      });
+    }
     return Column(
-      
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-
-        CustomNavigationButton(buttonText: 'New Song', navigateTo: const TeamHomePage(), fem: fem, ffem: ffem),
+        CustomNavigationButton(
+            buttonText: 'New Song',
+            navigateTo: const TeamHomePage(),
+            fem: fem,
+            ffem: ffem),
         /* Text(
           'Title',
           style: SafeGoogleFont (
@@ -213,20 +206,19 @@ TextEditingController lyricsController = TextEditingController();
           ),
         ), */
 
-TextField(
-  controller: titleController,
-  decoration: const InputDecoration(
-    hintText: 'Title',
-    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0), // Adjust top and bottom padding
-  ),
-),
-
-        
+        TextField(
+          controller: titleController,
+          decoration: const InputDecoration(
+            hintText: 'Title',
+            contentPadding: EdgeInsets.fromLTRB(
+                20.0, 15.0, 20.0, 15.0), // Adjust top and bottom padding
+          ),
+        ),
         CustomGradientButton(
           onPressed: () {
             String title = titleController.text;
-            setState(() {  
-               _futureScrapedSong = sendHTMLviaPostRequest(title: title);
+            setState(() {
+              _futureScrapedSong = sendHTMLviaPostRequest(title: title);
             });
           },
           buttonText: 'Find greek lyrics from title',
@@ -242,7 +234,7 @@ TextField(
             height: 1.2*ffem/fem,
             color: Color(0xff4e36b0),
           ),
-        ),     */   
+        ),     */
         TextField(
           controller: composerController,
           decoration: const InputDecoration(hintText: 'Composer'),
@@ -256,7 +248,7 @@ TextField(
             height: 1.2*ffem/fem,
             color: Color(0xff4e36b0),
           ),
-        ),   */     
+        ),   */
         TextField(
           controller: lyricistController,
           decoration: const InputDecoration(hintText: 'Lyricist'),
@@ -277,49 +269,51 @@ TextField(
           maxLines: 1000,
           decoration: const InputDecoration(hintText: 'Lyrics'),
         ),
-        
         CustomGradientButton(
-            onPressed: () {
-              String title = titleController.text;
-              String composer = composerController.text;
-              String lyricist = lyricistController.text;
-              String lyrics = lyricsController.text;
+          onPressed: () {
+            String title = titleController.text;
+            String composer = composerController.text;
+            String lyricist = lyricistController.text;
+            String lyrics = lyricsController.text;
 
-              setState(() {
-                _futureAlbum = createAlbum(title, composer, lyricist, lyrics);
-                //sendHTMLviaPostRequest(title: title);
-              });
-            },
-            buttonText: 'Add chords',
-            fontSize: 24,
-          ),
-    
+            setState(() {
+              _futureAlbum = createAlbum(title, composer, lyricist, lyrics);
+              //sendHTMLviaPostRequest(title: title);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Addchords()),
+              );
+            });
+          },
+          buttonText: 'Add chords',
+          fontSize: 24,
+        ),
       ],
     );
   }
 
   FutureBuilder<Album> buildFutureBuilder() {
     return FutureBuilder<Album>(
-  future: _futureAlbum,
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const CircularProgressIndicator();
-    } else if (snapshot.hasError) {
-      return Text('${snapshot.error}');
-    } else if (snapshot.hasData) {
-      if (snapshot.data!.message == 'Successful Insertion!') {
-        return const AddChords(); // or any other success screen/widget
-      } else {
-        return CustomError(
-          errorText: snapshot.data!.message.toString(),
-          navigateTo: const AddSongPage(), // Replace with the appropriate widget
-          errorTitle: 'Error', // Customize error title if needed
-        );
-      }
-    }
-    return const CircularProgressIndicator(); // or any default widget
-  },
-);
+      future: _futureAlbum,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        } else if (snapshot.hasData) {
+          if (snapshot.data!.message == 'Successful Insertion!') {
+            return const AddChords(); // or any other success screen/widget
+          } else {
+            return CustomError(
+              errorText: snapshot.data!.message.toString(),
+              navigateTo:
+                  const AddSongPage(), // Replace with the appropriate widget
+              errorTitle: 'Error', // Customize error title if needed
+            );
+          }
+        }
+        return const CircularProgressIndicator(); // or any default widget
+      },
+    );
   }
 }
-
