@@ -121,6 +121,7 @@ class _SongState extends State<SongPage> {
   String? initialButtonText;
   bool? recordingOK;
   bool mounted = true; // beacomes false after dispose
+  bool existsRecording = false;
 
 @override
 void initState() {
@@ -137,6 +138,7 @@ void initState() {
       seekForRecording().then((recordingOK) {
         if (mounted) setState(() {
           initialButtonText = recordingOK ? 'Play Recording' : 'No Recording';
+          existsRecording = recordingOK;
         });
       });
     });
@@ -325,18 +327,19 @@ void initState() {
 
   Future<void> _fetchAndPlayAudio() async {
     try {
+      if (!existsRecording) return ;
       String url = recordingUrl ?? '';
-      final response = await http.get(Uri.parse(url));
+      /* final response = await http.get(Uri.parse(url));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200) {*/
         final audioUrl = url; // You can use the apiUrl directly as a URL
         await _audioPlayer.play(UrlSource(audioUrl));
         setState(() {
           _isPlaying = true;
         });
-      } else {
+      /*} else {
         print('Failed to fetch audio: ${response.statusCode}');
-      }
+      }*/
     } catch (e) {
       print('Error fetching audio: $e');
     }
