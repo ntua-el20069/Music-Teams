@@ -72,21 +72,24 @@ Future<ScrapedSong> sendHTMLviaPostRequest({String title = 'Ρόζα'}) async {
 class Album {
   final String message;
   final String error;
+  final int song_id;
 
-  const Album({required this.message, required this.error});
+  const Album({required this.message, required this.error, required this.song_id});
 
   factory Album.fromJson(Map<String, dynamic> json) {
     if (json.containsKey('message') ) {
       print('Response message: ${json['message']}');
       return Album(
         message: json['message'] as String,
-        error: 'All OK'
+        error: 'All OK',
+        song_id: json['song_id'] as int
       );
     } else if (json.containsKey('error')){
       print('Response error: ${json['error']}');
       return Album(
         message: 'Error',
-        error: json['error'] as String
+        error: json['error'] as String,
+        song_id: -1
       );
     } else {
       throw FormatException('Failed to load album.');
@@ -307,7 +310,8 @@ TextField(
       return Text('${snapshot.error}');
     } else if (snapshot.hasData) {
       if (snapshot.data!.message == 'Successful Insertion!') {
-        return AddChords(); // or any other success screen/widget
+        //return AddChords(); // or any other success screen/widget
+        return CustomError(errorTitle: 'Song ID:', errorText: '${snapshot.data!.song_id}', navigateTo: AddSongPage());
       } else {
         return CustomError(
           errorText: snapshot.data!.message.toString(),

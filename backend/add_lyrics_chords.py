@@ -181,7 +181,9 @@ def add_lyrics_json(song_id='', update=False):
             "links": {
                 "add_chords": f"/{song_id}/add-chords",
                 "home": "/"
-            }
+                
+            },
+            "song_id": song_id
         }), 201  # Created
 
     else:
