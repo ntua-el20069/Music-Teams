@@ -119,26 +119,37 @@ class _SongState extends State<SongPage> {
   late AudioPlayer _audioPlayer;
   String? recordingUrl;
   String? initialButtonText;
+  bool? recordingOK;
+  bool mounted = true; // beacomes false after dispose
 
-  @override
-  void initState() {
-    super.initState();
-    // Get the integer value from the Future<int>
-    widget.songId.then((value) {
-      setState(() {
-        selectedSongId = value;
-        futureAlbum = fetchAlbum(selectedSongId!);
-        recordingUrl = baseUrl +  '/API/'+ selectedSongId.toString() +'/recording';
-        _audioPlayer = AudioPlayer();
-      });
-      
-        setState((){
-          seekForRecording().then( (recordingOK){
-            initialButtonText = (recordingOK) ? 'Play Recording' : 'No Recording';
-          });
+@override
+void initState() {
+  super.initState();
+
+  widget.songId.then((value) {
+    if(mounted) setState(() {
+      selectedSongId = value;
+      futureAlbum = fetchAlbum(selectedSongId!);
+      recordingUrl = baseUrl + '/API/' + selectedSongId.toString() + '/recording';
+      _audioPlayer = AudioPlayer();
+      }); 
+        // Fetch recording asynchronously without blocking the main content
+      seekForRecording().then((recordingOK) {
+        if (mounted) setState(() {
+          initialButtonText = recordingOK ? 'Play Recording' : 'No Recording';
         });
+      });
     });
-  }
+
+
+}
+
+// Function to load the main content
+
+
+
+
+
 
 
   @override
@@ -307,6 +318,7 @@ class _SongState extends State<SongPage> {
 
   @override
   void dispose() {
+    mounted = false;
     _audioPlayer.dispose();
     super.dispose();
   }
