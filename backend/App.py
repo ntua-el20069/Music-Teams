@@ -5,7 +5,7 @@ import mysql.connector
 from add_lyrics_chords import *
 from help_routes import *
 from transporto import *
-from __init__ import list_url, song_demands_url
+from __init__ import list_url, song_demands_url, recordings_url
 from web_scrape import scrape_from_html_to_json
 
 #from .accept import *
@@ -58,9 +58,8 @@ def webscrape_route():
     return scrape_from_html_to_json(html)
 
 # Set the upload folder
-#base_url = '/home/nikolaospapa3/Documents/web-dev/Mobile/Music-Teams/backend/'
-base_url = '/home/nikolaospapa3/Music-Teams/backend/'
-app.config['UPLOAD_FOLDER'] = base_url + 'recordings'
+
+app.config['UPLOAD_FOLDER'] = recordings_url()
 
 @app.route('/<song_id>/add-recording')
 def recording(song_id):
