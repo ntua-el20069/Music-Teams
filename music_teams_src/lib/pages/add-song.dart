@@ -5,7 +5,6 @@ import 'package:myapp/components/error.dart';
 import 'package:myapp/functions/greekLyrics.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/prototype/add-chords-page.dart';
-import 'package:myapp/prototype/add-song-page.dart';
 import 'package:myapp/utils.dart';
 import 'dart:async';
 import 'dart:convert';

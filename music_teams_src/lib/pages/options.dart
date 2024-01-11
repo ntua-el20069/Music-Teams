@@ -3,10 +3,6 @@ import 'package:myapp/components/disclaimer.dart';
 import 'package:myapp/components/error.dart';
 import 'package:myapp/pages/add-song.dart';
 import 'package:myapp/pages/team-home.dart';
-import 'package:myapp/prototype/add-song-page.dart';
-import 'package:myapp/prototype/rename-page.dart';
-import 'package:myapp/prototype/team-code-pop-up.dart';
-import 'package:myapp/prototype/team-home-page.dart';
 import 'package:myapp/utils.dart';
 
 class OptionsPage extends StatelessWidget {

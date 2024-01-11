@@ -36,7 +36,7 @@ def list_url():
     return 'list.txt' if mode=='local' else '/home/nikolaospapa3/ChordPose/list.txt'
 
 def song_demands_url():
-    return 'backend/lists/song-demands.txt' if mode=='local' else '/home/nikolaospapa3/Music-Teams/backend/lists/song-demands.txt'
+    return 'backend/lists/song-demands.txt' if mode=='local' else '/home/nikolaospapa3/lists/song-demands.txt'
 
 def recordings_url():
     return '/home/nikolaospapa3/Documents/web-dev/Mobile/Music-Teams/backend/recordings' if mode=='local' else '/home/nikolaospapa3/recordings'

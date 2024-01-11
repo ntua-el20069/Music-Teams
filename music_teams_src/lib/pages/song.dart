@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/pages/live.dart';
 import 'package:myapp/pages/team-home.dart';
-import 'package:myapp/prototype/live-team-1.dart';
 import 'package:myapp/url.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 
 
 // POST
@@ -114,6 +115,10 @@ class _SongState extends State<SongPage> {
   TextEditingController transportoController = TextEditingController();
   Future<Album>? _futureAlbum;
   int? selectedSongId;
+  bool _isPlaying = false;
+  late AudioPlayer _audioPlayer;
+  String? recordingUrl;
+  String? initialButtonText;
 
   @override
   void initState() {
@@ -123,9 +128,17 @@ class _SongState extends State<SongPage> {
       setState(() {
         selectedSongId = value;
         futureAlbum = fetchAlbum(selectedSongId!);
+        recordingUrl = baseUrl +  '/API/'+ selectedSongId.toString() +'/recording';
+        _audioPlayer = AudioPlayer();
       });
+      seekForRecording().then( (recordingOK){
+        setState((){
+            initialButtonText = (recordingOK) ? 'Play Recording' : 'No Recording';
+          });
+        });
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -138,11 +151,13 @@ class _SongState extends State<SongPage> {
         final double sensitivity = 10;
         if (details.delta.dx > sensitivity) {
           // Right Swipe
+          dispose();
           Navigator.of(context).push(
             MaterialPageRoute(builder: (_) => LivePage()),
           );
         } else if (details.delta.dx < -sensitivity) {
           // Left Swipe
+          dispose();
           Navigator.of(context).push(
             MaterialPageRoute(builder: (_) => TeamHomePage(mode: 'SongDemand',)),
           );
@@ -185,7 +200,7 @@ class _SongState extends State<SongPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(4.0),
                   child: Text(
                     'Swipe for Live >>    << Swipe for Song Demand',
                     textAlign: TextAlign.start,
@@ -230,12 +245,17 @@ class _SongState extends State<SongPage> {
               ],
             ),
             bottomNavigationBar: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(4.0),
               child: Container(
                 color: Colors.purple[100],
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    ElevatedButton(
+                      onPressed: _isPlaying ? _stopAudio : _fetchAndPlayAudio,
+                      child: Text(_isPlaying ? 'Stop' : (initialButtonText ?? 'Seeking for recording')),
+                    ),
+                    SizedBox(width: 8.0),
                     Expanded(
                       child: TextField(
                         controller: transportoController,
@@ -243,6 +263,7 @@ class _SongState extends State<SongPage> {
                         decoration: InputDecoration(
                           hintText: 'Number',
                           border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0), // Adjust the values as needed
                         ),
                       ),
                     ),
@@ -274,5 +295,55 @@ class _SongState extends State<SongPage> {
         }
       },
     );
+  }
+
+  Future<void> _stopAudio() async {
+    await _audioPlayer.stop();
+    setState(() {
+      _isPlaying = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchAndPlayAudio() async {
+    try {
+      String url = recordingUrl ?? '';
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final audioUrl = url; // You can use the apiUrl directly as a URL
+        await _audioPlayer.play(UrlSource(audioUrl));
+        setState(() {
+          _isPlaying = true;
+        });
+      } else {
+        print('Failed to fetch audio: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching audio: $e');
+    }
+  }
+
+
+  Future<bool> seekForRecording() async {
+    try {
+      String url = recordingUrl ?? '';
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        print("ok recording");
+        return true;  
+      } else {
+        print('Failed to fetch audio: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error fetching audio: $e');
+      return false;
+    }
   }
 }

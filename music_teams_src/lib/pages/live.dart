@@ -10,8 +10,6 @@ import 'package:myapp/components/options-button.dart';
 import 'package:myapp/pages/options.dart';
 import 'package:myapp/pages/song.dart';
 import 'package:myapp/pages/team-home.dart';
-import 'package:myapp/prototype/live-team-1.dart';
-import 'package:myapp/prototype/options-page.dart';
 import 'package:myapp/url.dart';
 
 

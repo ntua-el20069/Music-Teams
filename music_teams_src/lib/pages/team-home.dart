@@ -10,8 +10,6 @@ import 'package:myapp/components/options-button.dart';
 import 'package:myapp/pages/live.dart';
 import 'package:myapp/pages/options.dart';
 import 'package:myapp/pages/song.dart';
-import 'package:myapp/prototype/live-team-1.dart';
-import 'package:myapp/prototype/options-page.dart';
 import 'package:myapp/url.dart';
 
 int returnValue = 1;
@@ -40,6 +38,7 @@ Future<int> selectSong(String title) async {
       throw Exception('Failed to find Song, empty list of ids.');
     }
   } else {
+    print('Title: "${title}"');
     throw Exception('Failed to find Song. ${response.statusCode} status code.');
   }
 
