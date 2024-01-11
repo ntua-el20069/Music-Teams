@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, url_for, flash, redirect, jsonify, abort, g
+from flask import Flask, render_template, send_from_directory, request, url_for, flash, redirect, jsonify, abort, g
+import os
 from flask_httpauth import HTTPBasicAuth
 import mysql.connector
 
@@ -62,7 +63,7 @@ def webscrape_route():
 app.config['UPLOAD_FOLDER'] = recordings_url()
 
 @app.route('/<song_id>/add-recording')
-def recording(song_id):
+def add_recording(song_id):
     return render_template('recording.html', song_id = song_id)
 
 @app.route('/API/<song_id>/upload', methods=['POST'])
@@ -75,6 +76,28 @@ def upload_file_json(song_id):
             return jsonify({"message": "File uploaded successfully!", "file_path": file_path})
 
     return jsonify({"error": "No file uploaded or something went wrong."})
+
+@app.route('/API/<song_id>/recording', methods=['GET'])
+def recording(song_id):
+    recordings_folder = recordings_url()
+    # Get the list of files in the folder
+    files = os.listdir(recordings_folder)
+    # Filter files that start with the specified song_id
+    matching_files = [file for file in files if file.startswith(f"{song_id}-")]
+    if not matching_files:
+        # Return a 404 error if no matching file is found
+        return 'File not found', 404
+    # Take the first matching file (you can modify this logic as needed)
+    file_name = matching_files[0]
+    
+    # Use Flask's send_from_directory to send the file to the client
+    print(file_name)
+    try:
+        return send_from_directory(recordings_folder, file_name, as_attachment=True)
+    except Exception as e:
+        print(f'Exception: ############## {e}')
+
+    
 
 @app.route('/API/make-song-demand', methods=['POST'])
 def make_song_demand():
