@@ -109,9 +109,8 @@ def make_song_demand():
     with open(song_demands_url(), 'r') as file:
         #if demanded in file.read(): return jsonify({"error": "This song has been already demanded"}), 400  # Bad Request
         songs = file.read().split('\n')
-        if len(songs) > 11: 
-            last_songs = songs[-2:-12:-1]
-            if demanded in last_songs: return jsonify({"error": "This song has been already demanded"}), 400  # Bad Request
+        last_songs = songs[-2:-12:-1] if len(songs) > 11  else songs
+        if demanded in last_songs: return jsonify({"error": "This song has been already demanded"}), 400  # Bad Request
     with open(song_demands_url(), 'a') as file:
         file.write(demanded + '\n')
     return jsonify({"message": f"Demanded song {demanded}"}), 200  

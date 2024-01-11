@@ -131,8 +131,9 @@ class _SongState extends State<SongPage> {
         recordingUrl = baseUrl +  '/API/'+ selectedSongId.toString() +'/recording';
         _audioPlayer = AudioPlayer();
       });
-      seekForRecording().then( (recordingOK){
+      
         setState((){
+          seekForRecording().then( (recordingOK){
             initialButtonText = (recordingOK) ? 'Play Recording' : 'No Recording';
           });
         });
