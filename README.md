@@ -11,7 +11,7 @@ Organize your own lyrics, chords, small recordings and share them with your musi
 6. Ensure that in WSGI file `project_home` is set to the right path, as well as `Source Code`.
 7. Reload website
 
-### Bash commands for 2,3,4
+### Bash commands for 2,3,4,5
 ```bash
 rm -r /home/nikolaospapa3/Music-Teams
 ```
@@ -20,6 +20,7 @@ cd /home/nikolaospapa3/
 git clone https://github.com/ntua-el20069/Music-Teams.git
 cd Music-Teams
 rm -r music_teams_src
+vim backend/__init__.py
 ```
 
 ## Restore Database from the backup In the host database console (MySQL interpreter) 

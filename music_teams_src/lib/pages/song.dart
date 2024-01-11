@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:myapp/pages/live.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/url.dart';
-
+import 'package:audioplayers/audioplayers.dart';
 
 // POST
 Future<Album> createAlbum(int songId, String transporto) async {
@@ -16,9 +16,7 @@ Future<Album> createAlbum(int songId, String transporto) async {
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, String>{
-      'transporto': transporto
-    }),
+    body: jsonEncode(<String, String>{'transporto': transporto}),
   );
 
   if (response.statusCode == 201) {
@@ -33,10 +31,7 @@ Future<Album> createAlbum(int songId, String transporto) async {
   }
 }
 
-
-
-
-//  GET 
+//  GET
 Future<Album> fetchAlbum(int songId) async {
   String finalUrl = '$baseUrl/API/$songId/song-transpose';
   final response = await http
@@ -54,8 +49,6 @@ Future<Album> fetchAlbum(int songId) async {
   }
 }
 
-
-
 class Album {
   final String chords;
   final String composers;
@@ -66,38 +59,33 @@ class Album {
   final int transporto;
   final String type_transporto;
 
-  const Album({
-    required this.chords,
-    required this.composers,
-    required this.lyricists,
-    required this.lyrics,
-    required this.song_id,
-    required this.title,
-    required this.transporto,
-    required this.type_transporto
-  });
-
+  const Album(
+      {required this.chords,
+      required this.composers,
+      required this.lyricists,
+      required this.lyrics,
+      required this.song_id,
+      required this.title,
+      required this.transporto,
+      required this.type_transporto});
 
   factory Album.fromJson(Map<String, dynamic> json) {
-    if (json.containsKey('song_id') &&
-        json.containsKey('lyrics') ) {
-            return Album(
-              chords: json['chords'] as String,
-              composers: json['composers'] as String,
-              lyricists: json['lyricists'] as String,
-              lyrics: json['lyrics'] as String,
-              song_id: json['song_id'] as String,
-              title: json['title'] as String,
-              transporto: json['transporto'] as int,
-              type_transporto: json['type_transporto'] as String,
-            );
+    if (json.containsKey('song_id') && json.containsKey('lyrics')) {
+      return Album(
+        chords: json['chords'] as String,
+        composers: json['composers'] as String,
+        lyricists: json['lyricists'] as String,
+        lyrics: json['lyrics'] as String,
+        song_id: json['song_id'] as String,
+        title: json['title'] as String,
+        transporto: json['transporto'] as int,
+        type_transporto: json['type_transporto'] as String,
+      );
     } else {
       throw const FormatException('Failed to load album.');
     }
   }
 }
-
-
 
 class SongPage extends StatefulWidget {
   final Future<int> songId;
@@ -113,18 +101,41 @@ class _SongState extends State<SongPage> {
   TextEditingController transportoController = TextEditingController();
   Future<Album>? _futureAlbum;
   int? selectedSongId;
+  bool _isPlaying = false;
+  late AudioPlayer _audioPlayer;
+  String? recordingUrl;
+  String? initialButtonText;
+  bool? recordingOK;
+  bool mounted = true; // beacomes false after dispose
+  bool existsRecording = false;
 
   @override
   void initState() {
     super.initState();
-    // Get the integer value from the Future<int>
+
     widget.songId.then((value) {
-      setState(() {
-        selectedSongId = value;
-        futureAlbum = fetchAlbum(selectedSongId!);
+      if (mounted) {
+        setState(() {
+          selectedSongId = value;
+          futureAlbum = fetchAlbum(selectedSongId!);
+          recordingUrl =
+              baseUrl + '/API/' + selectedSongId.toString() + '/recording';
+          _audioPlayer = AudioPlayer();
+        });
+      }
+      // Fetch recording asynchronously without blocking the main content
+      seekForRecording().then((recordingOK) {
+        if (mounted) {
+          setState(() {
+            initialButtonText = recordingOK ? 'Play Recording' : 'No Recording';
+            existsRecording = recordingOK;
+          });
+        }
       });
     });
   }
+
+// Function to load the main content
 
   @override
   Widget build(BuildContext context) {
@@ -132,35 +143,42 @@ class _SongState extends State<SongPage> {
       return const Center(child: CircularProgressIndicator());
     }
     return GestureDetector(
-      onHorizontalDragUpdate: (details) {
-        // Sensitivity is used to determine the sensitivity of the swipe
-        const double sensitivity = 10;
-        if (details.delta.dx > sensitivity) {
-          // Right Swipe
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const LivePage()),
-          );
-        } else if (details.delta.dx < -sensitivity) {
-          // Left Swipe
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const TeamHomePage(mode: 'SongDemand',)),
-          );
-        }
-      },
-    child: MaterialApp(
-      title: 'Song Page',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF451475)),
-      ),
-      home: Scaffold(
-        body: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: _futureAlbum == null ? buildFutureBuilder(futureAlbum) : buildFutureBuilder(_futureAlbum!),
-        ),
-      ),
-    )
-    );
+        onHorizontalDragUpdate: (details) {
+          // Sensitivity is used to determine the sensitivity of the swipe
+          const double sensitivity = 10;
+          if (details.delta.dx > sensitivity) {
+            // Right Swipe
+            dispose();
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const LivePage()),
+            );
+          } else if (details.delta.dx < -sensitivity) {
+            // Left Swipe
+            dispose();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (_) => const TeamHomePage(
+                        mode: 'SongDemand',
+                      )),
+            );
+          }
+        },
+        child: MaterialApp(
+          title: 'Song Page',
+          theme: ThemeData(
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: const Color(0xFF451475)),
+          ),
+          home: Scaffold(
+            body: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(8),
+              child: _futureAlbum == null
+                  ? buildFutureBuilder(futureAlbum)
+                  : buildFutureBuilder(_futureAlbum!),
+            ),
+          ),
+        ));
   }
 
   Widget buildFutureBuilder(Future<Album> albumFuture) {
@@ -235,6 +253,13 @@ class _SongState extends State<SongPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    ElevatedButton(
+                      onPressed: _isPlaying ? _stopAudio : _fetchAndPlayAudio,
+                      child: Text(_isPlaying
+                          ? 'Stop'
+                          : (initialButtonText ?? 'Seeking for recording')),
+                    ),
+                    SizedBox(width: 8.0),
                     Expanded(
                       child: TextField(
                         controller: transportoController,
@@ -242,6 +267,9 @@ class _SongState extends State<SongPage> {
                         decoration: const InputDecoration(
                           hintText: 'Number',
                           border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0,
+                              horizontal: 12.0), // Adjust the values as needed
                         ),
                       ),
                     ),
@@ -250,11 +278,13 @@ class _SongState extends State<SongPage> {
                       onPressed: () {
                         String transporto = transportoController.text;
                         setState(() {
-                          _futureAlbum = createAlbum(selectedSongId ?? 0, transporto);
+                          _futureAlbum =
+                              createAlbum(selectedSongId ?? 0, transporto);
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff451475), // Set background color here
+                        backgroundColor: const Color(
+                            0xff451475), // Set background color here
                       ),
                       child: const Text('Transporto'),
                     ),
@@ -263,7 +293,6 @@ class _SongState extends State<SongPage> {
               ),
             ),
           );
-
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else {
@@ -273,5 +302,56 @@ class _SongState extends State<SongPage> {
         }
       },
     );
+  }
+
+  Future<void> _stopAudio() async {
+    await _audioPlayer.stop();
+    setState(() {
+      _isPlaying = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    mounted = false;
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchAndPlayAudio() async {
+    try {
+      if (!existsRecording) return;
+      String url = recordingUrl ?? '';
+      /* final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {*/
+      final audioUrl = url; // You can use the apiUrl directly as a URL
+      await _audioPlayer.play(UrlSource(audioUrl));
+      setState(() {
+        _isPlaying = true;
+      });
+      /*} else {
+        print('Failed to fetch audio: ${response.statusCode}');
+      }*/
+    } catch (e) {
+      print('Error fetching audio: $e');
+    }
+  }
+
+  Future<bool> seekForRecording() async {
+    try {
+      String url = recordingUrl ?? '';
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        print("ok recording");
+        return true;
+      } else {
+        print('Failed to fetch audio: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error fetching audio: $e');
+      return false;
+    }
   }
 }

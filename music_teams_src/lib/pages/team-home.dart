@@ -36,6 +36,7 @@ Future<int> selectSong(String title) async {
       throw Exception('Failed to find Song, empty list of ids.');
     }
   } else {
+    print('Title: "${title}"');
     throw Exception('Failed to find Song. ${response.statusCode} status code.');
   }
 
