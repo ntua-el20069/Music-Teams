@@ -20,6 +20,7 @@ cd /home/nikolaospapa3/
 git clone https://github.com/ntua-el20069/Music-Teams.git
 cd Music-Teams
 rm -r music_teams_src
+vim backend/__init__.py
 ```
 
 ## Restore Database from the backup In the host database console (MySQL interpreter) 
