@@ -73,9 +73,9 @@ def upload_file_json(song_id):
         if uploaded_file:
             file_path = f"{app.config['UPLOAD_FOLDER']}/{song_id}-{uploaded_file.filename}"
             uploaded_file.save(file_path)
-            return jsonify({"message": "File uploaded successfully!", "file_path": file_path})
+            return jsonify({"message": "File uploaded successfully!", "file_path": file_path}), 200
 
-    return jsonify({"error": "No file uploaded or something went wrong."})
+    return jsonify({"error": "No file uploaded or something went wrong."}), 400
 
 @app.route('/API/<song_id>/recording', methods=['GET'])
 def recording(song_id):
