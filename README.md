@@ -27,3 +27,4 @@ vim backend/__init__.py
 ```bash
 source ~/Music-Teams/backup_db_instance/musicteams-backup-2-11-2023.sql;
 ```
+Don't forget to remove some `song demands` and `recordings`.

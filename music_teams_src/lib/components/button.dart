@@ -37,13 +37,13 @@ class CustomGradientButton extends StatelessWidget {
         child: Stack(
           children: [
             Positioned(
-              left: 32.5 * fem,
-              top: 13 * fem,
+              left: 20 * fem,   // 20
+              top: 15 * fem, // 13
               child: Center(
                 child: Align(
                   child: SizedBox(
-                    width: 146 * fem,
-                    height: 29 * fem,
+                    width: 160 * fem, // 146
+                    height: 44 * fem, // 29
                     child: Text(
                       buttonText,
                       textAlign: TextAlign.center,

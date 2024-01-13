@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/components/dark-app-bar.dart';
 
 class Disclaimer extends StatelessWidget {
   @override
@@ -8,10 +9,7 @@ class Disclaimer extends StatelessWidget {
     double ffem = fem * 0.97;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Disclaimer'),
-        backgroundColor: Color(0xff451475),
-      ),
+      appBar: PurpleAppBar(header: 'Disclaimer',),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -31,7 +29,7 @@ class Disclaimer extends StatelessWidget {
               ),
               SizedBox(height: 20.0 * fem), // Add spacing between title and content
               Text(
-                'Your disclaimer content goes here. This may include important information or disclaimers regarding your application or services.',
+                'This is a demo version of the app.',
                 style: TextStyle(
                   fontSize: 18.0 * ffem,
                   color: Colors.black87, // Modify color as needed

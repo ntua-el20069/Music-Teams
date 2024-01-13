@@ -3,6 +3,7 @@ import 'package:myapp/examples/get.dart';
 import 'package:myapp/examples/post.dart';
 import 'package:myapp/pages/add-song.dart';
 import 'package:myapp/pages/live.dart';
+import 'package:myapp/pages/opening.dart';
 import 'package:myapp/pages/song.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/utils.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TeamHomePage(),                 // here change the page you want to see first
+      home: OpeningPage(),                 // here change the page you want to see first
     );
   }
 }

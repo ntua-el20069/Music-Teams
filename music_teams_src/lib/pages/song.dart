@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:myapp/components/dark-app-bar.dart';
 import 'package:myapp/pages/live.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/url.dart';
@@ -185,7 +186,7 @@ void initState() {
       home: Scaffold(
         body: Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(0),
           child: _futureAlbum == null ? buildFutureBuilder(futureAlbum) : buildFutureBuilder(_futureAlbum!),
         ),
       ),
@@ -206,26 +207,39 @@ void initState() {
           String title = snapshot.data!.title;
 
           return Scaffold(
-            appBar: AppBar(
-              title: Text(title),
-              backgroundColor: Color(0xff451475),
-            ),
+            appBar: PurpleAppBar(header: title,),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
                   padding: EdgeInsets.all(4.0),
-                  child: Text(
-                    'Swipe for Live >>    << Swipe for Song Demand',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: 'monospace',
-                      color: Color(0xff451475),
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Swipe for Live >>',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'monospace',
+                          color: Color(0xff451475),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '<< Swipe for Song Demand',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'monospace',
+                          color: Color(0xff451475),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
                 Expanded(
                   child: ListView.builder(
                     itemCount: lyrics.length,
@@ -259,17 +273,18 @@ void initState() {
               ],
             ),
             bottomNavigationBar: Padding(
-              padding: EdgeInsets.all(4.0),
+              padding: EdgeInsets.all(0.0),
               child: Container(
                 color: Colors.purple[100],
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    SizedBox(width: 4.0),
                     ElevatedButton(
                       onPressed: _isPlaying ? _stopAudio : _fetchAndPlayAudio,
                       child: Text(_isPlaying ? 'Stop' : (initialButtonText ?? 'Seeking for recording')),
                     ),
-                    SizedBox(width: 8.0),
+                    SizedBox(width: 4.0),
                     Expanded(
                       child: TextField(
                         controller: transportoController,
@@ -281,7 +296,7 @@ void initState() {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8.0),
+                    SizedBox(width: 4.0),
                     ElevatedButton(
                       onPressed: () {
                         String transporto = transportoController.text;
@@ -294,6 +309,7 @@ void initState() {
                         backgroundColor: Color(0xff451475), // Set background color here
                       ),
                     ),
+                    SizedBox(width: 4.0),
                   ],
                 ),
               ),

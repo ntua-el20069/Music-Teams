@@ -246,6 +246,7 @@ flutter:
     - assets/final-ui/images/icon-close-raY.png
     - assets/final-ui/images/back-button-bar-1qN.png
     - assets/final-ui/images/input-2P6.png
+    - assets/assets-components/images/3-line-menu-icon-13.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

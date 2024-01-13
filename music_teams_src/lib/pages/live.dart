@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:myapp/components/back-title-options.dart';
 import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
+import 'package:myapp/components/dark-app-bar.dart';
 import 'package:myapp/components/error.dart';
 import 'package:myapp/components/options-button.dart';
 import 'package:myapp/pages/options.dart';
@@ -66,10 +67,7 @@ class _LiveState extends State<LivePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Live (Recent Song Demands)'),
-        backgroundColor: Color(0xff451475),
-      ),
+      appBar: PurpleAppBar(header: 'Live (Recent Demands)',),
       body: FutureBuilder<SongDemandAlbum>(
         future: futureAlbum,
         builder: (context, snapshot) {

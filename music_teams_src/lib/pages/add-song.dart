@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
+import 'package:myapp/components/dark-app-bar.dart';
 import 'package:myapp/components/error.dart';
 import 'package:myapp/functions/greekLyrics.dart';
 import 'package:myapp/pages/add-recording.dart';
@@ -150,6 +151,7 @@ class _AddSongPage extends State<AddSongPage> {
     return (_futureAlbum == null && _futureScrapedSong == null) 
                         ?  MaterialApp(
                         home: Scaffold(
+                          appBar: PurpleAppBar(header: 'New Song',),
                           body: SingleChildScrollView(
                             child: Container(
                               alignment: Alignment.center,
@@ -205,7 +207,7 @@ TextEditingController lyricsController = TextEditingController();
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
 
-        CustomNavigationButton(buttonText: 'New Song', navigateTo: TeamHomePage(), fem: fem, ffem: ffem),
+        // CustomNavigationButton(buttonText: 'New Song', navigateTo: TeamHomePage(), fem: fem, ffem: ffem),
         /* Text(
           'Title',
           style: SafeGoogleFont (
@@ -295,7 +297,7 @@ TextField(
               });
             },
             buttonText: 'Add recording',
-            fontSize: 24,
+            fontSize: 20,
           ),
     
       ],
@@ -309,7 +311,11 @@ TextField(
     if (snapshot.connectionState == ConnectionState.waiting) {
       return CircularProgressIndicator();
     } else if (snapshot.hasError) {
-      return Text('${snapshot.error}');
+      return CustomError(
+          errorText: snapshot.error.toString(),
+          navigateTo: AddSongPage(), // Replace with the appropriate widget
+          errorTitle: 'Error', // Customize error title if needed
+        );
     } else if (snapshot.hasData) {
       if (snapshot.data!.message == 'Successful Insertion!') {
         //return AddChords(); // or any other success screen/widget

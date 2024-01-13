@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/components/button.dart';
+import 'package:myapp/components/dark-app-bar.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/url.dart';
 import 'package:record/record.dart';
@@ -70,9 +71,7 @@ class AddRecordingState extends State<AddRecordingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Recording'),
-      ),
+      appBar: PurpleAppBar(header: 'Recording for ${widget.title}',),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -85,6 +84,7 @@ class AddRecordingState extends State<AddRecordingPage> {
                 ),
               ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Color(0xff451475),),
               onPressed: isRecording ? stopRecording : startRecording,
               child: isRecording
                   ? const Text('Stop Recording')
@@ -95,6 +95,7 @@ class AddRecordingState extends State<AddRecordingPage> {
             ),
             if (!isRecording)
               ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Color(0xff451475),),
                   onPressed: playRecording,
                   child: const Text('Play Recording')),
             Expanded(

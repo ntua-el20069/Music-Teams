@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/components/dark-app-bar.dart';
 
 class CustomError extends StatelessWidget {
   final String errorTitle;
@@ -18,10 +19,7 @@ class CustomError extends StatelessWidget {
     double ffem = fem * 0.97;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(errorTitle),
-        backgroundColor: Color(0xff451475),
-      ),
+      appBar: PurpleAppBar(header: errorTitle,),
       body: Container(
         width: double.infinity,
         //height: double.infinity,
