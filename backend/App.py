@@ -1,5 +1,6 @@
 from flask import Flask, render_template, send_from_directory, request, url_for, flash, redirect, jsonify, abort, g
 import os
+from urllib.parse import unquote
 from flask_httpauth import HTTPBasicAuth
 import mysql.connector
 
@@ -71,7 +72,8 @@ def upload_file_json(song_id):
     if request.method == 'POST':
         uploaded_file = request.files['file']
         if uploaded_file:
-            file_path = f"{app.config['UPLOAD_FOLDER']}/{song_id}-{uploaded_file.filename}"
+            decoded_filename = unquote(uploaded_file.filename)
+            file_path = f"{app.config['UPLOAD_FOLDER']}/{song_id}-{decoded_filename}"
             uploaded_file.save(file_path)
             return jsonify({"message": "File uploaded successfully!", "file_path": file_path}), 200
 
