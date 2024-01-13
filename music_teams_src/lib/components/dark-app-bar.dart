@@ -13,8 +13,8 @@ class PurpleAppBar extends StatelessWidget implements PreferredSizeWidget {
     double ffem = fem * 0.97;
     return AppBar(
       title: Text(header),
-      titleTextStyle: SafeGoogleFont (
-        'Zilla Slab',
+      titleTextStyle: TextStyle (
+        fontFamily: 'Zilla Slab',
         fontSize: 22*ffem,
         fontWeight: FontWeight.w700,
         height: 1.2*ffem/fem,

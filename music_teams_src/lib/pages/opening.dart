@@ -41,7 +41,7 @@ class OpeningPage extends StatelessWidget {
                 height: 2.0 * ffem / fem,
                 foreground: Paint()..shader = LinearGradient(
                   colors: [Color(0xfffe9a1a), Color(0xffc5087e)],
-                ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 50.0)),
+                ).createShader(Rect.fromLTWH(0.0, 0.0, 300.0, 50.0)),
               ),
             ),
             SizedBox(

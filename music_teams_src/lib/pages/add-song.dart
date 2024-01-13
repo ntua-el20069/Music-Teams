@@ -165,6 +165,7 @@ class _AddSongPage extends State<AddSongPage> {
                       : (_futureAlbum == null)
                       ? MaterialApp(
                         home: Scaffold(
+                          appBar: PurpleAppBar(header: 'New Song',),
                           body: SingleChildScrollView(
                             child: Container(
                               alignment: Alignment.center,
