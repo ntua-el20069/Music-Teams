@@ -106,6 +106,7 @@ class _SongState extends State<SongPage> {
   String? recordingUrl;
   String? initialButtonText;
   bool? recordingOK;
+  @override
   bool mounted = true; // beacomes false after dispose
   bool existsRecording = false;
 
@@ -118,8 +119,7 @@ class _SongState extends State<SongPage> {
         setState(() {
           selectedSongId = value;
           futureAlbum = fetchAlbum(selectedSongId!);
-          recordingUrl =
-              baseUrl + '/API/' + selectedSongId.toString() + '/recording';
+          recordingUrl = '$baseUrl/API/$selectedSongId/recording';
           _audioPlayer = AudioPlayer();
         });
       }
@@ -150,7 +150,7 @@ class _SongState extends State<SongPage> {
             // Right Swipe
             dispose();
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const LivePage()),
+              MaterialPageRoute(builder: (_) => LivePage()),
             );
           } else if (details.delta.dx < -sensitivity) {
             // Left Swipe
@@ -259,7 +259,7 @@ class _SongState extends State<SongPage> {
                           ? 'Stop'
                           : (initialButtonText ?? 'Seeking for recording')),
                     ),
-                    SizedBox(width: 8.0),
+                    const SizedBox(width: 8.0),
                     Expanded(
                       child: TextField(
                         controller: transportoController,

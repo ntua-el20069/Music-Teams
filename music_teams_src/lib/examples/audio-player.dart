@@ -5,7 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 class AudioPlayerWidget extends StatefulWidget {
   final String apiUrl;
 
-  AudioPlayerWidget({required this.apiUrl});
+  const AudioPlayerWidget({super.key, required this.apiUrl});
 
   @override
   _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
@@ -67,7 +67,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: AudioPlayerWidget(
       apiUrl: 'https://nikolaospapa3.pythonanywhere.com/API/4/recording', // Replace with your Flask API endpoint
     ),

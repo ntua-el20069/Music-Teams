@@ -7,18 +7,14 @@ import 'package:myapp/pages/song.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/url.dart';
 
-
-<<<<<<< Updated upstream
 String finalUrl = baseUrl + '/API/recent-song-demands';
-=======
-String finalUrl = '$baseUrl/API/song-demands';
->>>>>>> Stashed changes
 
 Future<SongDemandAlbum> fetchAlbum() async {
   final response = await http.get(Uri.parse(finalUrl));
 
   if (response.statusCode == 200) {
-    return SongDemandAlbum.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return SongDemandAlbum.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>);
   } else {
     throw Exception('Failed to load album');
   }
@@ -37,14 +33,12 @@ class SongDemandAlbum {
         songs: json['demanded-songs'].split('\n') as List<dynamic>,
       );
     } else {
-      throw const FormatException('Failed to load album.');
+      throw FormatException('Failed to load album.');
     }
   }
 }
 
 class LivePage extends StatefulWidget {
-  const LivePage({super.key});
-
   @override
   _LiveState createState() => _LiveState();
 }
@@ -68,19 +62,14 @@ class _LiveState extends State<LivePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-<<<<<<< Updated upstream
         title: Text('Live (Recent Song Demands)'),
         backgroundColor: Color(0xff451475),
-=======
-        title: const Text('Live'),
-        backgroundColor: const Color(0xff451475),
->>>>>>> Stashed changes
       ),
       body: FutureBuilder<SongDemandAlbum>(
         future: futureAlbum,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
@@ -90,7 +79,7 @@ class _LiveState extends State<LivePage> {
               itemBuilder: (BuildContext context, int index) {
                 String title = songs[index];
                 return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  margin: EdgeInsets.symmetric(vertical: 8.0),
                   child: SizedBox(
                     width: 200, // Specify your desired width
                     height: 50, // Specify your desired height
@@ -98,7 +87,9 @@ class _LiveState extends State<LivePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SongPage(songId: selectSong(title))),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SongPage(songId: selectSong(title))),
                         );
                       },
                       buttonText: title,
@@ -110,7 +101,7 @@ class _LiveState extends State<LivePage> {
               },
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           }
         },
       ),

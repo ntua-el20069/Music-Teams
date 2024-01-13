@@ -44,6 +44,11 @@ def home_route_json():
 def add_song_route_json():
     return add_lyrics_json()
 
+@app.route('/API/<song_title>/get-id-by-title', methods = ['GET'])
+
+def get_id_by_title(song_title):
+    return get_id_by_title(song_title)
+
 @app.route('/API/<song_id>/add-chords', methods = ['GET', 'POST'])
 
 def add_chords_route_json(song_id):

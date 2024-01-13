@@ -27,7 +27,8 @@ Future<int> selectSong(String title) async {
   );
 
   if (response.statusCode == 200) {
-    Map<String, dynamic> json = jsonDecode(response.body) as Map<String, dynamic>;
+    Map<String, dynamic> json =
+        jsonDecode(response.body) as Map<String, dynamic>;
     List<dynamic> ids = json['ids'] as List<dynamic>;
 
     if (ids.isNotEmpty) {
@@ -36,7 +37,7 @@ Future<int> selectSong(String title) async {
       throw Exception('Failed to find Song, empty list of ids.');
     }
   } else {
-    print('Title: "${title}"');
+    print('Title: "$title"');
     throw Exception('Failed to find Song. ${response.statusCode} status code.');
   }
 
@@ -53,11 +54,12 @@ Future<String> DemandSong(String title) async {
       body: jsonEncode({'title': title}),
     );
 
-    Map<String, dynamic> json = jsonDecode(response.body) as Map<String, dynamic>;
+    Map<String, dynamic> json =
+        jsonDecode(response.body) as Map<String, dynamic>;
     print(json);
     if (response.statusCode == 200) {
-        print("ok response");
-        return 'OK';
+      print("ok response");
+      return 'OK';
     } else {
       // Handle cases for other response status codes
       print("Another status code");
@@ -70,7 +72,6 @@ Future<String> DemandSong(String title) async {
     return 'Exception occurred: $e';
   }
 }
-
 
 Future<Album> fetchAlbum() async {
   final response = await http.get(Uri.parse(finalUrl));
@@ -109,7 +110,7 @@ class Album {
 }
 
 class TeamHomePage extends StatefulWidget {
-final String mode;
+  final String mode;
 
   // Constructor for TeamHomePage that accepts a mode parameter
   const TeamHomePage({super.key, this.mode = 'TeamHome'});
@@ -136,8 +137,7 @@ class _TeamHomeState extends State<TeamHomePage> {
         filteredSongs = List.from(songs); // Show all songs if input is empty
       } else {
         filteredSongs = songs
-            .where((song) =>
-                song.toLowerCase().startsWith(value.toLowerCase()))
+            .where((song) => song.toLowerCase().startsWith(value.toLowerCase()))
             .toList();
         print(filteredSongs);
       }
@@ -160,28 +160,41 @@ class _TeamHomeState extends State<TeamHomePage> {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
               songs = snapshot.data!.songs;
-              if (_controller.text == '') filteredSongs = List.from(songs); // Initial population of filtered songs
+              if (_controller.text == '') {
+                filteredSongs =
+                    List.from(songs); // Initial population of filtered songs
+              }
 
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    
                     CustomAppBarWithOptions(
-                      text: (widget.mode == 'TeamHome') ? 'Team Home' : 'Song Demand', 
-                      navigateTo: (widget.mode == 'TeamHome') ? const TeamHomePage() : const LivePage(), 
-                      optionsNavigateTo: const OptionsPage(), fem: fem, ffem: ffem
-                    ),
-
-                    CustomGradientButton(onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context) => const LivePage()),), buttonText: 'Live', fontSize: 24),
-
+                        text: (widget.mode == 'TeamHome')
+                            ? 'Team Home'
+                            : 'Song Demand',
+                        navigateTo: (widget.mode == 'TeamHome')
+                            ? const TeamHomePage()
+                            : LivePage(),
+                        optionsNavigateTo: const OptionsPage(),
+                        fem: fem,
+                        ffem: ffem),
+                    CustomGradientButton(
+                        onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LivePage()),
+                            ),
+                        buttonText: 'Live',
+                        fontSize: 24),
                     TextFormField(
                       controller: _controller,
                       decoration: const InputDecoration(
                         labelText: 'Find Song',
                       ),
                       onChanged: (value) {
-                        filterSongs(value); // Call filter function on input change
+                        filterSongs(
+                            value); // Call filter function on input change
                       },
                     ),
                     Expanded(
@@ -195,19 +208,39 @@ class _TeamHomeState extends State<TeamHomePage> {
                               final title = filteredSongs[index];
                               print(title);
                               if (widget.mode == 'TeamHome') {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SongPage(songId: selectSong(title)),),);
-                              }
-                              else { // mode = 'SongDemand'
-                                DemandSong(title).then((result)  {
-                                    if (result == 'OK') {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LivePage(),),);
-                                    } else {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => CustomError(errorText: result, navigateTo: const TeamHomePage(mode: 'SongDemand'),),),);
-                                    }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        SongPage(songId: selectSong(title)),
+                                  ),
+                                );
+                              } else {
+                                // mode = 'SongDemand'
+                                DemandSong(title).then((result) {
+                                  if (result == 'OK') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LivePage(),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CustomError(
+                                          errorText: result,
+                                          navigateTo: const TeamHomePage(
+                                              mode: 'SongDemand'),
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 });
-                                
                               }
-                              print('############################################');
+                              print(
+                                  '############################################');
                             },
                           );
                         },

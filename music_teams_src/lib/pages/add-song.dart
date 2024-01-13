@@ -6,7 +6,6 @@ import 'package:myapp/functions/greekLyrics.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/prototype/add-chords-page.dart';
 import 'package:myapp/pages/add_chords.dart';
-import 'package:myapp/utils.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -282,7 +281,8 @@ class _AddSongPage extends State<AddSongPage> {
               //sendHTMLviaPostRequest(title: title);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Addchords()),
+                MaterialPageRoute(
+                    builder: (context) => Addchords(title: title)),
               );
             });
           },

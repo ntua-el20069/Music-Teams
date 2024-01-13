@@ -34,34 +34,42 @@ class CustomAppBarWithOptions extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 258 * fem, 10 * fem),
+                    margin: EdgeInsets.fromLTRB(
+                        0 * fem, 0 * fem, 258 * fem, 10 * fem),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => navigateTo));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => navigateTo));
                       },
                       child: Positioned(
-              left: 15 * fem,
-              top: 0 * fem,
-              child: Align(
-                child: SizedBox(
-                  width: 384.7 * fem,
-                  height: 80 * fem,
-                  child: Image.asset(
-                    'assets/prototype/images/back-button-bar-Ktx.png',
-                    width: 384.7 * fem,
-                    height: 80 * fem,
-                  ),
-                ),
-              ),
-            ),
+                        left: 15 * fem,
+                        top: 0 * fem,
+                        child: Align(
+                          child: SizedBox(
+                            width: 384.7 * fem,
+                            height: 80 * fem,
+                            child: Image.asset(
+                              'assets/prototype/images/back-button-bar-Ktx.png',
+                              width: 384.7 * fem,
+                              height: 80 * fem,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => optionsNavigateTo));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => optionsNavigateTo));
                     },
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(0 * fem, 10 * fem, 0 * fem, 0 * fem),
+                      margin: EdgeInsets.fromLTRB(
+                          0 * fem, 10 * fem, 0 * fem, 0 * fem),
                       width: 56.7 * fem,
                       height: 70 * fem,
                       child: Image.asset(
@@ -80,10 +88,12 @@ class CustomAppBarWithOptions extends StatelessWidget {
             top: 0 * fem,
             child: GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => optionsNavigateTo));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => optionsNavigateTo));
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(9.62 * fem, 18.75 * fem, 9.62 * fem, 18.75 * fem),
+                padding: EdgeInsets.fromLTRB(
+                    9.62 * fem, 18.75 * fem, 9.62 * fem, 18.75 * fem),
                 width: 76.93 * fem,
                 height: 75 * fem,
                 decoration: const BoxDecoration(
