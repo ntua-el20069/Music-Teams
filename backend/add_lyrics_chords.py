@@ -175,7 +175,7 @@ def add_lyrics_json(song_id='', update=False):
 
         message, song_id = insert_song(title, composers, lyricists, lyrics)
         if message:
-            return jsonify({"message": message, song_id: -1}), 400  # Bad Request
+            return jsonify({"message": message, "song_id": -1}), 400  # Bad Request
         return jsonify({
             "message": "Successful Insertion!",
             "links": {
