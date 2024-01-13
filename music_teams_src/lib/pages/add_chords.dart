@@ -36,8 +36,8 @@ class Addchords extends StatelessWidget {
                         builder: (context) => AddRecording(title: title)),
                   );
                 },
-                buttonText: 'Add chords',
-                fontSize: 24,
+                buttonText: 'Add recording',
+                fontSize: 18,
               ),
             ),
           ),

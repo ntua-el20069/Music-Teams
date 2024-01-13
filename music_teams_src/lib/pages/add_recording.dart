@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/components/button.dart';
+import 'package:myapp/pages/team-home.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
@@ -60,7 +62,25 @@ class AddRecordingState extends State<AddRecording> {
             ),
             if (!isRecording)
               ElevatedButton(
-                  onPressed: playRecording, child: const Text('Play Recording'))
+                  onPressed: playRecording,
+                  child: const Text('Play Recording')),
+            Expanded(
+              child: Container(
+                alignment: Alignment.bottomRight,
+                padding: const EdgeInsets.all(16),
+                child: CustomGradientButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TeamHomePage()),
+                    );
+                  },
+                  buttonText: 'Home Page',
+                  fontSize: 24,
+                ),
+              ),
+            ),
           ],
         ),
       ),
