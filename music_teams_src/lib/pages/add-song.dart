@@ -3,8 +3,10 @@ import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
 import 'package:myapp/components/error.dart';
 import 'package:myapp/functions/greekLyrics.dart';
+import 'package:myapp/pages/add-recording.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/prototype/add-chords-page.dart';
+import 'package:myapp/prototype/add-rec-page.dart';
 import 'package:myapp/utils.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -292,7 +294,7 @@ TextField(
                 //sendHTMLviaPostRequest(title: title);
               });
             },
-            buttonText: 'Add chords',
+            buttonText: 'Add recording',
             fontSize: 24,
           ),
     
@@ -311,7 +313,8 @@ TextField(
     } else if (snapshot.hasData) {
       if (snapshot.data!.message == 'Successful Insertion!') {
         //return AddChords(); // or any other success screen/widget
-        return CustomError(errorTitle: 'Song ID:', errorText: '${snapshot.data!.song_id}', navigateTo: AddSongPage());
+        //return CustomError(errorTitle: 'Song ID:', errorText: '${snapshot.data!.song_id}', navigateTo: AddSongPage());
+        return AddRecordingPage(songId: snapshot.data!.song_id, title: titleController.text,);
       } else {
         return CustomError(
           errorText: snapshot.data!.message.toString(),
