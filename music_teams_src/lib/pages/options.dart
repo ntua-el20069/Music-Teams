@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/components/disclaimer.dart';
-import 'package:myapp/components/error.dart';
 import 'package:myapp/components/option-rectangle.dart';
-import 'package:myapp/pages/add-song.dart';
-import 'package:myapp/pages/live.dart';
-import 'package:myapp/pages/team-home.dart';
-import 'package:myapp/utils.dart';
+
 
 class OptionsPage extends StatelessWidget {
   @override
@@ -41,13 +36,13 @@ class OptionsPage extends StatelessWidget {
               ),
             ),
             
-            OptionRectangle(top: 0, buttonText: 'Options', navigateTo: OptionsPage()),
+            OptionRectangle(top: 0, buttonText: 'Options', navigateToRoute: '/options'),
           
-            OptionRectangle(top: 83, buttonText: 'Disclaimer', navigateTo: Disclaimer()),
-            OptionRectangle(top: 166, buttonText: 'Add Song', navigateTo: AddSongPage()),
-            OptionRectangle(top: 249, buttonText: 'Song Demand', navigateTo: TeamHomePage(mode: 'SongDemand',)),
-            OptionRectangle(top: 333, buttonText: 'Live', navigateTo: LivePage()),
-            OptionRectangle(top: 416, buttonText: 'Team Home', navigateTo: TeamHomePage()),
+            OptionRectangle(top: 83, buttonText: 'Disclaimer', navigateToRoute: '/disclaimer'),
+            OptionRectangle(top: 166, buttonText: 'Add Song', navigateToRoute: '/add-song'),
+            OptionRectangle(top: 249, buttonText: 'Song Demand', navigateToRoute: '/song-demand'),
+            OptionRectangle(top: 333, buttonText: 'Live', navigateToRoute: '/live'),
+            OptionRectangle(top: 416, buttonText: 'Team Home', navigateToRoute: '/team-home'),
 
             
           ],

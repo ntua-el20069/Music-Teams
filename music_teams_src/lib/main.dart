@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/examples/get.dart';
-import 'package:myapp/examples/post.dart';
-import 'package:myapp/pages/add-song.dart';
-import 'package:myapp/pages/live.dart';
+import 'package:myapp/components/error.dart';
 import 'package:myapp/pages/opening.dart';
-import 'package:myapp/pages/song.dart';
-import 'package:myapp/pages/team-home.dart';
+import 'package:myapp/route-generator.dart';
 import 'package:myapp/utils.dart';
 import 'package:myapp/prototype/opening-page.dart';
-
 
 // Run each of the following:
 // MyApp()      for the app
@@ -42,7 +37,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: OpeningPage(),                 // here change the page you want to see first
+      debugShowCheckedModeBanner: false,
+      title: 'Music Teams',
+      theme: ThemeData(),
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.onGenerateRoute,
+      //navigatorKey: GlobalKey<NavigatorState>(),
     );
   }
 }
+
+

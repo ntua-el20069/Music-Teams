@@ -16,10 +16,7 @@ class OptionsButton extends StatelessWidget {
       top: 0 * fem,
       child: TextButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Options()),
-          );
+          Navigator.of(context).pushReplacementNamed('/options');
         },
         style: TextButton.styleFrom(padding: EdgeInsets.zero),
         child: Container(

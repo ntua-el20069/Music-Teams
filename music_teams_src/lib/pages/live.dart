@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:myapp/components/back-title-options.dart';
-import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
 import 'package:myapp/components/dark-app-bar.dart';
 import 'package:myapp/components/error.dart';
-import 'package:myapp/components/options-button.dart';
-import 'package:myapp/pages/options.dart';
-import 'package:myapp/pages/song.dart';
 import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/url.dart';
 
@@ -82,20 +77,20 @@ class _LiveState extends State<LivePage> {
           } else if (snapshot.hasError) {
               return CustomError(
                 errorText: (snapshot.data!.error == '') ? snapshot.error.toString() : snapshot.data!.error,
-                navigateTo: LivePage(), // Replace with the appropriate widget
+                navigateToRoute: '/live', // Replace with the appropriate widget
                 errorTitle: 'Error', // Customize error title if needed
               );
             } else if (snapshot.hasData) {
               if (snapshot.data!.error != ''){
                 return CustomError(
                   errorText: snapshot.data!.error,
-                  navigateTo: LivePage(), // Replace with the appropriate widget
+                  navigateToRoute: '/live', // Replace with the appropriate widget
                   errorTitle: 'Error', // Customize error title if needed
                 );
               }
             songs = snapshot.data!.songs;
             return Scaffold(
-              appBar: PurpleAppBar(header: 'Live (Recent Demands)',),
+              appBar: PurpleAppBar(header: 'Live (Recent Demands)', onLeadingTap: () {  Navigator.of(context).pushReplacementNamed('/options');},),
               body:  ListView.builder(
                       itemCount: songs.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -107,10 +102,12 @@ class _LiveState extends State<LivePage> {
                             height: 50, // Specify your desired height
                             child: CustomGradientButton(
                               onPressed: () {
-                                Navigator.push(
+                                //Navigator.of(context).pushReplacementNamed('/');
+                                selectSong(title).then((id) => Navigator.of(context).pushReplacementNamed('/song/$id'));
+                                /*Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => SongPage(songId: selectSong(title))),
-                                );
+                                );*/
                               },
                               buttonText: title,
                               fontSize: 14,
@@ -124,7 +121,7 @@ class _LiveState extends State<LivePage> {
                   } 
                   return CustomError(
                         errorText: 'Unexpected Error',
-                        navigateTo: LivePage(), // Replace with the appropriate widget
+                        navigateToRoute: '/live', // Replace with the appropriate widget
                         errorTitle: 'Unexpected Error', // Customize error title if needed
                   );
         },

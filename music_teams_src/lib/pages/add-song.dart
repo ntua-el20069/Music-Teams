@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
 import 'package:myapp/components/dark-app-bar.dart';
 import 'package:myapp/components/error.dart';
 import 'package:myapp/functions/greekLyrics.dart';
 import 'package:myapp/pages/add-recording.dart';
-import 'package:myapp/pages/team-home.dart';
-import 'package:myapp/prototype/add-chords-page.dart';
-import 'package:myapp/prototype/add-rec-page.dart';
-import 'package:myapp/utils.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -151,7 +146,7 @@ class _AddSongPage extends State<AddSongPage> {
     return (_futureAlbum == null && _futureScrapedSong == null) 
                         ?  MaterialApp(
                         home: Scaffold(
-                          appBar: PurpleAppBar(header: 'New Song',),
+                          appBar: PurpleAppBar(header: 'New Song', onLeadingTap: () {  Navigator.of(context).pushReplacementNamed('/options');},),
                           body: SingleChildScrollView(
                             child: Container(
                               alignment: Alignment.center,
@@ -165,7 +160,7 @@ class _AddSongPage extends State<AddSongPage> {
                       : (_futureAlbum == null)
                       ? MaterialApp(
                         home: Scaffold(
-                          appBar: PurpleAppBar(header: 'New Song',),
+                          appBar: PurpleAppBar(header: 'New Song', onLeadingTap: () {  Navigator.of(context).pushReplacementNamed('/options');},),
                           body: SingleChildScrollView(
                             child: Container(
                               alignment: Alignment.center,
@@ -314,7 +309,7 @@ TextField(
     } else if (snapshot.hasError) {
       return CustomError(
           errorText: snapshot.error.toString(),
-          navigateTo: AddSongPage(), // Replace with the appropriate widget
+          navigateToRoute: '/add-song', // Replace with the appropriate widget
           errorTitle: 'Error', // Customize error title if needed
         );
     } else if (snapshot.hasData) {
@@ -325,7 +320,7 @@ TextField(
       } else {
         return CustomError(
           errorText: snapshot.data!.message.toString(),
-          navigateTo: AddSongPage(), // Replace with the appropriate widget
+          navigateToRoute: '/add-song', // Replace with the appropriate widget
           errorTitle: 'Error', // Customize error title if needed
         );
       }

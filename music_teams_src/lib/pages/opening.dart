@@ -53,10 +53,7 @@ class OpeningPage extends StatelessWidget {
               child: TextButton(
                 onPressed: () {
                   // Navigate to the 'signin.dart' screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TeamHomePage()),
-                  );
+                  Navigator.of(context).pushReplacementNamed('/team-home');
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,
@@ -135,7 +132,7 @@ class OpeningPage extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(86*fem, 0*fem, 87*fem, 0*fem),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => OptionsPage()), );
+                  Navigator.of(context).pushReplacementNamed('/options');
                 },
                 style: TextButton.styleFrom (
                   padding: EdgeInsets.zero,

@@ -9,7 +9,7 @@ class Disclaimer extends StatelessWidget {
     double ffem = fem * 0.97;
 
     return Scaffold(
-      appBar: PurpleAppBar(header: 'Disclaimer',),
+      appBar: PurpleAppBar(header: 'Disclaimer', onLeadingTap: () {  Navigator.of(context).pushReplacementNamed('/options');},),
       body: Container(
         width: double.infinity,
         height: double.infinity,

@@ -1,15 +1,11 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:myapp/components/button.dart';
 import 'package:myapp/components/dark-app-bar.dart';
-import 'package:myapp/pages/team-home.dart';
 import 'package:myapp/url.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 void uploadFile(int songId, String recordingPath) async {
@@ -71,7 +67,7 @@ class AddRecordingState extends State<AddRecordingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PurpleAppBar(header: 'Recording for ${widget.title}',),
+      appBar: PurpleAppBar(header: 'Recording for ${widget.title}', onLeadingTap: () {  Navigator.of(context).pushReplacementNamed('/options');},),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -104,11 +100,7 @@ class AddRecordingState extends State<AddRecordingPage> {
                 padding: const EdgeInsets.all(16),
                 child: CustomGradientButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  TeamHomePage()),
-                    );
+                    Navigator.of(context).pushReplacementNamed('/team-home');
                   },
                   buttonText: 'Home Page',
                   fontSize: 24,

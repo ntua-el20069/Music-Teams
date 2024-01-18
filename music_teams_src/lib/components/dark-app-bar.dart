@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/options.dart';
-import 'package:myapp/utils.dart';
+
 
 class PurpleAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String header;
+  final Function()? onLeadingTap;
 
-  PurpleAppBar({required this.header});
+  PurpleAppBar({required this.header, required this.onLeadingTap });
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,9 @@ class PurpleAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               onPressed: () {
                 // Add your button's functionality here
-                Navigator.push(context, MaterialPageRoute(builder: (context) => OptionsPage()));
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => OptionsPage()));
+                //Navigator.of(context).pushReplacementNamed('/options');
+                onLeadingTap!();
               },
             ),
           ],

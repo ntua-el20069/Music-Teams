@@ -4,12 +4,12 @@ import 'package:myapp/utils.dart';
 class OptionRectangle extends StatelessWidget {
   final double top;
   final String buttonText;
-  final Widget navigateTo;
+  final String navigateToRoute;
 
   OptionRectangle({
     required this.top,
     required this.buttonText,
-    required this.navigateTo,
+    required this.navigateToRoute,
   });
 
   @override
@@ -22,7 +22,7 @@ class OptionRectangle extends StatelessWidget {
       top: top * fem,
       child: TextButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => navigateTo));
+          Navigator.of(context).pushReplacementNamed(navigateToRoute);
         },
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,

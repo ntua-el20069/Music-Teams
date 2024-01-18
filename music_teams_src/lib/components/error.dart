@@ -4,12 +4,12 @@ import 'package:myapp/components/dark-app-bar.dart';
 class CustomError extends StatelessWidget {
   final String errorTitle;
   final String errorText;
-  final Widget navigateTo;
+  final String navigateToRoute;
 
   CustomError({
     required this.errorText,
     this.errorTitle = 'Error',
-    required this.navigateTo,
+    required this.navigateToRoute,
   });
 
   @override
@@ -19,7 +19,7 @@ class CustomError extends StatelessWidget {
     double ffem = fem * 0.97;
 
     return Scaffold(
-      appBar: PurpleAppBar(header: errorTitle,),
+      appBar: PurpleAppBar(header: errorTitle, onLeadingTap: () {  Navigator.of(context).pushReplacementNamed('/options');},),
       body: Container(
         width: double.infinity,
         //height: double.infinity,
@@ -48,10 +48,11 @@ class CustomError extends StatelessWidget {
               SizedBox(height: 40.0 * fem), // Adjust spacing as needed
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  /*Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => navigateTo),
-                  );
+                    MaterialPageRoute(builder: (context) => navigateToRoute),
+                  );*/
+                  Navigator.of(context).pushReplacementNamed(navigateToRoute);
                 },
                 child: Text('Return'),
                 style: ElevatedButton.styleFrom(

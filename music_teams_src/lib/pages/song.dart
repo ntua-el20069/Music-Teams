@@ -4,8 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/components/dark-app-bar.dart';
-import 'package:myapp/pages/live.dart';
-import 'package:myapp/pages/team-home.dart';
+import 'package:myapp/route-generator.dart';
 import 'package:myapp/url.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -103,7 +102,7 @@ class Album {
 
 
 class SongPage extends StatefulWidget {
-  final Future<int> songId;
+  final int songId;
 
   SongPage({required this.songId, Key? key}) : super(key: key);
 
@@ -128,9 +127,9 @@ class _SongState extends State<SongPage> {
 void initState() {
   super.initState();
 
-  widget.songId.then((value) {
+  //widget.songId.then((value) {
     if(mounted) setState(() {
-      selectedSongId = value;
+      selectedSongId = widget.songId;
       futureAlbum = fetchAlbum(selectedSongId!);
       recordingUrl = baseUrl + '/API/' + selectedSongId.toString() + '/recording';
       _audioPlayer = AudioPlayer();
@@ -142,10 +141,11 @@ void initState() {
           existsRecording = recordingOK;
         });
       });
-    });
+    
 
 
 }
+
 
 // Function to load the main content
 
@@ -166,19 +166,17 @@ void initState() {
         final double sensitivity = 10;
         if (details.delta.dx > sensitivity) {
           // Right Swipe
-          dispose();
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => LivePage()),
-          );
+          //dispose();
+          Navigator.of(context).pushReplacementNamed('/live');
         } else if (details.delta.dx < -sensitivity) {
           // Left Swipe
-          dispose();
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => TeamHomePage(mode: 'SongDemand',)),
-          );
+          //dispose();
+          Navigator.of(context).pushReplacementNamed('/song-demand');
         }
       },
     child: MaterialApp(
+      onGenerateRoute: RouteGenerator.onGenerateRoute,
+      //navigatorKey: GlobalKey<NavigatorState>(),
       title: 'Song Page',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF451475)),
@@ -207,7 +205,7 @@ void initState() {
           String title = snapshot.data!.title;
 
           return Scaffold(
-            appBar: PurpleAppBar(header: title,),
+            appBar: PurpleAppBar(header: title, onLeadingTap: () {  Navigator.of(context).pushReplacementNamed('/options');},),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -336,9 +334,14 @@ void initState() {
 
   @override
   void dispose() {
+    try {
     mounted = false;
     _audioPlayer.dispose();
     super.dispose();
+    }
+    catch (e){
+      print("Could not dispose audio.");
+    }
   }
 
   Future<void> _fetchAndPlayAudio() async {
@@ -364,8 +367,10 @@ void initState() {
 
   Future<bool> seekForRecording() async {
     try {
+      if (!mounted) return false;
       String url = recordingUrl ?? '';
       final response = await http.get(Uri.parse(url));
+      if (!mounted) return false;
       if (response.statusCode == 200) {
         print("ok recording");
         return true;  

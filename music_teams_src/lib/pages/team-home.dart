@@ -2,16 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:myapp/components/back-title-options.dart';
-import 'package:myapp/components/backpage-title.dart';
 import 'package:myapp/components/button.dart';
 import 'package:myapp/components/dark-app-bar.dart';
 import 'package:myapp/components/error.dart';
-import 'package:myapp/components/options-button.dart';
-import 'package:myapp/pages/live.dart';
-import 'package:myapp/pages/opening.dart';
-import 'package:myapp/pages/options.dart';
-import 'package:myapp/pages/song.dart';
 import 'package:myapp/url.dart';
 
 int returnValue = 1;
@@ -33,7 +26,7 @@ Future<int> selectSong(String title) async {
   if (response.statusCode == 200) {
     Map<String, dynamic> json = jsonDecode(response.body) as Map<String, dynamic>;
     List<dynamic> ids = json['ids'] as List<dynamic>;
-
+    print(' json = $json \n');
     if (ids.isNotEmpty) {
       returnValue = ids[0] as int;
     } else {
@@ -170,7 +163,7 @@ class _TeamHomeState extends State<TeamHomePage> {
             } else if (snapshot.hasError || snapshot.data!.error != '') {
               return CustomError(
                 errorText: (snapshot.data!.error == '') ? snapshot.error.toString() : snapshot.data!.error,
-                navigateTo: OpeningPage(), // Replace with the appropriate widget
+                navigateToRoute: '/', // Replace with the appropriate widget
                 errorTitle: 'Error', // Customize error title if needed
               );
             } else if (snapshot.hasData) {
@@ -178,7 +171,7 @@ class _TeamHomeState extends State<TeamHomePage> {
               if (_controller.text == '') filteredSongs = List.from(songs); // Initial population of filtered songs
 
               return Scaffold(
-                appBar: PurpleAppBar(header: (widget.mode == 'TeamHome') ? 'Team Home' : 'Song Demand',),
+                appBar: PurpleAppBar(header: (widget.mode == 'TeamHome') ? 'Team Home' : 'Song Demand', onLeadingTap: () {  Navigator.of(context).pushReplacementNamed('/options');},),
                 body: Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Column(
@@ -190,7 +183,7 @@ class _TeamHomeState extends State<TeamHomePage> {
                         optionsNavigateTo: OptionsPage(), fem: fem, ffem: ffem
                       ), */  
 
-                      CustomGradientButton(onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (context) => LivePage()),), buttonText: 'Live', fontSize: 24),
+                      CustomGradientButton(onPressed: () => Navigator.of(context).pushReplacementNamed('/live'), buttonText: 'Live', fontSize: 24),
 
                       TextFormField(
                         controller: _controller,
@@ -212,12 +205,14 @@ class _TeamHomeState extends State<TeamHomePage> {
                                 final title = filteredSongs[index];
                                 print(title);
                                 if (widget.mode == 'TeamHome') {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => SongPage(songId: selectSong(title)),),);
+                                  
+                                    selectSong(title).then((id) => { Navigator.of(context).pushReplacementNamed('/song/$id')/* print('/$id/song') */});
+                                    //Navigator.push(context, MaterialPageRoute(builder: (context) => SongPage(songId: selectSong(title)),),);
                                 }
                                 else { // mode = 'SongDemand'
                                   DemandSong(title).then((result)  {
-                                      if (result == 'OK') Navigator.push(context, MaterialPageRoute(builder: (context) => LivePage(),),);
-                                      else Navigator.push(context, MaterialPageRoute(builder: (context) => CustomError(errorText: result, navigateTo: TeamHomePage(mode: 'SongDemand'),),),);
+                                      if (result == 'OK') Navigator.of(context).pushReplacementNamed('/live');
+                                      else Navigator.push(context, MaterialPageRoute(builder: (context) => CustomError(errorText: result, navigateToRoute: '/song-demand',),),);
                                   });
                                   
                                 }
@@ -234,7 +229,7 @@ class _TeamHomeState extends State<TeamHomePage> {
             } else {
               return CustomError(
                 errorText: 'Unexpected Error',
-                navigateTo: TeamHomePage(), // Replace with the appropriate widget
+                navigateToRoute: 'team-home', // Replace with the appropriate widget
                 errorTitle: 'Unexpected Error', // Customize error title if needed
               );
             }
