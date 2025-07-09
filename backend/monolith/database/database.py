@@ -18,7 +18,7 @@ def db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE) -> Tuple[str, s
         print(f"Error getting DB_TYPE from environment: {e}")
         pass
 
-    DATABASE_URL = f"{DB_USERSNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"
+    DATABASE_URL = f"{DB_USERSNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"  # noqa: E231
     DATABASE_URL = "postgresql://" + DATABASE_URL
 
     if DB_TYPE == "mysql":
