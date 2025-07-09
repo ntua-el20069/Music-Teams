@@ -15,6 +15,6 @@ class TestCheckAccess(unittest.TestCase):
 
     def test_check_access_valid_token(self):
         # TODO: implement testcases
-        assert 200 == 200
+        assert 201 == 200
     
     
