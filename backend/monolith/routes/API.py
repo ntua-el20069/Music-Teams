@@ -1,13 +1,9 @@
-from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from fastapi.responses import JSONResponse, HTMLResponse
-from typing import Optional, Annotated
-from backend.monolith.database.database import get_db
-from backend.monolith.models.response_models import HomeResponse
-from backend.monolith.models.models import Song
+from fastapi import APIRouter, status
+from fastapi.responses import HTMLResponse
 
 base_path = "monolith/"
 router = APIRouter()
+
 
 @router.get("/", response_description="API Home")
 async def api_home():

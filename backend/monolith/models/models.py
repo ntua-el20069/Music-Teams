@@ -1,46 +1,50 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, Boolean, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
-from pydantic import BaseModel, Field
+import os
 
 from dotenv import load_dotenv
-import os
+from pydantic import BaseModel, Field
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+
 from backend.monolith.database.database import db_type_url
 
-env_path = '.env'
+env_path = ".env"
 load_dotenv(dotenv_path=env_path)
 
-DB_USERSNAME = str(os.getenv('DB_USERNAME'))
-DB_PASSWORD = str(os.getenv('DB_PASSWORD'))
-DB_HOST = str(os.getenv('DB_HOST'))
-DB_DATABASE = str(os.getenv('DB_DATABASE'))
+DB_USERSNAME = str(os.getenv("DB_USERNAME"))
+DB_PASSWORD = str(os.getenv("DB_PASSWORD"))
+DB_HOST = str(os.getenv("DB_HOST"))
+DB_DATABASE = str(os.getenv("DB_DATABASE"))
 
-Base = declarative_base()
+Base = declarative_base()  # type: ignore
 
-class User(Base):
-    __tablename__ = 'user'
+
+class User(Base):  # type: ignore
+    __tablename__ = "user"
 
     username = Column(String(20), primary_key=True)
     password = Column(String(20))
     email = Column(String(80))
-    role = Column(String(20))  # Will use UserRole enum for validation
+    role = Column(String(20))  # TODO: enum
 
     # Relationships
     songs = relationship("Song", backref="creator")
     team_memberships = relationship("MemberOfTeam", backref="user")
     active_sessions = relationship("ActiveSession", backref="user")
 
-class ActiveSession(Base):
-    __tablename__ = 'active_session'
+
+class ActiveSession(Base):  # type: ignore
+    __tablename__ = "active_session"
 
     token = Column(String(50), primary_key=True)
-    username = Column(String(20), ForeignKey('user.username'))
-    role = Column(String(20))  # Mirrors user's role at session creation time
+    username = Column(String(20), ForeignKey("user.username"))
+    role = Column(String(20))  # user's role at session creation
+
 
 class ActiveSessionModel(BaseModel):
-    token: str = Field(..., title="ActiveSession Token", description="Unique session token")
-    username: str = Field(..., title="Username", description="Username of the user")
-    role: str = Field(..., title="Role", description="Role of the user at session creation time")
+    token: str = Field(..., title="ActiveSession Token")
+    username: str = Field(..., title="Username")
+    role: str = Field(..., title="Role")
 
     class Config:
         orm_mode = True
@@ -48,37 +52,49 @@ class ActiveSessionModel(BaseModel):
             "example": {
                 "token": "abc123xyz",
                 "username": "AntonisNikos",
-                "role": "user"
+                "role": "user",
             }
         }
 
-class Song(Base):
-    __tablename__ = 'song'
+
+class Song(Base):  # type: ignore
+    __tablename__ = "song"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(50))
     lyrics = Column(Text)
-    chords = Column(Text, default='')
+    chords = Column(Text, default="")
     likes = Column(Integer, default=0)
-    made_by = Column(String(20), ForeignKey('user.username'), default='AntonisNikos')
+    made_by = Column(String(20), ForeignKey("user.username"), default="AntonisNikos")
     public = Column(Boolean, default=False)
 
     # Relationships
     composers = relationship("Composer", secondary="wrotemusic", back_populates="songs")
-    lyricists = relationship("Lyricist", secondary="wrotelyrics", back_populates="songs")
-    shared_with_teams = relationship("Team", secondary="teams_share_songs", back_populates="shared_songs")
+    lyricists = relationship(
+        "Lyricist", secondary="wrotelyrics", back_populates="songs"
+    )
+    shared_with_teams = relationship(
+        "Team", secondary="teams_share_songs", back_populates="shared_songs"
+    )
+
 
 class SongModel(BaseModel):
-    id: int = Field(default=None, title="Song ID", description="Unique identifier for the song")
-    title: str = Field(..., title="Song Title", description="Title of the song")
-    lyrics: str = Field(..., title="Song Lyrics", description="Lyrics of the song")
-    chords: str = Field(default='', title="Song Chords", description="Chords of the song")
-    likes: int = Field(default=0, title="Likes", description="Number of likes for the song")
-    made_by: str = Field(default='AntonisNikos', title="Made By", description="Username of the user who created the song")
-    public: bool = Field(default=False, title="Public", description="Whether the song is public or not")
-    composers: list[str] = Field(default=[], title="Composers", description="List of composers for the song")
-    lyricists: list[str] = Field(default=[], title="Lyricists", description="List of lyricists for the song")
-    shared_with_teams: list[str] = Field(default=[], title="Shared With Teams", description="List of teams that the song is shared with")
+    id: int = Field(default=None, title="Song ID")
+    title: str = Field(..., title="Song Title")
+    lyrics: str = Field(..., title="Song Lyrics")
+    chords: str = Field(default="", title="Song Chords")
+    likes: int = Field(default=0, title="Likes")
+    made_by: str = Field(
+        default="AntonisNikos",
+        title="Made By",
+    )
+    public: bool = Field(default=False, title="Public")
+    composers: list[str] = Field(default=[], title="Composers")
+    lyricists: list[str] = Field(default=[], title="Lyricists")
+    shared_with_teams: list[str] = Field(
+        default=[],
+        title="Shared With Teams",
+    )
 
     class Config:
         orm_mode = True
@@ -93,14 +109,15 @@ class SongModel(BaseModel):
                 "public": True,
                 "composers": ["Composer1", "Composer2"],
                 "lyricists": ["Lyricist1", "Lyricist2"],
-                "shared_with_teams": ["Team1", "Team2"]
+                "shared_with_teams": ["Team1", "Team2"],
             }
         }
 
+
 class UpdateLyricsChordsModel(BaseModel):
-    song_id: int = Field(..., title="Song ID", description="Unique identifier for the song")
-    lyrics: str = Field(..., title="Song Lyrics", description="Lyrics of the song")
-    chords: str = Field(..., title="Song Chords", description="Chords of the song")
+    song_id: int = Field(..., title="Song ID")
+    lyrics: str = Field(..., title="Song Lyrics")
+    chords: str = Field(..., title="Song Chords")
 
     class Config:
         orm_mode = True
@@ -108,73 +125,83 @@ class UpdateLyricsChordsModel(BaseModel):
             "example": {
                 "song_id": 1,
                 "lyrics": "These are the updated lyrics of the song.",
-                "chords": "C G Am F"
+                "chords": "C G Am F",
             }
         }
 
+
 class UpdateChordsModel(BaseModel):
-    song_id: int = Field(..., title="Song ID", description="Unique identifier for the song")
-    chords: str = Field(..., title="Song Chords", description="Chords of the song")
+    song_id: int = Field(
+        ..., title="Song ID", description="Unique identifier for the song"
+    )
+    chords: str = Field(..., title="Song Chords")
 
     class Config:
         orm_mode = True
-        schema_extra = {
-            "example": {
-                "song_id": 1,
-                "chords": "C G Am F"
-            }
-        }
+        schema_extra = {"example": {"song_id": 1, "chords": "C G Am F"}}
 
-class Composer(Base):
-    __tablename__ = 'composer'
+
+class Composer(Base):  # type: ignore
+    __tablename__ = "composer"
 
     name = Column(String(50), primary_key=True)
 
     # Relationships
     songs = relationship("Song", secondary="wrotemusic", back_populates="composers")
 
-class Lyricist(Base):
-    __tablename__ = 'lyricist'
+
+class Lyricist(Base):  # type: ignore
+    __tablename__ = "lyricist"
 
     name = Column(String(50), primary_key=True)
 
     # Relationships
     songs = relationship("Song", secondary="wrotelyrics", back_populates="lyricists")
 
-class WroteMusic(Base):
-    __tablename__ = 'wrotemusic'
 
-    composer = Column(String(50), ForeignKey('composer.name'), primary_key=True)
-    song_id = Column(Integer, ForeignKey('song.id'), primary_key=True)
+class WroteMusic(Base):  # type: ignore
+    __tablename__ = "wrotemusic"
 
-class WroteLyrics(Base):
-    __tablename__ = 'wrotelyrics'
+    composer = Column(String(50), ForeignKey("composer.name"), primary_key=True)
+    song_id = Column(Integer, ForeignKey("song.id"), primary_key=True)
 
-    lyricist = Column(String(50), ForeignKey('lyricist.name'), primary_key=True)
-    song_id = Column(Integer, ForeignKey('song.id'), primary_key=True)
 
-class Team(Base):
-    __tablename__ = 'team'
+class WroteLyrics(Base):  # type: ignore
+    __tablename__ = "wrotelyrics"
+
+    lyricist = Column(String(50), ForeignKey("lyricist.name"), primary_key=True)
+    song_id = Column(Integer, ForeignKey("song.id"), primary_key=True)
+
+
+class Team(Base):  # type: ignore
+    __tablename__ = "team"
 
     name = Column(String(50), primary_key=True)
     team_id = Column(String(50), unique=True, nullable=False)
 
     # Relationships
     members = relationship("MemberOfTeam", backref="team")
-    shared_songs = relationship("Song", secondary="teams_share_songs", back_populates="shared_with_teams")
+    shared_songs = relationship(
+        "Song", secondary="teams_share_songs", back_populates="shared_with_teams"
+    )
 
-class MemberOfTeam(Base):
-    __tablename__ = 'member_of_team'
 
-    username = Column(String(20), ForeignKey('user.username'), primary_key=True)
-    teamname = Column(String(50), ForeignKey('team.name'), primary_key=True, default='NTUA')
+class MemberOfTeam(Base):  # type: ignore
+    __tablename__ = "member_of_team"
+
+    username = Column(String(20), ForeignKey("user.username"), primary_key=True)
+    teamname = Column(
+        String(50), ForeignKey("team.name"), primary_key=True, default="NTUA"
+    )
     points = Column(Integer)
 
-class TeamsShareSongs(Base):
-    __tablename__ = 'teams_share_songs'
 
-    teamname = Column(String(50), ForeignKey('team.name'), primary_key=True)
-    song_id = Column(Integer, ForeignKey('song.id'), primary_key=True)
+class TeamsShareSongs(Base):  # type: ignore
+    __tablename__ = "teams_share_songs"
+
+    teamname = Column(String(50), ForeignKey("team.name"), primary_key=True)
+    song_id = Column(Integer, ForeignKey("song.id"), primary_key=True)
+
 
 # Create engine
 DB_TYPE, DATABASE_URL = db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE)

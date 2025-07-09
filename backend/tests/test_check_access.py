@@ -1,10 +1,12 @@
 # using pytest and FastAPI's TestClient to test the check_access endpoint
 import unittest
+
 from fastapi.testclient import TestClient
+
 from backend.monolith.app import app
-from backend.monolith.models.models import ActiveSessionModel
 
 TestClient = TestClient(app)
+
 
 class TestCheckAccess(unittest.TestCase):
     def setUp(self):
@@ -16,5 +18,3 @@ class TestCheckAccess(unittest.TestCase):
     def test_check_access_valid_token(self):
         # TODO: implement testcases
         assert 201 == 200
-    
-    

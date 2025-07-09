@@ -48,5 +48,6 @@ jobs:
           file: ./backend/coverage.xml
 
       - name: Stop Services
+        working-directory: ./backend
         if: always()  # Run even if previous steps fail
         run: docker compose down
