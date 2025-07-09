@@ -1,0 +1,65 @@
+services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - app_network
+# for PostgreSQL
+#   db:
+#     container_name: music_teams_db
+#     image: postgres
+#     restart: always
+#     environment:
+#       POSTGRES_USER: music_teams_user
+#       POSTGRES_DB: music_teams
+#       POSTGRES_PASSWORD: my_secret_password
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data 
+#     ports:
+#       - 5432:5432
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -h localhost -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+#       interval: 5s
+#       timeout: 5s
+#       retries: 5
+ 
+# volumes:
+#   pgdata:
+
+# for MySQL
+  db:
+    container_name: music_teams_db
+    image: mysql:8.0
+    restart: always
+    environment:
+      # user should be "root" for MySQL
+      MYSQL_DATABASE: music_teams
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_password  # Required for MySQL
+    volumes:
+      - mysql_data:/var/lib/mysql
+    secrets:
+      - db_password
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "music_teams_user", "-p", "my_secret_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
+volumes:
+  mysql_data:
+
+secrets:
+  db_password:
+    file: ./db_password.txt
+
+networks:
+  app_network:
+    driver: bridge

@@ -1,5 +1,8 @@
-backup_db_instance/
+db_instance_backup/
 script.py
 __pycache__/
 *.pyc
 .venv/
+*.env
+*password.txt
+chordpose_dml.sql
