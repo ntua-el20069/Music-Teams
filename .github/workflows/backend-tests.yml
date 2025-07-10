@@ -39,7 +39,6 @@ jobs:
       - name: Run Backend Tests
         working-directory: ./backend
         env:
-          MONGO_URI: mongodb://mongo:27017  # Using service name from compose
           PYTHONPATH: ${{ github.workspace }}
         run: |
           pytest --cov=./ --cov-report=xml
