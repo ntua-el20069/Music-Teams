@@ -28,7 +28,7 @@ jobs:
           cat db_password_template.txt > db_password.txt  # Copy password template
           docker compose build
           docker compose up -d
-          sleep 10  # Wait for services to initialize
+          sleep 20  # Wait for services to initialize
 
       - name: Install Backend Dependencies
         working-directory: ./backend
