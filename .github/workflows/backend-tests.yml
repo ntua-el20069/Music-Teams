@@ -2,9 +2,9 @@ name: backend tests Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, nikos-dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, nikos-dev ]
 
 jobs:
   build-and-test:

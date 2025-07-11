@@ -13,3 +13,5 @@ pytest
 # Session and token handling
 itsdangerous
 werkzeug
+
+requests

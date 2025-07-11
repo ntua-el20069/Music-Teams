@@ -1,4 +1,6 @@
 import os
+import uuid
+from datetime import datetime
 from typing import Optional, Tuple
 
 from dotenv import load_dotenv
@@ -47,10 +49,21 @@ def login_and_make_token(
         return (None, "Invalid username or password")
 
     # TODO: how many active sessions can a user have?
+    # Check if the user already has an active session
+    # number_of_active_sessions = (
+    #     db.query(ActiveSession).filter(ActiveSession.username == username_input).count()
+    # )
 
     # user login successful so create a session token
     try:
-        token = serializer.dumps(username_input)
+        # Generate a unique token with random data
+        token_data = {
+            "username": username_input,
+            "session_id": str(uuid.uuid4()),  # Random UUID
+            "timestamp": datetime.utcnow().isoformat(),  # Current time
+        }
+        token = serializer.dumps(token_data)[:48]  # Now unique per login
+
         new_session = ActiveSession(
             token=token,
             username=username_input,

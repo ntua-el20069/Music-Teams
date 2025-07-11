@@ -4,3 +4,4 @@ DB_USERNAME=root
 DB_PASSWORD=my_secret_password
 DB_HOST=0.0.0.0
 DB_DATABASE=music_teams
+SECRET_KEY=my_secret_key_here_for_serializer
