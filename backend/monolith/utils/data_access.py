@@ -1,8 +1,19 @@
-from typing import Optional
+import os
+from typing import Optional, Tuple
 
+from dotenv import load_dotenv
+from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy.orm import Session
 
-from backend.monolith.models.models import ActiveSession, ActiveSessionModel
+from backend.monolith.models.models import ActiveSession, ActiveSessionModel, User
+
+# from werkzeug.security import check_password_hash
+
+
+env_path = ".env"
+load_dotenv(dotenv_path=env_path)
+SECRET_KEY = str(os.getenv("SECRET_KEY"))
+serializer = URLSafeTimedSerializer(SECRET_KEY)
 
 
 def get_session_by_token(db: Session, token: str) -> Optional[ActiveSessionModel]:
@@ -17,3 +28,70 @@ def get_session_by_token(db: Session, token: str) -> Optional[ActiveSessionModel
         role=found_active_session.role,
     )
     return active_session_instance
+
+
+def login_and_make_token(
+    db: Session,
+    username_input: str,
+    password_input: str,
+) -> Tuple[Optional[ActiveSessionModel], Optional[str]]:
+    """
+    Placeholder function for user login logic.
+    This should be implemented to validate user credentials and create a session.
+    """
+    user_found = db.query(User).filter(User.username == username_input).first()
+    # TODO: keep the check_password_hash logic in the database
+    # if (user_found is None) or
+    # not check_password_hash(user_found.password, password_input):
+    if (user_found is None) or (user_found.password != password_input):
+        return (None, "Invalid username or password")
+
+    # TODO: how many active sessions can a user have?
+
+    # user login successful so create a session token
+    try:
+        token = serializer.dumps(username_input)
+        new_session = ActiveSession(
+            token=token,
+            username=username_input,
+            role=user_found.role,
+        )
+        db.add(new_session)
+        db.commit()
+        db.refresh(new_session)
+    except Exception as e:
+        print(f"Error creating session in database: {e}")
+        return (None, "Error creating session in database")
+
+    active_session_instance = ActiveSessionModel(
+        token=new_session.token,
+        username=new_session.username,
+        role=new_session.role,
+    )
+    return (active_session_instance, "token created successfully")
+
+
+def logout_and_remove_session(
+    db: Session,
+    token: str,
+) -> Tuple[bool, Optional[str]]:
+    """
+    Placeholder function for user logout logic.
+    This should be implemented to remove the session from the database.
+    """
+    try:
+        active_session_instance = (
+            db.query(ActiveSession).filter(ActiveSession.token == token).first()
+        )
+        if not active_session_instance:
+            raise ValueError("Session does not exist or has already been removed")
+        db.delete(active_session_instance)
+        db.commit()
+        return (True, "Session removed successfully")
+    except Exception as e:
+        print(f"Error removing session from database: {e}")
+        return (
+            False,
+            """Error removing session from database: \
+                You may already be logged out or the session does not exist""",
+        )

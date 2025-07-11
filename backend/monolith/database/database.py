@@ -19,10 +19,16 @@ def db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE) -> Tuple[str, s
         pass
 
     DATABASE_URL = f"{DB_USERSNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"  # noqa: E231
-    DATABASE_URL = "postgresql://" + DATABASE_URL
-
-    if DB_TYPE == "mysql":
-        DATABASE_URL = "mysql+pymysql://" + DATABASE_URL
+    try:
+        if DB_TYPE == "mysql":
+            DATABASE_URL = "mysql+pymysql://" + DATABASE_URL
+        elif DB_TYPE == "postgresql":
+            DATABASE_URL = "postgresql://" + DATABASE_URL
+        else:
+            raise ValueError(f"Unsupported DB_TYPE: {DB_TYPE}")
+    except Exception as e:
+        print(f"Error constructing DATABASE_URL: {e}")
+        raise
 
     return (DB_TYPE, DATABASE_URL)
 

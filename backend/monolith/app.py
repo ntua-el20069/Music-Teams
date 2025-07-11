@@ -6,7 +6,8 @@ from fastapi import FastAPI
 from backend.monolith.database.database import engine
 from backend.monolith.models.models import Base
 from backend.monolith.routes.API import router as API_router
-from backend.monolith.routes.user_management import router as user_management_router
+from backend.monolith.routes.login import router as login_router
+from backend.monolith.routes.register import router as register_router
 
 env_path = ".env"
 load_dotenv(dotenv_path=env_path)
@@ -27,6 +28,5 @@ async def read_root() -> dict:
 
 
 app.include_router(API_router, prefix="/API", tags=["API"])
-app.include_router(
-    user_management_router, prefix="/user_management", tags=["user_management"]
-)
+app.include_router(login_router, prefix="/login", tags=["login"])
+app.include_router(register_router, prefix="/register", tags=["register"])
