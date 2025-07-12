@@ -24,6 +24,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: always
 # for PostgreSQL
 #   db:
 #     container_name: music_teams_db

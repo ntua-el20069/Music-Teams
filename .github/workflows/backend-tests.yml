@@ -34,7 +34,7 @@ jobs:
           docker compose run --rm fastapi-app python -c "
           import requests
           import time
-          for _ in range(10):
+          for _ in range(100):
               try:
                   res_status_code = requests.get('http://localhost:8000/').status_code
                   print(f'FastAPI service status code: {res_status_code}')
