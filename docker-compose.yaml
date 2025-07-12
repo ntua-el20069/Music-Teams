@@ -1,5 +1,8 @@
+name: music_teams
+
 services:
   adminer:
+    container_name: music_teams_adminer
     image: adminer
     restart: always
     ports:
@@ -7,7 +10,20 @@ services:
     depends_on:
       - db
     networks:
-      - app_network
+      - default
+    
+  fastapi-app:
+    container_name: music_teams_fastapi
+    build:
+      dockerfile: backend/Dockerfile
+    ports:
+      - 8000:8000
+    networks:
+      - default
+    # depends on health of db
+    depends_on:
+      db:
+        condition: service_healthy
 # for PostgreSQL
 #   db:
 #     container_name: music_teams_db
@@ -46,20 +62,22 @@ services:
     ports:
       - "3306:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "music_teams_user", "-p", "my_secret_password"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$$(cat /run/secrets/db_password)"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
     networks:
-      - app_network
+      - default
 
 volumes:
   mysql_data:
 
 secrets:
   db_password:
-    file: ./db_password.txt
+    file: backend/db_password.txt
 
 networks:
-  app_network:
-    driver: bridge
+  default:
+    name: app_network
+    driver_opts:    # pass options to driver for network creation
+      com.docker.network.bridge.host_binding_ipv4: 127.0.0.1

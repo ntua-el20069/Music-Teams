@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 
 def db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE) -> Tuple[str, str]:
 
-    env_path = ".env"
+    env_path = "backend/.env"
     load_dotenv(dotenv_path=env_path)
 
     DB_TYPE = "postgresql"
@@ -33,7 +33,7 @@ def db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE) -> Tuple[str, s
     return (DB_TYPE, DATABASE_URL)
 
 
-env_path = ".env"
+env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
 
 DB_USERSNAME = str(os.getenv("DB_USERNAME"))

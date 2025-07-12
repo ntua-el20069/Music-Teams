@@ -7,9 +7,8 @@ from backend.monolith.database.database import engine, get_db
 from backend.monolith.models.models import Base, User
 from backend.monolith.routes.API import router as API_router
 from backend.monolith.routes.login import router as login_router
-from backend.monolith.routes.register import router as register_router
 
-env_path = ".env"
+env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
 
 
@@ -47,4 +46,3 @@ async def init_database() -> dict:
 
 app.include_router(API_router, prefix="/API", tags=["API"])
 app.include_router(login_router, prefix="/login", tags=["login"])
-app.include_router(register_router, prefix="/register", tags=["register"])

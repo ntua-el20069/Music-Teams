@@ -12,7 +12,7 @@ from backend.monolith.models.models import ActiveSession, ActiveSessionModel, Us
 # from werkzeug.security import check_password_hash
 
 
-env_path = ".env"
+env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 serializer = URLSafeTimedSerializer(SECRET_KEY)
