@@ -2,5 +2,6 @@ DEBUG=1
 DB_TYPE=mysql
 DB_USERNAME=root
 DB_PASSWORD=my_secret_password
-DB_HOST=0.0.0.0
+DB_HOST=music_teams_db
 DB_DATABASE=music_teams
+SECRET_KEY=place_your_secret_key_here

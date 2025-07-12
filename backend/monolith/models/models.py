@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 
 from backend.monolith.database.database import db_type_url
 
-env_path = ".env"
+env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
 
 DB_USERSNAME = str(os.getenv("DB_USERNAME"))

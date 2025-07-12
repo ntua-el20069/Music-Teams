@@ -28,3 +28,8 @@ vim backend/__init__.py
 source ~/Music-Teams/backup_db_instance/musicteams-backup-2-11-2023.sql;
 ```
 Don't forget to remove some `song demands` and `recordings`.
+
+## Kill process on 3306
+```bash
+sudo kill $(sudo lsof -t -i :3306) 2>/dev/null || echo "No process found on port 3306"
+```
