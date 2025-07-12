@@ -28,6 +28,9 @@ jobs:
           cat backend/db_password_template.txt > backend/db_password.txt  # Copy password template
           docker compose build
           docker compose up -d
+
+          # Wait for services to be ready
+          docker compose run --rm fastapi-app bash -c "while ! curl -s http://fastapi-app:8000/ >/dev/null; do sleep 1; done"
           
       - name: Install Backend Dependencies
         working-directory: ./backend
