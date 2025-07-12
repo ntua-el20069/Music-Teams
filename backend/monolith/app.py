@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from backend.monolith.database.database import engine, get_db
 from backend.monolith.models.models import Base, User
@@ -14,6 +15,13 @@ load_dotenv(dotenv_path=env_path)
 
 app = FastAPI()
 app.debug = bool(int(os.getenv("DEBUG")))  # type: ignore
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")  # type: ignore

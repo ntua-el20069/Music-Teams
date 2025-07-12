@@ -1,4 +1,4 @@
-import os
+# import os
 import unittest
 
 import requests
@@ -7,11 +7,12 @@ from dotenv import load_dotenv
 env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
 
-BASE_URL = (
-    "http://fastapi-app:8000/login"
-    if str(os.getenv("MODE")) == "CONTAINER"
-    else "http://localhost:8000/login"
-)
+# BASE_URL = (
+#     "http://fastapi-app:8000/login"
+#     if str(os.getenv("MODE")) == "CONTAINER"
+#     else "http://localhost:8000/login"
+# )
+BASE_URL = "http://localhost:8000/login"  # Adjust for your local setup
 
 
 class TestLogin(unittest.TestCase):
