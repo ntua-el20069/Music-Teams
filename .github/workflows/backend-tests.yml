@@ -34,9 +34,11 @@ jobs:
           docker compose run --rm fastapi-app python -c "
           import requests
           import time
-          for _ in range(30):
+          for _ in range(10):
               try:
-                  if requests.get('http://localhost:8000/').status_code == 200:
+                  res_status_code = requests.get('http://localhost:8000/').status_code
+                  print(f'FastAPI service status code: {res_status_code}')
+                  if res_status_code == 200:
                       break
               except:
                   print('Waiting for FastAPI service...')
