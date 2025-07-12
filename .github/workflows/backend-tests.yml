@@ -46,6 +46,23 @@ jobs:
           else:
               raise Exception('Service not ready after 30 seconds')
           "
+      - name: Initialize Database with admin user
+        working-directory: .
+        run: |
+          docker compose run --rm fastapi-app python -c "
+          import requests
+          try:
+              res = requests.get('http://fastapi-app:8000/init').status_code
+              print(f'Initialization response status code: {res}')
+              if res == 200:
+                  print('Database initialized successfully')
+              else :
+                  print(f'Initialization failed with detail: {res.detail}')
+          except Exception as e:
+              print(f'Error during initialization: {e}')
+              raise
+          "
+          
       - name: Install Backend Dependencies
         working-directory: ./backend
         run: |
