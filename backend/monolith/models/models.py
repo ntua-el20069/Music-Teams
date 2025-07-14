@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 
 from backend.monolith.database.database import db_type_url
 
-env_path = ".env"
+env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
 
 DB_USERSNAME = str(os.getenv("DB_USERNAME"))
@@ -22,10 +22,11 @@ Base = declarative_base()  # type: ignore
 class User(Base):  # type: ignore
     __tablename__ = "user"
 
-    username = Column(String(20), primary_key=True)
-    password = Column(String(20))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(20), unique=True, nullable=False)
+    password = Column(String(20), nullable=False)
     email = Column(String(80))
-    role = Column(String(20))  # TODO: enum
+    role = Column(String(20), nullable=False)  # TODO: enum
 
     # Relationships
     songs = relationship("Song", backref="creator")
@@ -37,12 +38,14 @@ class ActiveSession(Base):  # type: ignore
     __tablename__ = "active_session"
 
     token = Column(String(50), primary_key=True)
-    username = Column(String(20), ForeignKey("user.username"))
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
+    username = Column(String(20))
     role = Column(String(20))  # user's role at session creation
 
 
 class ActiveSessionModel(BaseModel):
     token: str = Field(..., title="ActiveSession Token")
+    user_id: int = Field(..., title="User ID")
     username: str = Field(..., title="Username")
     role: str = Field(..., title="Role")
 
@@ -51,6 +54,7 @@ class ActiveSessionModel(BaseModel):
         schema_extra = {
             "example": {
                 "token": "abc123xyz",
+                "user_id": 1,
                 "username": "AntonisNikos",
                 "role": "user",
             }
@@ -65,7 +69,7 @@ class Song(Base):  # type: ignore
     lyrics = Column(Text)
     chords = Column(Text, default="")
     likes = Column(Integer, default=0)
-    made_by = Column(String(20), ForeignKey("user.username"), default="AntonisNikos")
+    made_by = Column(Integer, ForeignKey("user.id"))
     public = Column(Boolean, default=False)
 
     # Relationships
@@ -84,9 +88,8 @@ class SongModel(BaseModel):
     lyrics: str = Field(..., title="Song Lyrics")
     chords: str = Field(default="", title="Song Chords")
     likes: int = Field(default=0, title="Likes")
-    made_by: str = Field(
-        default="AntonisNikos",
-        title="Made By",
+    made_by: int = Field(
+        title="Made By (user id)",
     )
     public: bool = Field(default=False, title="Public")
     composers: list[str] = Field(default=[], title="Composers")
@@ -105,7 +108,7 @@ class SongModel(BaseModel):
                 "lyrics": "These are the lyrics of the song.",
                 "chords": "C G Am F",
                 "likes": 10,
-                "made_by": "AntonisNikos",
+                "made_by": 1,
                 "public": True,
                 "composers": ["Composer1", "Composer2"],
                 "lyricists": ["Lyricist1", "Lyricist2"],
