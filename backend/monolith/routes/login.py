@@ -49,6 +49,7 @@ async def check_access(
                 "message": "Session is valid",
                 "role": active_session_instance.role,
                 "username": active_session_instance.username,
+                "user_id": active_session_instance.user_id,
             },
         )
 
@@ -95,6 +96,7 @@ async def login(
                 "token": active_session_instance.token,
                 "role": active_session_instance.role,
                 "username": active_session_instance.username,
+                "user_id": active_session_instance.user_id,
             },
         )
 

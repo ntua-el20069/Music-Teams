@@ -28,6 +28,7 @@ def get_session_by_token(db: Session, token: str) -> Optional[ActiveSessionModel
         token=found_active_session.token,
         username=found_active_session.username,
         role=found_active_session.role,
+        user_id=found_active_session.user_id,
     )
     return active_session_instance
 
@@ -68,6 +69,7 @@ def login_and_make_token(
             token=token,
             username=username_input,
             role=user_found.role,
+            user_id=user_found.id,
         )
         db.add(new_session)
         db.commit()
@@ -80,6 +82,7 @@ def login_and_make_token(
         token=new_session.token,
         username=new_session.username,
         role=new_session.role,
+        user_id=new_session.user_id,
     )
     return (active_session_instance, "token created successfully")
 
