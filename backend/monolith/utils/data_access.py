@@ -51,9 +51,15 @@ def login_and_make_token(
 
     # TODO: how many active sessions can a user have?
     # Check if the user already has an active session
-    # number_of_active_sessions = (
-    #     db.query(ActiveSession).filter(ActiveSession.username == username_input).count()
-    # )
+    number_of_active_sessions = (
+        db.query(ActiveSession).filter(ActiveSession.username == username_input).count()
+    )
+    if number_of_active_sessions >= 3:
+        return (
+            None,
+            """You have reached the maximum number of active sessions (3). \
+                Please log out from another session/device.""",
+        )
 
     # user login successful so create a session token
     try:

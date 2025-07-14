@@ -31,6 +31,11 @@ class TestLogin(unittest.TestCase):
         self.assertIn("token", response_data)
         self.assertIsInstance(response_data["token"], str)
         self.assertGreater(len(response_data["token"]), 0)
+        # Logout after successful login
+        token = response_data.get("token")
+        self.assertIsNotNone(token)
+        logout_response = requests.post(f"{BASE_URL}/logout", params={"token": token})
+        self.assertEqual(logout_response.status_code, 200)
 
     def test_login_invalid(self):
         response = requests.post(
@@ -68,6 +73,9 @@ class TestCheckAccess(unittest.TestCase):
         self.assertIn("username", access_data)
         self.assertEqual(access_data["role"], "admin")
         self.assertEqual(access_data["username"], "admin")
+        # logout
+        logout_response = requests.post(f"{BASE_URL}/logout", params={"token": token})
+        self.assertEqual(logout_response.status_code, 200)
 
     def test_check_access_invalid_token(self):
         response = requests.post(
@@ -108,3 +116,33 @@ class TestLogout(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 401)
         self.assertIn("detail", response.json())
+
+    def test_sessions_restriction(self):
+        # Attempt to create multiple sessions
+        # use an array of tokens to track active sessions
+        tokens = []
+        for i in range(4):
+            response = requests.post(
+                f"{BASE_URL}/login",
+                params={"username": "admin", "password": "admin"},
+            )
+            response_data = response.json()
+            if i < 3:
+                self.assertEqual(response.status_code, 200)
+                tokens.append(response_data.get("token"))
+            else:
+                self.assertEqual(response.status_code, 401)
+                self.assertIn(
+                    "You have reached the maximum number of active sessions (3)",
+                    response.json()["detail"],
+                )
+        # Logout from the 3 sessions
+        for token in tokens[:3]:
+            logout_response = requests.post(
+                f"{BASE_URL}/logout", params={"token": token}
+            )
+            self.assertEqual(logout_response.status_code, 200)
+            self.assertIn("message", logout_response.json())
+            self.assertEqual(
+                logout_response.json()["message"], "Session removed successfully"
+            )
