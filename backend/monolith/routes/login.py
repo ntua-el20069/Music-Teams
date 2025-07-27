@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from backend.monolith.database.database import get_db
 from backend.monolith.models.models import ActiveSessionModel
-from backend.monolith.utils.data_access import (
+from backend.monolith.utils.login_data_access import (
     get_session_by_token,
     login_and_make_token,
     logout_and_remove_session,
