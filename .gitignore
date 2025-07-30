@@ -7,3 +7,6 @@ __pycache__/
 *password.txt
 chordpose_dml.sql
 *test.py
+ailogs/
+*token.json
+*credentials.json
