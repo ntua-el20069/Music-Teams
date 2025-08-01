@@ -10,3 +10,4 @@ chordpose_dml.sql
 ailogs/
 *token.json
 *credentials.json
+*unused/

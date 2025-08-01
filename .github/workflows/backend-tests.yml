@@ -52,7 +52,7 @@ jobs:
           docker compose run --rm fastapi-app python -c "
           import requests
           try:
-              res = requests.get('http://fastapi-app:8000/init').status_code
+              res = requests.get('http://fastapi-app:8000/init-db/create-admin').status_code
               print(f'Initialization response status code: {res}')
               if res == 200:
                   print('Database initialized successfully')

@@ -23,10 +23,13 @@ class User(Base):  # type: ignore
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String(20), unique=True, nullable=False)
+    username = Column(String(80), unique=True, nullable=False)
     password = Column(String(20), nullable=False)
-    email = Column(String(80))
+    email = Column(String(80), nullable=False)
     role = Column(String(20), nullable=False)  # TODO: enum
+    registered_with_google = Column(Boolean, default=False)
+    # verification_token = Column(String(50), nullable=True)
+    # verified = Column(Boolean, default=False)
 
     # Relationships
     songs = relationship("Song", backref="creator")
@@ -34,18 +37,56 @@ class User(Base):  # type: ignore
     active_sessions = relationship("ActiveSession", backref="user")
 
 
+class UserModel(BaseModel):
+    id: int = Field(default=None, title="User ID")
+    username: str = Field(..., title="Username")
+    password: str = Field(..., title="Password")
+    email: str = Field(default=None, title="Email")
+    role: str = Field(..., title="Role")
+    registered_with_google: bool = Field(default=False, title="Registered with Google")
+    # verified: bool = Field(default=False, title="Verified")
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "username": "my_username",
+                "password": "my_password",
+                "email": "my_email@gmail.com",
+                "role": "user",
+                "registered_with_google": True,
+                # "verified": False,
+            }
+        }
+
+
+class UserUpdateModel(BaseModel):
+    username: str
+    password: str
+
+
+class UserManualLoginModel(BaseModel):
+    username: str
+    password: str
+
+
 class ActiveSession(Base):  # type: ignore
     __tablename__ = "active_session"
 
-    token = Column(String(50), primary_key=True)
+    # token = Column(String(50), primary_key=True)
+    session_id = Column(String(50), primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
+    user_email = Column(String(80))
     username = Column(String(20))
     role = Column(String(20))  # user's role at session creation
 
 
 class ActiveSessionModel(BaseModel):
-    token: str = Field(..., title="ActiveSession Token")
+    # token: str = Field(..., title="ActiveSession Token")
+    session_id: str = Field(..., title="ActiveSession ID")
     user_id: int = Field(..., title="User ID")
+    user_email: str = Field(..., title="User Email")
     username: str = Field(..., title="Username")
     role: str = Field(..., title="Role")
 
@@ -53,8 +94,9 @@ class ActiveSessionModel(BaseModel):
         orm_mode = True
         schema_extra = {
             "example": {
-                "token": "abc123xyz",
+                "session_id": "abc123xyz",
                 "user_id": 1,
+                "user_email": "my_mail@gmail.com",
                 "username": "AntonisNikos",
                 "role": "user",
             }
