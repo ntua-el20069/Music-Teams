@@ -27,13 +27,15 @@ app.add_middleware(
     secret_key=os.getenv("SECRET_KEY"),
     session_cookie="sessionid",  # Unique name
     same_site="lax",
-    max_age=3600,
-    https_only=False,  # True in production
+    max_age=3600,  # session expires in 1 hour
+    https_only=False,  # TODO: True in production (use MODE environment variable)
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust for production
+    allow_origins=[
+        "*"
+    ],  # TODO: Adjust for production (if frontend is hosted elsewhere)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,7 +47,7 @@ async def start_database() -> None:
     Base.metadata.create_all(bind=engine)
 
 
-@app.get("/", tags=["Root"])  # type: ignore
+@app.get("/", tags=["Root"], summary="Welcome message with status code 200")
 async def read_root() -> JSONResponse:
     return JSONResponse(
         status_code=200,
@@ -55,7 +57,11 @@ async def read_root() -> JSONResponse:
     )
 
 
-@app.get("/health", tags=["Health"])  # type: ignore
+@app.get(
+    "/health",
+    tags=["Health"],
+    summary="Indicates healthy app and running with status 200",
+)
 async def health_check() -> JSONResponse:
     return JSONResponse(
         status_code=200,

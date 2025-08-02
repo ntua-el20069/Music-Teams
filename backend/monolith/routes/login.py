@@ -23,7 +23,7 @@ env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
 
 # JWT Configurations
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 FRONTEND_URL = os.getenv("FRONTEND_URL")
 
@@ -44,7 +44,7 @@ oauth.register(
     access_token_url="https://accounts.google.com/o/oauth2/token",
     access_token_params=None,
     refresh_token_url=None,
-    authorize_state=os.getenv("SECRET_KEY"),
+    authorize_state=os.getenv("JWT_SECRET_KEY"),
     redirect_uri=os.getenv("REDIRECT_URL"),
     jwks_uri="https://www.googleapis.com/oauth2/v3/certs",
     client_kwargs={
@@ -87,15 +87,15 @@ def create_session_set_cookie_and_redirect(
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=False,  # Set to True in production with HTTPS
+        secure=False,  # TODO: Set to True in production with HTTPS
         samesite="lax",  # Changed from "strict" to allow top-level navigation
         path="/",  # Make cookie available to all routes
-        max_age=expires_in,  # Set expiration (1 hour) # TODO: decide the expiration time
+        max_age=expires_in,  # TODO: decide the expiration time
     )
 
     print(
         f"\n\n\t Access token created for user {user_model_instance.username} \
-            with ID {user_model_instance.id}: \n\t {access_token}\n\n"
+        with ID {user_model_instance.id}: \n\t {access_token}\n\n"
     )
 
     return response
@@ -104,6 +104,12 @@ def create_session_set_cookie_and_redirect(
 # Google login routes
 @google_login_router.get("/login")
 async def google_login(request: Request):
+    """
+    Initiates the Google OAuth login process. \n
+    Clears the session and redirects to the Google authorization URL. \n
+    Returns: \n
+        RedirectResponse to the Google authorization URL. \n
+    """
     request.session.clear()
     # referer = request.headers.get("referer")
     frontend_url = os.getenv("FRONTEND_URL")
@@ -121,13 +127,30 @@ async def google_login(request: Request):
 
 @google_login_router.get("/auth")
 async def google_auth(request: Request, db: db_dependency):
+    """
+    Handles the Google authentication callback. \n
+    A state parameter is used to prevent CSRF attacks. \n
+    Calls Google API to authorize the user and again
+         to fetch user information. \n
+    Returns: \n
+        a RedirectResponse to the frontend URL after successful login. \n
+        Status code 303 (See Other) \n
+    Raises: \n
+        HTTPException if authentication fails or user registration fails. \n
+        Status codes include: (see 'detail') \n
+        - 401 if Google authentication fails \n
+        - 406 if state mismatch (possible CSRF attack) \n
+        - 400 if user registration fails or session not created \n
+        - 500 for internal server errors \n
+    """
     # Verify state first
     stored_state = request.session.pop("oauth_state", None)
     query_state = request.query_params.get("state")
     print(f"Stored state: {stored_state}, Query state: {query_state}")
     if not stored_state or stored_state != query_state:
         raise HTTPException(
-            status_code=400, detail="State mismatch. Possible CSRF attack."
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail="State mismatch. Possible CSRF attack.",
         )
 
     try:
@@ -187,7 +210,7 @@ async def google_auth(request: Request, db: db_dependency):
         return response
 
     except HTTPException as e:
-        print(f"HTTP Exception during Google authentication: {str(e)}")
+        print(f"Unexpected HTTP Exception during Google authentication: {str(e)}")
         raise e
     except Exception as e:
         print(f"Error during Google authentication: {str(e)}")
@@ -202,11 +225,17 @@ async def simple_login(
 ):
     """
     Placeholder for login functionality. \n
-    Args: username (str): The username of the user. \n
-          password (str): The password of the user. \n
-    Returns: JSONResponse with \n
-    - message indicating login success or failure the token \n
-    - token if login is successful \n
+    Args: (payload) \n
+            username (str): The username of the user. \n
+            password (str): The password of the user. \n
+    Returns: \n
+            RedirectResponse to the frontend URL after successful login. \n
+            Status code 303 (See Other) \n
+    Raises: \n
+            HTTPException if login fails. (see 'detail') \n
+            Status codes include: \n
+            - 401 if credentials are invalid \n
+            - 500 for internal server errors \n
     """
     try:
         user_model_instance, message = check_credentials(
@@ -230,7 +259,7 @@ async def simple_login(
         return response
 
     except HTTPException as e:
-        print(f"HTTP Exception during login: {str(e)}")
+        print(f"Unexpected HTTP Exception during login: {str(e)}")
         raise e
     except Exception as e:
         print(f"Error during login: {str(e)}")

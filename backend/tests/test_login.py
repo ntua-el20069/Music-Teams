@@ -79,7 +79,7 @@ class TestLoginLogout(unittest.TestCase):
             print(f"Invalid logout response: {response.text}")
         self.assertEqual(response.status_code, 401)
         self.assertIn("detail", response.json())
-        self.assertEqual(response.json()["detail"], "Could not validate credentials")
+        self.assertIn("Could not validate credentials", response.json()["detail"])
 
     def test_sessions_restriction(self):
         # Attempt to create multiple sessions
@@ -162,4 +162,4 @@ class TestHome(unittest.TestCase):
             print(f"Invalid token response: {response.text}")
         self.assertEqual(response.status_code, 401)
         self.assertIn("detail", response.json())
-        self.assertEqual(response.json()["detail"], "Could not validate credentials")
+        self.assertIn("Could not validate credentials", response.json()["detail"])

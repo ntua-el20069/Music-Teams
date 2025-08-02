@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 
 from backend.monolith.database.database import get_db
 from backend.monolith.models.models import User
@@ -11,7 +12,14 @@ router = APIRouter()
 
 
 @router.get("/create-admin")  # type: ignore
-async def init_database() -> dict:
+async def init_database() -> JSONResponse:
+    """
+    Initializes the database with an admin user \n.
+    Returns: \n
+        JSONResponse with 'message' in content \n
+        status code 200 if successful \n
+        status code 500 if an error occurs \n
+    """
     try:
         db = next(get_db())
         admin_user = User(
@@ -22,6 +30,12 @@ async def init_database() -> dict:
         )
         db.add(admin_user)
         db.commit()
-        return {"message": "Database initialized with admin user."}
+        return JSONResponse(
+            status_code=200,
+            content={"message": "Database initialized with admin user."},
+        )
     except Exception as e:
-        return {"message": f"Error initializing database: {str(e)}"}
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"Error initializing database: {str(e)}"},
+        )

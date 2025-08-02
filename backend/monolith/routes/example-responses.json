@@ -1,0 +1,47 @@
+{
+
+    "/": {
+        "get": {}
+    },
+    "/health": {
+        "get": {}
+    },
+
+
+
+
+    "/home/":{
+        "get": {
+            "message": "Welcome to the home route!",
+            "user_details": {
+                "user_id": 9734,
+                "email": "myuser@gmail.com",
+                "username": "myuser",
+                "role": "user",
+                "registered_with_google": true,
+                "session_id": "session_id_12345_sdgrefgd",
+                "exp": 1754145465
+            }
+        }
+    },
+    "/home/logout":{
+        "get": {}
+    },
+
+
+    
+
+    "/google_login/login":{
+        "get": {}
+    },
+
+    "/google_login/auth":{
+        "get": {}
+    },
+
+    "/simple_login/login":{
+        "get": {}
+    }
+
+
+}
