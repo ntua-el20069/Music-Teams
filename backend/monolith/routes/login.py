@@ -95,7 +95,7 @@ def create_session_set_cookie_and_redirect(
 
     print(
         f"\n\n\t Access token created for user {user_model_instance.username} \
-        with ID {user_model_instance.id}: \n\t {access_token}\n\n"
+        with ID {user_model_instance.id}: \n\t {access_token}\n\n"  # noqa: E272
     )
 
     return response

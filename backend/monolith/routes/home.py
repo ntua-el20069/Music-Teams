@@ -1,3 +1,4 @@
+import json
 import os
 import traceback
 from typing import Annotated
@@ -19,6 +20,10 @@ load_dotenv(dotenv_path=env_path)
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 FRONTEND_URL = os.getenv("FRONTEND_URL")
+response_examples_path = "backend/monolith/routes/example-responses.json"
+response_examples = None
+with open(response_examples_path, "r", encoding="utf-8") as file:
+    response_examples = json.load(file)
 
 router = APIRouter()
 db_dependency = Annotated[Session, Depends(get_db)]
@@ -78,7 +83,18 @@ def get_current_user(request: Request):
         )
 
 
-@router.get("/", summary="Home (after login) that returns user details")
+@router.get(
+    "/",
+    summary="Home (after login) that returns user details",
+    responses={
+        200: {
+            "description": "Welcome message with user details",
+            "content": {
+                "application/json": {"example": response_examples["/home/"]["get"]}
+            },
+        },
+    },
+)
 async def get_response(
     request: Request, current_user: dict = Depends(get_current_user)
 ) -> JSONResponse:
