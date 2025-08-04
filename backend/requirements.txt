@@ -1,17 +1,30 @@
 fastapi[standard]
 python-dotenv
-
+requests
 SQLAlchemy
-psycopg2-binary
 
+# Database drivers
+psycopg2-binary
 pymysql
-cryptography
 
 # testing
 pytest
 
+# web framework
+uvicorn
+
 # Session and token handling
 itsdangerous
-werkzeug
+# werkzeug
+# cryptography
 
-requests
+# JWT and OAuth libraries
+python-jose[cryptography]
+authlib
+# pyjwt
+# google-auth
+
+# # google auth - for Google API
+# google-api-python-client
+# google-auth-httplib2
+# google-auth-oauthlib

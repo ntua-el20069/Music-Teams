@@ -2,9 +2,9 @@ name: pre-commit
 
 on:
   pull_request:
-    branches: [ main, nikos-dev ]
+    branches: [ main, nikos-dev, google-login]
   push:
-    branches: [main, nikos-dev]
+    branches: [main, nikos-dev, google-login]
 
 jobs:
   pre-commit:
