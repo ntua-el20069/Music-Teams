@@ -80,5 +80,6 @@ secrets:
 networks:
   default:
     name: app_network
+    # the following options are do not let the app to be accessible from outside the host machine
     driver_opts:    # pass options to driver for network creation
       com.docker.network.bridge.host_binding_ipv4: 127.0.0.1
