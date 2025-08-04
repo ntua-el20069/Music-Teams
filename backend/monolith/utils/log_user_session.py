@@ -1,7 +1,10 @@
+import os
 import uuid
+from datetime import datetime, timedelta
 from typing import Optional, Tuple
 
 from dotenv import load_dotenv
+from sqlalchemy.exc import IntegrityError
 
 # from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy.orm import Session
@@ -28,25 +31,30 @@ def check_credentials(
     password_input: str,
 ) -> Tuple[Optional[UserModel], str]:
     """
-    user login logic:
-    validate user credentials.
+    user login logic: validate user credentials. (used for testing purposes)
     """
-    user_found = db.query(User).filter(User.username == username_input).first()
-    # TODO: keep the check_password_hash logic in the database
-    # if (user_found is None) or
-    # not check_password_hash(user_found.password, password_input):
-    if (user_found is None) or (user_found.password != password_input):
-        return (None, "Invalid username or password")
 
-    user_model_instance = UserModel(
-        id=user_found.id,
-        username=user_found.username,
-        password=user_found.password,  # This should be hashed in production
-        email=user_found.email,
-        role=user_found.role,
-        registered_with_google=user_found.registered_with_google,
-    )
-    return (user_model_instance, "Credentials validated successfully")
+    try:
+        user_found = db.query(User).filter(User.username == username_input).first()
+        # TODO: keep the check_password_hash logic in the database
+        # if (user_found is None) or
+        # not check_password_hash(user_found.password, password_input):
+        if (user_found is None) or (user_found.password != password_input):
+            return (None, "Invalid username or password")
+
+        user_model_instance = UserModel(
+            id=user_found.id,
+            username=user_found.username,
+            password=user_found.password,  # This should be hashed in production
+            email=user_found.email,
+            role=user_found.role,
+            registered_with_google=user_found.registered_with_google,
+        )
+        return (user_model_instance, "Credentials validated successfully")
+
+    except Exception as e:
+        print(f"Unexpected Error checking credentials: {str(e)}")
+        return (None, f"Unexpected Error checking credentials: {str(e)}")
 
 
 def log_user(
@@ -106,6 +114,14 @@ def log_user(
             )
             print("User already exists in the database.")
             return (user_model_instance, "User already exists.")
+
+    except IntegrityError as e:
+        if db:
+            db.rollback()
+        # Handle specific integrity errors, e.g. unique constraint violations
+        print(f"Integrity error: {str(e)}")
+        return (None, f"Integrity error: {str(e)} - Try using a different username.")
+
     except Exception as e:
         if db:
             db.rollback()
@@ -120,6 +136,20 @@ def log_session(
     Logs a session in the database.
     """
     try:
+        # TODO: remove expired sessions
+        # remove sessions of the user that have expired
+        expired_sessions = (
+            db.query(ActiveSession)
+            .filter(
+                ActiveSession.user_email == user_email,
+                ActiveSession.expires_at < datetime.utcnow(),
+            )
+            .all()
+        )
+        for exp_session in expired_sessions:
+            db.delete(exp_session)
+        db.commit()
+
         # TODO: how many active sessions can a user have?
         # Check if the user already has an active session
         number_of_active_sessions = (
@@ -137,12 +167,19 @@ def log_session(
         user_found = db.query(User).filter(User.email == user_email).first()
         if not user_found:
             raise ValueError("User not found in the database.")
+
+        # Define session expiration time
+        expiration_datetime = datetime.utcnow() + timedelta(
+            seconds=int(os.getenv("ACCESS_TOKEN_EXPIRE_SECONDS", "3600"))
+        )
+
         new_session = ActiveSession(
             session_id=session_id,
             user_id=user_found.id,
             user_email=user_email,
             username=user_found.username,
             role=user_found.role,
+            expires_at=expiration_datetime,
         )
         db.add(new_session)
         db.commit()
@@ -154,6 +191,7 @@ def log_session(
                 user_email=user_email,
                 username=user_found.username,
                 role=user_found.role,
+                expires_at=expiration_datetime.isoformat(),
             ),
             "Session logged successfully.",
         )

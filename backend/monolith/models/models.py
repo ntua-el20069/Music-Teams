@@ -2,7 +2,16 @@ import os
 
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text, create_engine
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    create_engine,
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -25,7 +34,7 @@ class User(Base):  # type: ignore
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(80), unique=True, nullable=False)
     password = Column(String(20), nullable=False)
-    email = Column(String(80), nullable=False)
+    email = Column(String(80), unique=True, nullable=False)
     role = Column(String(20), nullable=False)  # TODO: enum
     registered_with_google = Column(Boolean, default=False)
     # verification_token = Column(String(50), nullable=True)
@@ -80,6 +89,7 @@ class ActiveSession(Base):  # type: ignore
     user_email = Column(String(80))
     username = Column(String(20))
     role = Column(String(20))  # user's role at session creation
+    expires_at = Column(DateTime, nullable=False)
 
 
 class ActiveSessionModel(BaseModel):
@@ -89,6 +99,9 @@ class ActiveSessionModel(BaseModel):
     user_email: str = Field(..., title="User Email")
     username: str = Field(..., title="Username")
     role: str = Field(..., title="Role")
+    expires_at: str = Field(
+        ..., title="Expiration Time", description="ISO format datetime string"
+    )
 
     class Config:
         orm_mode = True
@@ -99,6 +112,7 @@ class ActiveSessionModel(BaseModel):
                 "user_email": "my_mail@gmail.com",
                 "username": "AntonisNikos",
                 "role": "user",
+                "expires_at": "2023-10-01T12:00:00Z",
             }
         }
 

@@ -1,6 +1,5 @@
 import os
 import uuid
-from datetime import timedelta
 from typing import Annotated
 
 import requests
@@ -57,10 +56,12 @@ oauth.register(
 def create_session_set_cookie_and_redirect(
     db: db_dependency, expires_in: int, user_model_instance: UserModel
 ) -> RedirectResponse:
+    """
+    This function creates a session for the user, sets a cookie with the access token,
+    and redirects to the frontend URL.
+    """
     session_id = str(uuid.uuid4())
-    # Create JWT token
-    # TODO: decide the expiration time
-    access_token_expires = timedelta(seconds=expires_in)
+
     token_data = {
         "user_id": user_model_instance.id,
         "email": user_model_instance.email,
@@ -69,9 +70,7 @@ def create_session_set_cookie_and_redirect(
         "registered_with_google": user_model_instance.registered_with_google,
         "session_id": session_id,
     }
-    access_token = create_access_token(
-        data=token_data, expires_delta=access_token_expires
-    )
+    access_token = create_access_token(data=token_data)
 
     user_session_instance, message = log_session(
         db, user_model_instance.email, session_id
@@ -86,7 +85,7 @@ def create_session_set_cookie_and_redirect(
     response.set_cookie(
         key="access_token",
         value=access_token,
-        httponly=True,
+        httponly=True,  # TODO: how to set on production?
         secure=False,  # TODO: Set to True in production with HTTPS
         samesite="lax",  # Changed from "strict" to allow top-level navigation
         path="/",  # Make cookie available to all routes
@@ -102,7 +101,9 @@ def create_session_set_cookie_and_redirect(
 
 
 # Google login routes
-@google_login_router.get("/login")
+@google_login_router.get(
+    "/login", summary="Route that Redirects to Google Accounts OAuth"
+)
 async def google_login(request: Request):
     """
     Initiates the Google OAuth login process. \n
@@ -125,7 +126,7 @@ async def google_login(request: Request):
     )
 
 
-@google_login_router.get("/auth")
+@google_login_router.get("/auth", summary="Google Authentication Callback Handler")
 async def google_auth(request: Request, db: db_dependency):
     """
     Handles the Google authentication callback. \n
@@ -159,6 +160,7 @@ async def google_auth(request: Request, db: db_dependency):
         print(f"Error during Google authentication: {str(e)}")
         raise HTTPException(status_code=401, detail="Google authentication failed.")
 
+    # Get more information about the user from Google
     try:
         user_info_endpoint = "https://www.googleapis.com/oauth2/v2/userinfo"
         headers = {"Authorization": f'Bearer {token["access_token"]}'}
@@ -172,14 +174,12 @@ async def google_auth(request: Request, db: db_dependency):
 
     try:
         user = token.get("userinfo")
-        expires_in = token.get("expires_in")
+        # expires_in = token.get("expires_in")
+        # bypass Google expiration time (no strict expiration)
+        expires_in = int(os.getenv("ACCESS_TOKEN_EXPIRE_SECONDS", "3600"))
         user_google_id = user.get("sub")
         iss = user.get("iss")
         user_email = user.get("email")
-        # first_logged_in = datetime.utcnow()
-        # last_accessed = datetime.utcnow()
-        # user_google_name = user_info.get("name")
-        # user_pic = user_info.get("picture")
 
         if iss not in ["https://accounts.google.com", "accounts.google.com"]:
             print(f"Invalid issuer: {iss}")
@@ -189,6 +189,7 @@ async def google_auth(request: Request, db: db_dependency):
             print("User Google ID not found in Google response.")
             raise HTTPException(status_code=401, detail="Google authentication failed.")
 
+        # register the user in the database or check if already exists
         user_input_model_instance = UserModel(
             username="",  # username selection logic in the function implementation
             password="",  # if registered by Google, Password is randomly generated
@@ -218,7 +219,7 @@ async def google_auth(request: Request, db: db_dependency):
 
 
 # Simple login route
-@simple_login_router.post("/login")
+@simple_login_router.post("/login", summary="Simple User Login - username/password")
 async def simple_login(
     db: db_dependency,
     user_model: UserManualLoginModel,
@@ -248,9 +249,7 @@ async def simple_login(
                 detail=message,
             )
 
-        # Create JWT token
-        expires_in = 3600  # 1 hour TODO: decide the expiration time
-        # access_token_expires = timedelta(seconds=expires_in)
+        expires_in = int(os.getenv("ACCESS_TOKEN_EXPIRE_SECONDS", "3600"))
 
         response = create_session_set_cookie_and_redirect(
             db, expires_in, user_model_instance
