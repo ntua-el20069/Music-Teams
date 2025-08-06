@@ -13,6 +13,7 @@ from backend.monolith.routes.API import router as API_router
 from backend.monolith.routes.helpers import router as database_init_router
 from backend.monolith.routes.home import router as home_router
 from backend.monolith.routes.login import google_login_router, simple_login_router
+from backend.monolith.routes.profile import router as profile_router
 
 env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
@@ -76,6 +77,7 @@ async def health_check() -> JSONResponse:
 app.include_router(API_router, prefix="/API", tags=["API"])
 app.include_router(google_login_router, prefix="/google_login", tags=["Google login"])
 app.include_router(home_router, prefix="/home", tags=["home"])
+app.include_router(profile_router, prefix="/profile", tags=["Profile"])
 
 if os.getenv("MODE") == "DEVELOPMENT":
     app.include_router(database_init_router, prefix="/init-db", tags=["Init Database"])

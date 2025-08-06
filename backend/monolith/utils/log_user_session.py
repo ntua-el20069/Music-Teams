@@ -228,3 +228,28 @@ def remove_session(db: Session, user_id: int, session_id: str) -> Tuple[bool, st
             db.rollback()
         print(f"Error removing session: {str(e)}")
         return (False, f"Error removing session: {str(e)}")
+
+
+def find_user_by_email(db: Session, user_email: str) -> Tuple[Optional[UserModel], str]:
+    """
+    Finds a user by email in the database.
+    """
+    try:
+        user_found = db.query(User).filter(User.email == user_email).first()
+        if not user_found:
+            return (None, "User not found in the database.")
+
+        return (
+            UserModel(
+                id=user_found.id,
+                username=user_found.username,
+                password=user_found.password,
+                email=user_found.email,
+                role=user_found.role,
+                registered_with_google=user_found.registered_with_google,
+            ),
+            "User found successfully.",
+        )
+    except Exception as e:
+        print(f"Error finding user: {str(e)}")
+        return (None, f"Error finding user: {str(e)}")

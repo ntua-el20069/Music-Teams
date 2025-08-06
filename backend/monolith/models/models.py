@@ -253,6 +253,7 @@ class MemberOfTeam(Base):  # type: ignore
         String(50), ForeignKey("team.name"), primary_key=True, default="NTUA"
     )
     points = Column(Integer)
+    can_edit = Column(Boolean, default=False)
 
 
 class TeamsShareSongs(Base):  # type: ignore

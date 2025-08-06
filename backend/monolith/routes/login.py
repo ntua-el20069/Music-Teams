@@ -1,4 +1,5 @@
 import os
+import time
 import uuid
 from typing import Annotated
 
@@ -69,6 +70,7 @@ def create_session_set_cookie_and_redirect(
         "role": user_model_instance.role,
         "registered_with_google": user_model_instance.registered_with_google,
         "session_id": session_id,
+        "exp_time": time.time() + expires_in,
     }
     access_token = create_access_token(data=token_data)
 

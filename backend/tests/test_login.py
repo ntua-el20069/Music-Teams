@@ -1,4 +1,6 @@
 # import os
+import os
+import time
 import unittest
 
 import requests
@@ -163,3 +165,87 @@ class TestHome(unittest.TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertIn("detail", response.json())
         self.assertIn("Could not validate credentials", response.json()["detail"])
+
+    def test_token_refresh(self):
+        #################
+        #  do the login
+        response = self.session.post(
+            f"{BASE_URL}/simple_login/login",
+            json=self.valid_credentials,
+            allow_redirects=True,  # expect to redirect to home page after login
+        )
+        response_data = response.json()
+        # after the redirect, the response should be a redirect to the home page
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response_data["user_details"]["username"], "admin")
+        access_token_1 = self.session.cookies.get("access_token")
+
+        #######################
+        # try to refresh the token
+        refresh_response = self.session.get(
+            f"{BASE_URL}/home/token-refresh", allow_redirects=True
+        )
+        if TEST_DEBUG:
+            print(f"Token refresh response: {refresh_response.text}")
+        self.assertEqual(refresh_response.status_code, 200)
+        self.assertIn("access_token", self.session.cookies.get_dict())
+        access_token_2 = self.session.cookies.get("access_token")
+        self.assertNotEqual(access_token_1, access_token_2)
+
+        ##########################
+        # logout
+        logout_response = self.session.get(
+            f"{BASE_URL}/home/logout", allow_redirects=False
+        )
+        if TEST_DEBUG:
+            print("Logout response:", logout_response.text)
+        self.assertEqual(logout_response.status_code, 303)
+
+    def test_check_token_expiration(self):
+        """
+        Test the check_token endpoint to ensure it redirects
+        correctly based on token expiration.
+        """
+        # First, log in to get a valid token
+        response = self.session.post(
+            f"{BASE_URL}/simple_login/login",
+            json=self.valid_credentials,
+            allow_redirects=True,
+        )
+        self.assertEqual(response.status_code, 200)
+
+        # Now, check the token expiration
+        check_response = self.session.get(
+            f"{BASE_URL}/home/check-token", allow_redirects=False
+        )
+        if TEST_DEBUG:
+            print(f"Check token response: {check_response.text}")
+
+        # Expect a redirect to /home if the token is still valid
+        self.assertEqual(check_response.status_code, 303)
+
+        # wait for the half of the token expiration time
+
+        half_expiration_time = int(os.getenv("ACCESS_TOKEN_EXPIRE_SECONDS", "16")) // 2
+        time.sleep(
+            half_expiration_time + 1
+        )  # Add a second to ensure we cross the threshold
+
+        # Check the token again
+        check_response = self.session.get(
+            f"{BASE_URL}/home/check-token", allow_redirects=False
+        )
+        if TEST_DEBUG:
+            print(f"Check token response after waiting: {check_response.text}")
+
+        # Expect a redirect to /home/token-refresh if the token is about to expire
+        self.assertEqual(check_response.status_code, 307)
+
+        # logout now
+        logout_response = self.session.get(
+            f"{BASE_URL}/home/logout", allow_redirects=False
+        )
+        if TEST_DEBUG:
+            print("Logout response:", logout_response.text)
+
+        self.assertEqual(logout_response.status_code, 303)
