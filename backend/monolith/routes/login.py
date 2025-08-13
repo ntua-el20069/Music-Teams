@@ -17,7 +17,7 @@ from backend.monolith.utils.log_user_session import (
     log_session,
     log_user,
 )
-from backend.monolith.utils.token import create_access_token
+from backend.monolith.utils.token import convert_to_jwt_token
 
 env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
@@ -72,7 +72,7 @@ def create_session_set_cookie_and_redirect(
         "session_id": session_id,
         "exp_time": time.time() + expires_in,
     }
-    access_token = create_access_token(data=token_data)
+    access_token = convert_to_jwt_token(data=token_data)
 
     user_session_instance, message = log_session(
         db, user_model_instance.email, session_id
