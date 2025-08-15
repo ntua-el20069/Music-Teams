@@ -82,7 +82,7 @@ class TestTeamEndpoints(unittest.TestCase):
                             f"⚠️ Could not leave team {team_name}: {leave_response.status_code}"
                         )
                         raise Exception(
-                            f"Failed to leave team {team_name} for user {i}:\
+                            f"Failed to leave team {team_name} for user {i}: \
                                 {leave_response.status_code}"
                         )
 
@@ -97,7 +97,7 @@ class TestTeamEndpoints(unittest.TestCase):
 
             if TEST_DEBUG:
                 print(
-                    f"Logout response for user {i}:\
+                    f"Logout response for user {i}: \
                         {logout_response.status_code} - {logout_response.text}"
                 )
 
