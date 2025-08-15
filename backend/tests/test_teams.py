@@ -15,7 +15,7 @@ import requests
 from dotenv import load_dotenv
 
 env_path = "backend/.env"
-load_dotenv(dotenv_path=env_path)
+load_dotenv(dotenv_path=env_path, override=True)
 
 BASE_URL = "http://127.0.0.1:8000"
 TEST_DEBUG = True
