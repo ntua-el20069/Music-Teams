@@ -31,7 +31,7 @@ router = APIRouter()
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-def get_current_user(request: Request):
+def get_current_user(request: Request) -> dict:
     token = request.cookies.get("access_token")
     if not token:
         raise HTTPException(
@@ -166,9 +166,12 @@ async def check_token(
         RedirectResponse to: \n
         - /token-refresh (status 307) if token is about to expire \n
         (less than half of ACCESS_TOKEN_EXPIRE_SECONDS remaining) \n
-        - /home (status 303) if token is still valid \n
+        - /home (status 303) if token is still valid - recently refreshed \n
     Raises: \n
         HTTPException if token is invalid or other errors occur. \n
+        400 status if token has no expiration time or other issues. \n
+        500 status for internal server errors. \n
+        check /home for more details on 401 HTTPExceptions. \n
     """
     try:
         exp = current_user.get("exp_time")
@@ -209,7 +212,10 @@ async def refresh_token(
         RedirectResponse to the frontend URL with a new JWT token. \n
     Raises: \n
         HTTPException if token refresh fails. \n
-        Specifically status code 401 if not authenticated. \n
+        status code 400 if session removal fails. \n
+        status code 404 if user not found. \n
+        status code 500 for internal server errors. \n
+        check /home for more details on 401 HTTPExceptions. \n
     """
     try:
         action_ok, message = remove_session(

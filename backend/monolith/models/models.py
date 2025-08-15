@@ -245,15 +245,24 @@ class Team(Base):  # type: ignore
     )
 
 
+class TeamModel(BaseModel):
+    team_name: str
+    team_id: str
+
+
+class TeamCodeModel(BaseModel):
+    team_code: str
+
+
 class MemberOfTeam(Base):  # type: ignore
     __tablename__ = "member_of_team"
 
-    username = Column(String(20), ForeignKey("user.username"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"), primary_key=True)
     teamname = Column(
         String(50), ForeignKey("team.name"), primary_key=True, default="NTUA"
     )
-    points = Column(Integer)
-    can_edit = Column(Boolean, default=False)
+    points = Column(Integer, default=0)
+    can_edit = Column(Boolean, default=True)
 
 
 class TeamsShareSongs(Base):  # type: ignore

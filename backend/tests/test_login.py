@@ -23,8 +23,8 @@ class TestLoginLogout(unittest.TestCase):
         print("Setting up the test environment...")
         self.session = requests.Session()
         self.multiple_sessions = [requests.Session() for _ in range(4)]
-        self.valid_credentials = {"username": "admin", "password": "admin"}
-        self.invalid_credentials = {"username": "admin", "password": "wrong_password"}
+        self.valid_credentials = {"username": "admin0", "password": "admin0"}
+        self.invalid_credentials = {"username": "admin0", "password": "wrong_password"}
 
     def tearDown(self):
         print("Tearing down the test environment...")
@@ -47,7 +47,7 @@ class TestLoginLogout(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertIn("message", response_data)
-        self.assertEqual(response_data["user_details"]["username"], "admin")
+        self.assertEqual(response_data["user_details"]["username"], "admin0")
 
         ######################################
         # Logout after successful login
@@ -112,8 +112,8 @@ class TestLoginLogout(unittest.TestCase):
 class TestHome(unittest.TestCase):
     def setUp(self):
         self.session = requests.Session()
-        self.valid_credentials = {"username": "admin", "password": "admin"}
-        self.invalid_credentials = {"username": "admin", "password": "wrong_password"}
+        self.valid_credentials = {"username": "admin0", "password": "admin0"}
+        self.invalid_credentials = {"username": "admin0", "password": "wrong_password"}
 
     def tearDown(self):
         self.session.close()
@@ -132,7 +132,7 @@ class TestHome(unittest.TestCase):
         # after the redirect, the response should be a redirect to the home page
         self.assertEqual(response.status_code, 200)
         self.assertIn("message", response_data)
-        self.assertEqual(response_data["user_details"]["username"], "admin")
+        self.assertEqual(response_data["user_details"]["username"], "admin0")
 
         #######################
         # check the home route
@@ -177,7 +177,7 @@ class TestHome(unittest.TestCase):
         response_data = response.json()
         # after the redirect, the response should be a redirect to the home page
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response_data["user_details"]["username"], "admin")
+        self.assertEqual(response_data["user_details"]["username"], "admin0")
         access_token_1 = self.session.cookies.get("access_token")
 
         #######################

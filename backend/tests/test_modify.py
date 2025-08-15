@@ -20,7 +20,7 @@ class TestModifyUserDetails(unittest.TestCase):
     def setUp(self):
         print("Setting up the test environment...")
         self.session = requests.Session()
-        self.valid_credentials = {"username": "admin", "password": "admin"}
+        self.valid_credentials = {"username": "admin0", "password": "admin0"}
 
         # Log in to get a session
         response = self.session.post(
@@ -63,7 +63,7 @@ class TestModifyUserDetails(unittest.TestCase):
         self.assertEqual(modify_response.status_code, 303)
 
         # change back to original credentials
-        modify_data = {"username": "admin", "password": "admin"}
+        modify_data = {"username": "admin0", "password": "admin0"}
         modify_response = self.session.post(
             f"{BASE_URL}/profile/update_user_details",
             json=modify_data,

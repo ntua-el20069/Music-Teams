@@ -22,17 +22,18 @@ async def init_database() -> JSONResponse:
     """
     try:
         db = next(get_db())
-        admin_user = User(
-            username="admin",
-            password="admin",  # TODO: hash this password
-            email="",
-            role="admin",
-        )
-        db.add(admin_user)
+        for i in range(10):
+            admin_user = User(
+                username=f"admin{i}",
+                password=f"admin{i}",  # TODO: hash this password
+                email=f"admin{i}@emaildomain.gr",
+                role="admin",
+            )
+            db.add(admin_user)
         db.commit()
         return JSONResponse(
             status_code=200,
-            content={"message": "Database initialized with admin user."},
+            content={"message": "Database initialized with admin users."},
         )
     except Exception as e:
         return JSONResponse(

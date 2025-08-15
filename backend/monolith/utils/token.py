@@ -9,7 +9,7 @@ JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
 
-def create_access_token(data: dict) -> str:
+def convert_to_jwt_token(data: dict) -> str:
     global JWT_SECRET_KEY, ALGORITHM
     to_encode = data.copy()
     return jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=ALGORITHM)
