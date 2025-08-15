@@ -23,18 +23,18 @@ async def get_specific_team_composers(
     db: db_dependency,
     team_name: str,
     current_user: dict = Depends(get_current_user),
-    teams: List[TeamModel] = Depends(get_teams_of_user)
+    teams: List[TeamModel] = Depends(get_teams_of_user),
 ) -> JSONResponse:
     """
     Get all composers that are in songs in a specific team.
     Requires authenticated user, access to team_data cookie, and enrollment in the specified team.
-    
+
     Args:
         team_name: Name of the team to get composers from
-    
+
     Returns:
         JSONResponse with list of composer names
-        
+
     Raises:
         HTTPException with status 401 if user is not authenticated
         HTTPException with status 428 if team_data cookie is missing or invalid
@@ -43,27 +43,27 @@ async def get_specific_team_composers(
     """
     try:
         # Verify user is enrolled in the specified team
-        team = team_if_enrolled(team_name, teams)
-        
+        team_if_enrolled(team_name, teams)
+
         success, msg, composers = get_all_composers_in_team(db, team_name)
-        
+
         if not success:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=msg
             )
-        
+
         return JSONResponse(
-            status_code=200,
-            content={"message": msg, "composers": composers}
+            status_code=200, content={"message": msg, "composers": composers}
         )
-        
+
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
         print(f"Unexpected error in get_specific_team_composers: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred while retrieving composers from the specified team."
+            detail="An unexpected error occurred while retrieving composers "
+            + "from the specified team.",
         )
 
 
@@ -72,18 +72,18 @@ async def get_specific_team_lyricists(
     db: db_dependency,
     team_name: str,
     current_user: dict = Depends(get_current_user),
-    teams: List[TeamModel] = Depends(get_teams_of_user)
+    teams: List[TeamModel] = Depends(get_teams_of_user),
 ) -> JSONResponse:
     """
     Get all lyricists that are in songs in a specific team.
     Requires authenticated user, access to team_data cookie, and enrollment in the specified team.
-    
+
     Args:
         team_name: Name of the team to get lyricists from
-    
+
     Returns:
         JSONResponse with list of lyricist names
-        
+
     Raises:
         HTTPException with status 401 if user is not authenticated
         HTTPException with status 428 if team_data cookie is missing or invalid
@@ -92,27 +92,27 @@ async def get_specific_team_lyricists(
     """
     try:
         # Verify user is enrolled in the specified team
-        team = team_if_enrolled(team_name, teams)
-        
+        team_if_enrolled(team_name, teams)
+
         success, msg, lyricists = get_all_lyricists_in_team(db, team_name)
-        
+
         if not success:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=msg
             )
-        
+
         return JSONResponse(
-            status_code=200,
-            content={"message": msg, "lyricists": lyricists}
+            status_code=200, content={"message": msg, "lyricists": lyricists}
         )
-        
+
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
         print(f"Unexpected error in get_specific_team_lyricists: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred while retrieving lyricists from the specified team."
+            detail="An unexpected error occurred while retrieving lyricists "
+            + "from the specified team.",
         )
 
 
@@ -121,18 +121,18 @@ async def get_specific_team_songs(
     db: db_dependency,
     team_name: str,
     current_user: dict = Depends(get_current_user),
-    teams: List[TeamModel] = Depends(get_teams_of_user)
+    teams: List[TeamModel] = Depends(get_teams_of_user),
 ) -> JSONResponse:
     """
     Get all songs in a specific team.
     Requires authenticated user, access to team_data cookie, and enrollment in the specified team.
-    
+
     Args:
         team_name: Name of the team to get songs from
-    
+
     Returns:
         JSONResponse with list of song titles
-        
+
     Raises:
         HTTPException with status 401 if user is not authenticated
         HTTPException with status 428 if team_data cookie is missing or invalid
@@ -141,25 +141,22 @@ async def get_specific_team_songs(
     """
     try:
         # Verify user is enrolled in the specified team
-        team = team_if_enrolled(team_name, teams)
-        
+        team_if_enrolled(team_name, teams)
+
         success, msg, songs = get_all_songs_in_team(db, team_name)
-        
+
         if not success:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=msg
             )
-        
-        return JSONResponse(
-            status_code=200,
-            content={"message": msg, "songs": songs}
-        )
-        
+
+        return JSONResponse(status_code=200, content={"message": msg, "songs": songs})
+
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
         print(f"Unexpected error in get_specific_team_songs: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred while retrieving songs from the specified team."
+            detail="An unexpected error occurred while retrieving songs from the specified team.",
         )

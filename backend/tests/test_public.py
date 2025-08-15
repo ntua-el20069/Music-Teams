@@ -7,9 +7,7 @@
 # - Tracks created resources for proper cleanup
 # - Uses unique test data to prevent conflicts
 
-import os
 import unittest
-import uuid
 
 import requests
 from dotenv import load_dotenv
@@ -29,7 +27,7 @@ class TestPublicEndpoints(unittest.TestCase):
         print("Setting up test environment...")
         self.session = requests.Session()
         self.valid_credentials = {"username": "admin0", "password": "admin0"}
-        
+
         self.logged_in = False
 
         # Log in for the test
@@ -43,7 +41,7 @@ class TestPublicEndpoints(unittest.TestCase):
             print("✅ Successfully logged in")
         else:
             print(f"❌ Login failed: {response.status_code} - {response.text}")
-            self.fail(f"Setup failed: Could not log in")
+            self.fail("Setup failed: Could not log in")
 
     def tearDown(self):
         """Clean up test environment following project guidelines."""
@@ -142,16 +140,16 @@ class TestPublicEndpoints(unittest.TestCase):
         # Try to access endpoints without authentication
         endpoints = [
             "/public/all-composers",
-            "/public/all-lyricists", 
-            "/public/all-songs"
+            "/public/all-lyricists",
+            "/public/all-songs",
         ]
 
         for endpoint in endpoints:
             response = self.session.get(f"{BASE_URL}{endpoint}", timeout=10)
-            
+
             if TEST_DEBUG:
                 print(f"Unauthorized access to {endpoint}: {response.status_code}")
-            
+
             self.assertEqual(
                 response.status_code,
                 401,

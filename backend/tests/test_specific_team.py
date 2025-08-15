@@ -7,7 +7,6 @@
 # - Tracks created resources for proper cleanup
 # - Uses unique test data to prevent conflicts
 
-import os
 import unittest
 import uuid
 
@@ -29,7 +28,7 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
         print("Setting up test environment...")
         self.session = requests.Session()
         self.valid_credentials = {"username": "admin0", "password": "admin0"}
-        
+
         self.logged_in = False
         self.teams_loaded = False
         self.test_team_name = f"test_team_{uuid.uuid4().hex[:8]}"
@@ -46,7 +45,7 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
             print("✅ Successfully logged in")
         else:
             print(f"❌ Login failed: {response.status_code} - {response.text}")
-            self.fail(f"Setup failed: Could not log in")
+            self.fail("Setup failed: Could not log in")
 
         # Create a test team for testing
         create_team_response = self.session.get(
@@ -58,8 +57,11 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
             self.created_teams.append(self.test_team_name)
             print(f"✅ Test team '{self.test_team_name}' created successfully")
         else:
-            print(f"❌ Team creation failed: {create_team_response.status_code} - {create_team_response.text}")
-            self.fail(f"Setup failed: Could not create test team")
+            print(
+                f"❌ Team creation failed: {create_team_response.status_code} - "
+                f"{create_team_response.text}"
+            )
+            self.fail("Setup failed: Could not create test team")
 
         # Load teams data (required for specific_team endpoints)
         teams_response = self.session.get(f"{BASE_URL}/teams/teams", timeout=10)
@@ -67,8 +69,10 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
             self.teams_loaded = True
             print("✅ Teams data loaded successfully")
         else:
-            print(f"❌ Teams loading failed: {teams_response.status_code} - {teams_response.text}")
-            self.fail(f"Setup failed: Could not load teams data")
+            print(
+                f"❌ Teams loading failed: {teams_response.status_code} - {teams_response.text}"
+            )
+            self.fail("Setup failed: Could not load teams data")
 
     def tearDown(self):
         """Clean up test environment following project guidelines."""
@@ -85,7 +89,9 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
                 if leave_response.status_code == 200:
                     print(f"✅ Successfully left team {team_name}")
                 else:
-                    print(f"⚠️ Could not leave team {team_name}: {leave_response.status_code}")
+                    print(
+                        f"⚠️ Could not leave team {team_name}: {leave_response.status_code}"
+                    )
 
             except Exception as e:
                 print(f"⚠️ Error leaving team {team_name}: {e}")
@@ -119,7 +125,7 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
         response = self.session.get(
             f"{BASE_URL}/specific_team/all-composers",
             params={"team_name": self.test_team_name},
-            timeout=10
+            timeout=10,
         )
 
         if TEST_DEBUG:
@@ -134,7 +140,9 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
         data = response.json()
         self.assertIn("composers", data)
         self.assertIsInstance(data["composers"], list)
-        print(f"✅ Retrieved {len(data['composers'])} composers from team {self.test_team_name}")
+        print(
+            f"✅ Retrieved {len(data['composers'])} composers from team {self.test_team_name}"
+        )
 
     def test_get_specific_team_lyricists(self):
         """Test: Get all lyricists in a specific team."""
@@ -143,7 +151,7 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
         response = self.session.get(
             f"{BASE_URL}/specific_team/all-lyricists",
             params={"team_name": self.test_team_name},
-            timeout=10
+            timeout=10,
         )
 
         if TEST_DEBUG:
@@ -158,7 +166,9 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
         data = response.json()
         self.assertIn("lyricists", data)
         self.assertIsInstance(data["lyricists"], list)
-        print(f"✅ Retrieved {len(data['lyricists'])} lyricists from team {self.test_team_name}")
+        print(
+            f"✅ Retrieved {len(data['lyricists'])} lyricists from team {self.test_team_name}"
+        )
 
     def test_get_specific_team_songs(self):
         """Test: Get all songs in a specific team."""
@@ -167,7 +177,7 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
         response = self.session.get(
             f"{BASE_URL}/specific_team/all-songs",
             params={"team_name": self.test_team_name},
-            timeout=10
+            timeout=10,
         )
 
         if TEST_DEBUG:
@@ -182,34 +192,39 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
         data = response.json()
         self.assertIn("songs", data)
         self.assertIsInstance(data["songs"], list)
-        print(f"✅ Retrieved {len(data['songs'])} songs from team {self.test_team_name}")
+        print(
+            f"✅ Retrieved {len(data['songs'])} songs from team {self.test_team_name}"
+        )
 
     def test_non_enrolled_team_access(self):
         """Test: Verify endpoints reject access to teams user is not enrolled in."""
         print("\n=== Testing non-enrolled team access ===")
 
         fake_team_name = f"fake_team_{uuid.uuid4().hex[:8]}"
-        
+
         endpoints = [
             "/specific_team/all-composers",
-            "/specific_team/all-lyricists", 
-            "/specific_team/all-songs"
+            "/specific_team/all-lyricists",
+            "/specific_team/all-songs",
         ]
 
         for endpoint in endpoints:
             response = self.session.get(
                 f"{BASE_URL}{endpoint}",
                 params={"team_name": fake_team_name},
-                timeout=10
+                timeout=10,
             )
-            
+
             if TEST_DEBUG:
                 print(f"Access to {endpoint} with fake team: {response.status_code}")
-            
+
             self.assertEqual(
                 response.status_code,
                 404,
-                f"Expected 404 for non-enrolled team access to {endpoint}, got {response.status_code}",
+                (
+                    f"Expected 404 for non-enrolled team access to {endpoint}, "
+                    f"got {response.status_code}"
+                ),
             )
 
         print("✅ All endpoints properly reject non-enrolled team access")
@@ -220,7 +235,7 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
 
         # Create a new session without teams data
         new_session = requests.Session()
-        
+
         # Log in but don't load teams
         login_response = new_session.post(
             f"{BASE_URL}/simple_login/login",
@@ -232,24 +247,27 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
         # Try to access endpoints without team_data cookie
         endpoints = [
             "/specific_team/all-composers",
-            "/specific_team/all-lyricists", 
-            "/specific_team/all-songs"
+            "/specific_team/all-lyricists",
+            "/specific_team/all-songs",
         ]
 
         for endpoint in endpoints:
             response = new_session.get(
                 f"{BASE_URL}{endpoint}",
                 params={"team_name": self.test_team_name},
-                timeout=10
+                timeout=10,
             )
-            
+
             if TEST_DEBUG:
                 print(f"Access to {endpoint} without team_data: {response.status_code}")
-            
+
             self.assertEqual(
                 response.status_code,
                 428,
-                f"Expected 428 for missing team_data cookie on {endpoint}, got {response.status_code}",
+                (
+                    f"Expected 428 for missing team_data cookie on {endpoint}, "
+                    f"got {response.status_code}"
+                ),
             )
 
         # Cleanup
@@ -267,20 +285,20 @@ class TestSpecificTeamEndpoints(unittest.TestCase):
         # Try to access endpoints without authentication
         endpoints = [
             "/specific_team/all-composers",
-            "/specific_team/all-lyricists", 
-            "/specific_team/all-songs"
+            "/specific_team/all-lyricists",
+            "/specific_team/all-songs",
         ]
 
         for endpoint in endpoints:
             response = new_session.get(
                 f"{BASE_URL}{endpoint}",
                 params={"team_name": self.test_team_name},
-                timeout=10
+                timeout=10,
             )
-            
+
             if TEST_DEBUG:
                 print(f"Unauthorized access to {endpoint}: {response.status_code}")
-            
+
             self.assertEqual(
                 response.status_code,
                 401,

@@ -7,9 +7,7 @@
 # - Tracks created resources for proper cleanup
 # - Uses unique test data to prevent conflicts
 
-import os
 import unittest
-import uuid
 
 import requests
 from dotenv import load_dotenv
@@ -29,7 +27,7 @@ class TestMyTeamsEndpoints(unittest.TestCase):
         print("Setting up test environment...")
         self.session = requests.Session()
         self.valid_credentials = {"username": "admin0", "password": "admin0"}
-        
+
         self.logged_in = False
         self.teams_loaded = False
 
@@ -44,7 +42,7 @@ class TestMyTeamsEndpoints(unittest.TestCase):
             print("✅ Successfully logged in")
         else:
             print(f"❌ Login failed: {response.status_code} - {response.text}")
-            self.fail(f"Setup failed: Could not log in")
+            self.fail("Setup failed: Could not log in")
 
         # Load teams data (required for my_teams endpoints)
         teams_response = self.session.get(f"{BASE_URL}/teams/teams", timeout=10)
@@ -52,8 +50,10 @@ class TestMyTeamsEndpoints(unittest.TestCase):
             self.teams_loaded = True
             print("✅ Teams data loaded successfully")
         else:
-            print(f"❌ Teams loading failed: {teams_response.status_code} - {teams_response.text}")
-            self.fail(f"Setup failed: Could not load teams data")
+            print(
+                f"❌ Teams loading failed: {teams_response.status_code} - {teams_response.text}"
+            )
+            self.fail("Setup failed: Could not load teams data")
 
     def tearDown(self):
         """Clean up test environment following project guidelines."""
@@ -147,7 +147,7 @@ class TestMyTeamsEndpoints(unittest.TestCase):
 
         # Create a new session without teams data
         new_session = requests.Session()
-        
+
         # Log in but don't load teams
         login_response = new_session.post(
             f"{BASE_URL}/simple_login/login",
@@ -159,20 +159,23 @@ class TestMyTeamsEndpoints(unittest.TestCase):
         # Try to access endpoints without team_data cookie
         endpoints = [
             "/my_teams/all-composers",
-            "/my_teams/all-lyricists", 
-            "/my_teams/all-songs"
+            "/my_teams/all-lyricists",
+            "/my_teams/all-songs",
         ]
 
         for endpoint in endpoints:
             response = new_session.get(f"{BASE_URL}{endpoint}", timeout=10)
-            
+
             if TEST_DEBUG:
                 print(f"Access to {endpoint} without team_data: {response.status_code}")
-            
+
             self.assertEqual(
                 response.status_code,
                 428,
-                f"Expected 428 for missing team_data cookie on {endpoint}, got {response.status_code}",
+                (
+                    f"Expected 428 for missing team_data cookie on {endpoint}, "
+                    f"got {response.status_code}"
+                ),
             )
 
         # Cleanup
@@ -190,16 +193,16 @@ class TestMyTeamsEndpoints(unittest.TestCase):
         # Try to access endpoints without authentication
         endpoints = [
             "/my_teams/all-composers",
-            "/my_teams/all-lyricists", 
-            "/my_teams/all-songs"
+            "/my_teams/all-lyricists",
+            "/my_teams/all-songs",
         ]
 
         for endpoint in endpoints:
             response = new_session.get(f"{BASE_URL}{endpoint}", timeout=10)
-            
+
             if TEST_DEBUG:
                 print(f"Unauthorized access to {endpoint}: {response.status_code}")
-            
+
             self.assertEqual(
                 response.status_code,
                 401,

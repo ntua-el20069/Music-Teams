@@ -23,34 +23,33 @@ async def get_public_composers(
     """
     Get all composers that are in public songs.
     Requires authenticated user.
-    
+
     Returns:
         JSONResponse with list of composer names
-        
+
     Raises:
         HTTPException with status 401 if user is not authenticated
         HTTPException with status 500 if database error occurs
     """
     try:
         success, msg, composers = get_all_public_composers(db)
-        
+
         if not success:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=msg
             )
-        
+
         return JSONResponse(
-            status_code=200,
-            content={"message": msg, "composers": composers}
+            status_code=200, content={"message": msg, "composers": composers}
         )
-        
+
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
         print(f"Unexpected error in get_public_composers: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred while retrieving public composers."
+            detail="An unexpected error occurred while retrieving public composers.",
         )
 
 
@@ -61,34 +60,33 @@ async def get_public_lyricists(
     """
     Get all lyricists that are in public songs.
     Requires authenticated user.
-    
+
     Returns:
         JSONResponse with list of lyricist names
-        
+
     Raises:
         HTTPException with status 401 if user is not authenticated
         HTTPException with status 500 if database error occurs
     """
     try:
         success, msg, lyricists = get_all_public_lyricists(db)
-        
+
         if not success:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=msg
             )
-        
+
         return JSONResponse(
-            status_code=200,
-            content={"message": msg, "lyricists": lyricists}
+            status_code=200, content={"message": msg, "lyricists": lyricists}
         )
-        
+
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
         print(f"Unexpected error in get_public_lyricists: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred while retrieving public lyricists."
+            detail="An unexpected error occurred while retrieving public lyricists.",
         )
 
 
@@ -99,32 +97,29 @@ async def get_public_songs(
     """
     Get all public songs.
     Requires authenticated user.
-    
+
     Returns:
         JSONResponse with list of song titles
-        
+
     Raises:
         HTTPException with status 401 if user is not authenticated
         HTTPException with status 500 if database error occurs
     """
     try:
         success, msg, songs = get_all_public_songs(db)
-        
+
         if not success:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=msg
             )
-        
-        return JSONResponse(
-            status_code=200,
-            content={"message": msg, "songs": songs}
-        )
-        
+
+        return JSONResponse(status_code=200, content={"message": msg, "songs": songs})
+
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
         print(f"Unexpected error in get_public_songs: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred while retrieving public songs."
+            detail="An unexpected error occurred while retrieving public songs.",
         )
