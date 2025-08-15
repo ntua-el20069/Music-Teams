@@ -31,7 +31,7 @@ router = APIRouter()
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-def get_current_user(request: Request):
+def get_current_user(request: Request) -> dict:
     token = request.cookies.get("access_token")
     if not token:
         raise HTTPException(

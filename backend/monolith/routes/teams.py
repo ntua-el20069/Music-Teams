@@ -29,9 +29,7 @@ router = APIRouter()
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-def get_teams_of_user(
-    request: Request, current_user: dict = Depends(get_current_user)
-) -> List[TeamModel]:
+def get_teams_of_user(request: Request) -> List[TeamModel]:
     """
     Middleware to get the teams of the current user.
     This will be used to fetch the teams data from the cookie.
@@ -70,6 +68,22 @@ def get_teams_of_user(
         raise http_exc
 
 
+def team_if_enrolled(team_name: str, teams: List[TeamModel]) -> TeamModel:
+    """
+    Check if the user is enrolled in the team with the given name.
+    """
+    found_teams = [team for team in teams if team.team_name == team_name]
+    not_found_msg = f"Team '{team_name}' \
+        does not exist or you are not registered in this team."
+    # noqa: E713
+    if not found_teams:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=not_found_msg,
+        )
+    return found_teams[0]
+
+
 @router.get("/create-team", summary="Create a new team")
 async def create_team(
     db: db_dependency, team_name: str, current_user: dict = Depends(get_current_user)
@@ -78,7 +92,7 @@ async def create_team(
     Create a new team for the current user. \n
     Returns: \n
         JSONResponse with status 200 and success message \n
-        with team details (team_name, team_code). \n
+        with team details (team_name, team_id). \n
         removes the 'team_data' cookie \n
     Raises: \n
         HTTPException if team creation fails. \n
@@ -342,7 +356,7 @@ async def get_team_details(
     Args: \n
         team_name (str): The name of the team to get details for. \n
     Returns: \n
-        JSONResponse with status 200 and team details (team_name, team_code) if found. \n
+        JSONResponse with status 200 and team details (team_name, team_id) if found. \n
     Raises: \n
         HTTPException if fetching team details fails. \n
         status code 401 if the user is not authenticated. (see /home for more) \n
@@ -352,14 +366,8 @@ async def get_team_details(
 
     """
     try:
-        found_teams = [team for team in teams if team.team_name == team_name]
-        if not found_teams:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Team '{team_name}' \
-                    does not exist or you are not registered in this team.",  # noqa: E713
-            )
-        found_team = found_teams[0]
+        # USEFUL function to check if the user is enrolled in the team
+        found_team = team_if_enrolled(team_name, teams)
 
         response = JSONResponse(status_code=200, content=found_team.model_dump())
 
