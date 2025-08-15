@@ -1,0 +1,1 @@
+# Monolith package for Music Teams backend
