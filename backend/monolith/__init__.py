@@ -1,0 +1,1 @@
+# Monolith backend structure for Music Teams
