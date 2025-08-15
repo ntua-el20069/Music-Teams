@@ -7,7 +7,7 @@ import requests
 from dotenv import load_dotenv
 
 env_path = "backend/.env"
-load_dotenv(dotenv_path=env_path, override=True)
+load_dotenv(dotenv_path=env_path)
 
 # BASE_URL = (
 #     "http://fastapi-app:8000/login"

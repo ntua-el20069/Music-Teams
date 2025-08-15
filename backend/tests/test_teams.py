@@ -15,7 +15,7 @@ import requests
 from dotenv import load_dotenv
 
 env_path = "backend/.env"
-load_dotenv(dotenv_path=env_path, override=True)
+load_dotenv(dotenv_path=env_path)
 
 BASE_URL = "http://127.0.0.1:8000"
 TEST_DEBUG = True
@@ -140,7 +140,9 @@ class TestTeamEndpoints(unittest.TestCase):
         print("\n=== Testing team creation exceeding participation threshold ===")
 
         # Create multiple teams to exceed the threshold
-        max_teams = int(os.getenv("MAX_TEAMS_TO_PARTICIPATE", "10"))
+        # TODO: identify why workflows do not get env variable
+        # set it same as in .env file until fixed
+        max_teams = int(os.getenv("MAX_TEAMS_TO_PARTICIPATE", "2"))
         print(f"Max teams allowed per user: {max_teams}")
         for i in range(max_teams + 1):
             team_name = f"test_team_exceed_{i}_{uuid.uuid4().hex[:8]}"
