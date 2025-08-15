@@ -74,7 +74,7 @@ def team_if_enrolled(team_name: str, teams: List[TeamModel]) -> TeamModel:
     """
     found_teams = [team for team in teams if team.team_name == team_name]
     not_found_msg = f"Team '{team_name}' \
-        does not exist or you are not registered in this team."
+        does not exist or you are not registered in this team."  # noqa: E713
     # noqa: E713
     if not found_teams:
         raise HTTPException(
