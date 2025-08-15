@@ -31,6 +31,8 @@ This project is a web application that allows users to manage their tasks and to
 
 - Use try except blocks for error handling inside functions.
 - Try to pass the pre-commit checks before pushing code.
+- Every PR made should be done from a new branch that is based on `nikos-dev` branch 
+and will be merged into `nikos-dev` branch.
 
 ## UI guidelines
 

@@ -121,7 +121,7 @@ async def create_team(
         )
         if not enrolled_in_team:
             if "Not found team with code" in msg:
-                raise HTTPException(status=status.HTTP_404_NOT_FOUND, detail=msg)
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=msg)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=msg
             )
@@ -197,7 +197,7 @@ async def enter_team(
         )
         if not enrolled_in_team:
             if "Not found team with code" in msg:
-                raise HTTPException(status=status.HTTP_404_NOT_FOUND, detail=msg)
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=msg)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=msg
             )
@@ -357,7 +357,7 @@ async def get_team_details(
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Team '{team_name}' \
-                                does not exist or you are not registered in this team.",
+                    does not exist or you are not registered in this team.",  # noqa: E713
             )
         found_team = found_teams[0]
 
