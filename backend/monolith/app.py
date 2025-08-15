@@ -15,6 +15,9 @@ from backend.monolith.routes.home import router as home_router
 from backend.monolith.routes.login import google_login_router, simple_login_router
 from backend.monolith.routes.profile import router as profile_router
 from backend.monolith.routes.teams import router as teams_router
+from backend.monolith.routes.public import router as public_router
+from backend.monolith.routes.my_teams import router as my_teams_router
+from backend.monolith.routes.specific_team import router as specific_team_router
 
 env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
@@ -80,6 +83,9 @@ app.include_router(google_login_router, prefix="/google_login", tags=["Google lo
 app.include_router(home_router, prefix="/home", tags=["home"])
 app.include_router(profile_router, prefix="/profile", tags=["Profile"])
 app.include_router(teams_router, prefix="/teams", tags=["Teams"])
+app.include_router(public_router, prefix="/public", tags=["public"])
+app.include_router(my_teams_router, prefix="/my_teams", tags=["my_teams"])
+app.include_router(specific_team_router, prefix="/specific_team", tags=["specific_team"])
 
 if os.getenv("MODE") == "DEVELOPMENT":
     app.include_router(database_init_router, prefix="/init-db", tags=["Init Database"])
