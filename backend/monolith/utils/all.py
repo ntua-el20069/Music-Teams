@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 from sqlalchemy import distinct
 from sqlalchemy import exc as sqlalchemy_exc
@@ -70,18 +70,19 @@ def get_all_public_lyricists(db: Session) -> Tuple[bool, str, List[str]]:
         return False, f"Unexpected error: {exc}", []
 
 
-def get_all_public_songs(db: Session) -> Tuple[bool, str, List[str]]:
+def get_all_public_songs(db: Session) -> Tuple[bool, str, List[Dict[str, str]]]:
     """
     Get all public songs.
 
     Returns:
-        Tuple[bool, str, List[str]]: Success status, message, list of song titles
+        Tuple[bool, str, List[Dict[str, str]]]: Success status, message,
+            list of song dictionaries with id and title
     """
     try:
-        songs = db.query(Song.title).filter(Song.public is True).all()
+        songs = db.query(Song.id, Song.title).filter(Song.public is True).all()
 
-        song_titles = [song[0] for song in songs]
-        return True, "Public songs retrieved successfully", song_titles
+        song_list = [{"id": str(song[0]), "title": song[1]} for song in songs]
+        return True, "Public songs retrieved successfully", song_list
 
     except sqlalchemy_exc.SQLAlchemyError as exc:
         print(f"Database error in get_all_public_songs: {exc}")
@@ -165,7 +166,7 @@ def get_all_lyricists_in_user_teams(
 
 def get_all_songs_in_user_teams(
     db: Session, user_id: str
-) -> Tuple[bool, str, List[str]]:
+) -> Tuple[bool, str, List[Dict[str, str]]]:
     """
     Get all songs in teams the user participates in.
 
@@ -174,11 +175,12 @@ def get_all_songs_in_user_teams(
         user_id: ID of the user
 
     Returns:
-        Tuple[bool, str, List[str]]: Success status, message, list of song titles
+        Tuple[bool, str, List[Dict[str, str]]]: Success status, message,
+            list of song dictionaries with id and title
     """
     try:
         songs = (
-            db.query(Song.title)
+            db.query(Song.id, Song.title)
             .join(TeamsShareSongs, Song.id == TeamsShareSongs.song_id)
             .join(Team, TeamsShareSongs.teamname == Team.name)
             .join(MemberOfTeam, Team.name == MemberOfTeam.teamname)
@@ -186,8 +188,8 @@ def get_all_songs_in_user_teams(
             .all()
         )
 
-        song_titles = [song[0] for song in songs]
-        return True, "Songs in user teams retrieved successfully", song_titles
+        song_list = [{"id": str(song[0]), "title": song[1]} for song in songs]
+        return True, "Songs in user teams retrieved successfully", song_list
 
     except sqlalchemy_exc.SQLAlchemyError as exc:
         print(f"Database error in get_all_songs_in_user_teams: {exc}")
@@ -273,7 +275,9 @@ def get_all_lyricists_in_team(
         return False, f"Unexpected error: {exc}", []
 
 
-def get_all_songs_in_team(db: Session, team_name: str) -> Tuple[bool, str, List[str]]:
+def get_all_songs_in_team(
+    db: Session, team_name: str
+) -> Tuple[bool, str, List[Dict[str, str]]]:
     """
     Get all songs in a specific team.
 
@@ -282,18 +286,19 @@ def get_all_songs_in_team(db: Session, team_name: str) -> Tuple[bool, str, List[
         team_name: Name of the team
 
     Returns:
-        Tuple[bool, str, List[str]]: Success status, message, list of song titles
+        Tuple[bool, str, List[Dict[str, str]]]: Success status, message,
+            list of song dictionaries with id and title
     """
     try:
         songs = (
-            db.query(Song.title)
+            db.query(Song.id, Song.title)
             .join(TeamsShareSongs, Song.id == TeamsShareSongs.song_id)
             .filter(TeamsShareSongs.teamname == team_name)
             .all()
         )
 
-        song_titles = [song[0] for song in songs]
-        return True, f"Songs in team {team_name} retrieved successfully", song_titles
+        song_list = [{"id": str(song[0]), "title": song[1]} for song in songs]
+        return True, f"Songs in team {team_name} retrieved successfully", song_list
 
     except sqlalchemy_exc.SQLAlchemyError as exc:
         print(f"Database error in get_all_songs_in_team: {exc}")
