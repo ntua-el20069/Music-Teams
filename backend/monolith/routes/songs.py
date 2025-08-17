@@ -23,7 +23,8 @@ from backend.monolith.utils.song_access import (
 from backend.monolith.utils.create_song import (
     manage_song,
     get_song_with_teams,
-    transpose_chords
+    transpose_chords,
+    update_song_chords_only
 )
 
 router = APIRouter()
@@ -277,26 +278,8 @@ async def permanent_transporto(
         # Transpose the chords
         transposed_chords = transpose_chords(song.chords, transporto_data.transporto_units)
         
-        # Create SongModel instance for update
-        song_model = SongModel(
-            id=song.id,
-            title=song.title,
-            lyrics=song.lyrics,
-            chords=transposed_chords,
-            made_by=song.made_by,
-            public=song.public,
-            composers=[],  # Will be handled by the existing relationships
-            lyricists=[],  # Will be handled by the existing relationships
-            shared_with_teams=song_teams
-        )
-        
-        # Update only chords
-        success, message, _ = manage_song(
-            db=db,
-            song_model=song_model,
-            update_chords=True,
-            update_song=True
-        )
+        # Update only the chords field
+        success, message = update_song_chords_only(db, song.id, transposed_chords)
         
         if not success:
             raise HTTPException(

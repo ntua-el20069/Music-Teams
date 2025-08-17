@@ -234,3 +234,31 @@ def get_song_with_teams(db: Session, song_id: int) -> Tuple[Optional[Song], List
     except Exception as exc:
         print(f"Error getting song with teams: {exc}")
         return (None, [])
+
+
+def update_song_chords_only(db: Session, song_id: int, new_chords: str) -> Tuple[bool, str]:
+    """
+    Update only the chords field of a song.
+    
+    Args:
+        db: Database session
+        song_id: ID of the song to update
+        new_chords: New chords string
+        
+    Returns:
+        Tuple[bool, str]: (success, message)
+    """
+    try:
+        song = db.query(Song).filter(Song.id == song_id).first()
+        if not song:
+            return (False, f"Song with ID {song_id} not found")
+        
+        song.chords = new_chords
+        db.commit()
+        
+        return (True, "Song chords updated successfully")
+        
+    except Exception as exc:
+        db.rollback()
+        print(f"Error updating song chords: {exc}")
+        return (False, f"Error updating song chords: {exc}")
