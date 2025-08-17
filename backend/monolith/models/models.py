@@ -138,6 +138,20 @@ class Song(Base):  # type: ignore
     )
 
 
+class SimpleSongModel(BaseModel):
+    id: int = Field(default=None, title="Song ID")
+    title: str = Field(..., title="Song Title")
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "title": "Song Title",
+            }
+        }
+
+
 class SongModel(BaseModel):
     id: int = Field(default=None, title="Song ID")
     title: str = Field(..., title="Song Title")

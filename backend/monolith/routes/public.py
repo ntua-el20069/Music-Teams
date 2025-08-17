@@ -21,15 +21,16 @@ async def get_public_composers(
     db: db_dependency, current_user: dict = Depends(get_current_user)
 ) -> JSONResponse:
     """
-    Get all composers that are in public songs.
-    Requires authenticated user.
+    Get all composers that are in public songs. \n
+    Requires authenticated user. \n
 
-    Returns:
-        JSONResponse with list of composer names
+    Returns: \n
+        JSONResponse (200) with list of composer names \n
+        (message: str, composers: list) \n
 
-    Raises:
-        HTTPException with status 401 if user is not authenticated
-        HTTPException with status 500 if database error occurs
+    Raises: \n
+        HTTPException with status 401 if user is not authenticated \n
+        HTTPException with status 500 if database error occurs \n
     """
     try:
         success, msg, composers = get_all_public_composers(db)
@@ -58,15 +59,16 @@ async def get_public_lyricists(
     db: db_dependency, current_user: dict = Depends(get_current_user)
 ) -> JSONResponse:
     """
-    Get all lyricists that are in public songs.
-    Requires authenticated user.
+    Get all lyricists that are in public songs. \n
+    Requires authenticated user. \n
 
-    Returns:
-        JSONResponse with list of lyricist names
+    Returns: \n
+        JSONResponse (200) with list of lyricist names \n
+        (message: str, lyricists: list) \n
 
-    Raises:
-        HTTPException with status 401 if user is not authenticated
-        HTTPException with status 500 if database error occurs
+    Raises: \n
+        HTTPException with status 401 if user is not authenticated \n
+        HTTPException with status 500 if database error occurs \n
     """
     try:
         success, msg, lyricists = get_all_public_lyricists(db)
@@ -95,15 +97,17 @@ async def get_public_songs(
     db: db_dependency, current_user: dict = Depends(get_current_user)
 ) -> JSONResponse:
     """
-    Get all public songs.
-    Requires authenticated user.
+    Get all public songs. \n
+    Requires authenticated user. \n
 
-    Returns:
-        JSONResponse with list of song titles
+    Returns: \n
+        JSONResponse (200) with list of songs \n
+        (message: str, songs: list of  \n
+        dictionaries with keys (id, title) ) \n
 
-    Raises:
-        HTTPException with status 401 if user is not authenticated
-        HTTPException with status 500 if database error occurs
+    Raises: \n
+        HTTPException with status 401 if user is not authenticated \n
+        HTTPException with status 500 if database error occurs \n
     """
     try:
         success, msg, songs = get_all_public_songs(db)

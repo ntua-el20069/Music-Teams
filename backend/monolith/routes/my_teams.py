@@ -25,16 +25,17 @@ async def get_my_teams_composers(
     teams: List[TeamModel] = Depends(get_teams_of_user),
 ) -> JSONResponse:
     """
-    Get all composers that are in songs in teams the user participates in.
-    Requires authenticated user and access to team_data cookie.
+    Get all composers that are in songs in teams the user participates in. \n
+    Requires authenticated user and access to team_data cookie. \n
 
-    Returns:
-        JSONResponse with list of composer names
+    Returns: \n
+        JSONResponse (200) with list of composer names \n
+        (message: str, composers: list) \n
 
-    Raises:
-        HTTPException with status 401 if user is not authenticated
-        HTTPException with status 428 if team_data cookie is missing or invalid
-        HTTPException with status 500 if database error occurs
+    Raises: \n
+        HTTPException with status 401 if user is not authenticated \n
+        HTTPException with status 428 if team_data cookie is missing or invalid \n
+        HTTPException with status 500 if database error occurs \n
     """
     try:
         user_id = current_user["user_id"]
@@ -66,16 +67,17 @@ async def get_my_teams_lyricists(
     teams: List[TeamModel] = Depends(get_teams_of_user),
 ) -> JSONResponse:
     """
-    Get all lyricists that are in songs in teams the user participates in.
-    Requires authenticated user and access to team_data cookie.
+    Get all lyricists that are in songs in teams the user participates in. \n
+    Requires authenticated user and access to team_data cookie. \n
 
-    Returns:
-        JSONResponse with list of lyricist names
+    Returns: \n
+        JSONResponse (200) with list of lyricist names \n
+        (message: str, lyricists: list) \n
 
-    Raises:
-        HTTPException with status 401 if user is not authenticated
-        HTTPException with status 428 if team_data cookie is missing or invalid
-        HTTPException with status 500 if database error occurs
+    Raises: \n
+        HTTPException with status 401 if user is not authenticated \n
+        HTTPException with status 428 if team_data cookie is missing or invalid \n
+        HTTPException with status 500 if database error occurs \n
     """
     try:
         user_id = current_user["user_id"]
@@ -107,16 +109,18 @@ async def get_my_teams_songs(
     teams: List[TeamModel] = Depends(get_teams_of_user),
 ) -> JSONResponse:
     """
-    Get all songs in teams the user participates in.
-    Requires authenticated user and access to team_data cookie.
+    Get all songs in teams the user participates in. \n
+    Requires authenticated user and access to team_data cookie. \n
 
-    Returns:
-        JSONResponse with list of song titles
+    Returns: \n
+        JSONResponse (200) with list of songs \n
+        (message: str, songs: list of  \n
+        dictionaries with keys (id, title) ) \n
 
-    Raises:
-        HTTPException with status 401 if user is not authenticated
-        HTTPException with status 428 if team_data cookie is missing or invalid
-        HTTPException with status 500 if database error occurs
+    Raises: \n
+        HTTPException with status 401 if user is not authenticated \n
+        HTTPException with status 428 if team_data cookie is missing or invalid \n
+        HTTPException with status 500 if database error occurs \n
     """
     try:
         user_id = current_user["user_id"]

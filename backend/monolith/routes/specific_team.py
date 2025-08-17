@@ -26,20 +26,21 @@ async def get_specific_team_composers(
     teams: List[TeamModel] = Depends(get_teams_of_user),
 ) -> JSONResponse:
     """
-    Get all composers that are in songs in a specific team.
-    Requires authenticated user, access to team_data cookie, and enrollment in the specified team.
+    Get all composers that are in songs in a specific team. \n
+    Requires authenticated user, team_data cookie, and enrollment in the specified team. \n
 
-    Args:
-        team_name: Name of the team to get composers from
+    Args: \n
+        team_name: Name of the team to get composers from \n
 
-    Returns:
-        JSONResponse with list of composer names
+    Returns: \n
+        JSONResponse (200) with list of composer names \n
+        (message: str, composers: list) \n
 
-    Raises:
-        HTTPException with status 401 if user is not authenticated
-        HTTPException with status 428 if team_data cookie is missing or invalid
-        HTTPException with status 404 if team doesn't exist or user is not enrolled
-        HTTPException with status 500 if database error occurs
+    Raises: \n
+        HTTPException with status 401 if user is not authenticated \n
+        HTTPException with status 428 if team_data cookie is missing or invalid \n
+        HTTPException with status 404 if team doesn't exist or user is not enrolled \n
+        HTTPException with status 500 if database error occurs \n
     """
     try:
         # Verify user is enrolled in the specified team
@@ -75,20 +76,21 @@ async def get_specific_team_lyricists(
     teams: List[TeamModel] = Depends(get_teams_of_user),
 ) -> JSONResponse:
     """
-    Get all lyricists that are in songs in a specific team.
-    Requires authenticated user, access to team_data cookie, and enrollment in the specified team.
+    Get all lyricists that are in songs in a specific team. \n
+    Requires authenticated user, team_data cookie, and enrollment in the specified team. \n
 
-    Args:
-        team_name: Name of the team to get lyricists from
+    Args: \n
+        team_name: Name of the team to get lyricists from \n
 
-    Returns:
-        JSONResponse with list of lyricist names
+    Returns: \n
+        JSONResponse (200) with list of lyricist names
+        (message: str, lyricists: list) \n
 
-    Raises:
-        HTTPException with status 401 if user is not authenticated
-        HTTPException with status 428 if team_data cookie is missing or invalid
-        HTTPException with status 404 if team doesn't exist or user is not enrolled
-        HTTPException with status 500 if database error occurs
+    Raises: \n
+        HTTPException with status 401 if user is not authenticated \n
+        HTTPException with status 428 if team_data cookie is missing or invalid \n
+        HTTPException with status 404 if team doesn't exist or user is not enrolled \n
+        HTTPException with status 500 if database error occurs \n
     """
     try:
         # Verify user is enrolled in the specified team
@@ -124,20 +126,22 @@ async def get_specific_team_songs(
     teams: List[TeamModel] = Depends(get_teams_of_user),
 ) -> JSONResponse:
     """
-    Get all songs in a specific team.
-    Requires authenticated user, access to team_data cookie, and enrollment in the specified team.
+    Get all songs in a specific team. \n
+    Requires authenticated user, team_data cookie, and enrollment in the specified team. \n
 
-    Args:
-        team_name: Name of the team to get songs from
+    Args: \n
+        team_name: Name of the team to get songs from \n
 
-    Returns:
-        JSONResponse with list of song titles
+    Returns: \n
+        JSONResponse (200) with list of songs \n
+        (message: str, songs: list of  \n
+        dictionaries with keys (id, title) ) \n
 
-    Raises:
-        HTTPException with status 401 if user is not authenticated
-        HTTPException with status 428 if team_data cookie is missing or invalid
-        HTTPException with status 404 if team doesn't exist or user is not enrolled
-        HTTPException with status 500 if database error occurs
+    Raises: \n
+        HTTPException with status 401 if user is not authenticated \n
+        HTTPException with status 428 if team_data cookie is missing or invalid \n
+        HTTPException with status 404 if team doesn't exist or user is not enrolled \n
+        HTTPException with status 500 if database error occurs \n
     """
     try:
         # Verify user is enrolled in the specified team

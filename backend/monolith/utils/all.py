@@ -5,8 +5,6 @@ from sqlalchemy import exc as sqlalchemy_exc
 from sqlalchemy.orm import Session
 
 from backend.monolith.models.models import (
-    Composer,
-    Lyricist,
     MemberOfTeam,
     Song,
     Team,
@@ -25,10 +23,9 @@ def get_all_public_composers(db: Session) -> Tuple[bool, str, List[str]]:
     """
     try:
         composers = (
-            db.query(distinct(Composer.name))
-            .join(WroteMusic, Composer.name == WroteMusic.composer)
+            db.query(distinct(WroteMusic.composer))
             .join(Song, WroteMusic.song_id == Song.id)
-            .filter(Song.public is True)
+            .filter(Song.public == True)  # noqa: E712
             .all()
         )
 
@@ -52,10 +49,9 @@ def get_all_public_lyricists(db: Session) -> Tuple[bool, str, List[str]]:
     """
     try:
         lyricists = (
-            db.query(distinct(Lyricist.name))
-            .join(WroteLyrics, Lyricist.name == WroteLyrics.lyricist)
+            db.query(distinct(WroteLyrics.lyricist))
             .join(Song, WroteLyrics.song_id == Song.id)
-            .filter(Song.public is True)
+            .filter(Song.public == True)  # noqa: E712
             .all()
         )
 
@@ -79,7 +75,11 @@ def get_all_public_songs(db: Session) -> Tuple[bool, str, List[Dict[str, str]]]:
             list of song dictionaries with id and title
     """
     try:
-        songs = db.query(Song.id, Song.title).filter(Song.public is True).all()
+        songs = (
+            db.query(Song.id, Song.title)
+            .filter(Song.public == True)  # noqa: E712
+            .all()
+        )
 
         song_list = [{"id": str(song[0]), "title": song[1]} for song in songs]
         return True, "Public songs retrieved successfully", song_list
@@ -93,7 +93,7 @@ def get_all_public_songs(db: Session) -> Tuple[bool, str, List[Dict[str, str]]]:
 
 
 def get_all_composers_in_user_teams(
-    db: Session, user_id: str
+    db: Session, user_id: int
 ) -> Tuple[bool, str, List[str]]:
     """
     Get all composers that are in songs in teams the user participates in.
@@ -107,8 +107,7 @@ def get_all_composers_in_user_teams(
     """
     try:
         composers = (
-            db.query(distinct(Composer.name))
-            .join(WroteMusic, Composer.name == WroteMusic.composer)
+            db.query(distinct(WroteMusic.composer))
             .join(Song, WroteMusic.song_id == Song.id)
             .join(TeamsShareSongs, Song.id == TeamsShareSongs.song_id)
             .join(Team, TeamsShareSongs.teamname == Team.name)
@@ -129,7 +128,7 @@ def get_all_composers_in_user_teams(
 
 
 def get_all_lyricists_in_user_teams(
-    db: Session, user_id: str
+    db: Session, user_id: int
 ) -> Tuple[bool, str, List[str]]:
     """
     Get all lyricists that are in songs in teams the user participates in.
@@ -143,8 +142,7 @@ def get_all_lyricists_in_user_teams(
     """
     try:
         lyricists = (
-            db.query(distinct(Lyricist.name))
-            .join(WroteLyrics, Lyricist.name == WroteLyrics.lyricist)
+            db.query(distinct(WroteLyrics.lyricist))
             .join(Song, WroteLyrics.song_id == Song.id)
             .join(TeamsShareSongs, Song.id == TeamsShareSongs.song_id)
             .join(Team, TeamsShareSongs.teamname == Team.name)
@@ -165,7 +163,7 @@ def get_all_lyricists_in_user_teams(
 
 
 def get_all_songs_in_user_teams(
-    db: Session, user_id: str
+    db: Session, user_id: int
 ) -> Tuple[bool, str, List[Dict[str, str]]]:
     """
     Get all songs in teams the user participates in.
@@ -185,6 +183,7 @@ def get_all_songs_in_user_teams(
             .join(Team, TeamsShareSongs.teamname == Team.name)
             .join(MemberOfTeam, Team.name == MemberOfTeam.teamname)
             .filter(MemberOfTeam.user_id == user_id)
+            .distinct()
             .all()
         )
 
@@ -214,8 +213,7 @@ def get_all_composers_in_team(
     """
     try:
         composers = (
-            db.query(distinct(Composer.name))
-            .join(WroteMusic, Composer.name == WroteMusic.composer)
+            db.query(distinct(WroteMusic.composer))
             .join(Song, WroteMusic.song_id == Song.id)
             .join(TeamsShareSongs, Song.id == TeamsShareSongs.song_id)
             .filter(TeamsShareSongs.teamname == team_name)
@@ -252,8 +250,7 @@ def get_all_lyricists_in_team(
     """
     try:
         lyricists = (
-            db.query(distinct(Lyricist.name))
-            .join(WroteLyrics, Lyricist.name == WroteLyrics.lyricist)
+            db.query(distinct(WroteLyrics.lyricist))
             .join(Song, WroteLyrics.song_id == Song.id)
             .join(TeamsShareSongs, Song.id == TeamsShareSongs.song_id)
             .filter(TeamsShareSongs.teamname == team_name)
@@ -294,6 +291,7 @@ def get_all_songs_in_team(
             db.query(Song.id, Song.title)
             .join(TeamsShareSongs, Song.id == TeamsShareSongs.song_id)
             .filter(TeamsShareSongs.teamname == team_name)
+            .distinct()
             .all()
         )
 
