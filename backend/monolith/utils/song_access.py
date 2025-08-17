@@ -5,7 +5,7 @@ This module contains helper functions to check user permissions
 for song reading and writing operations based on team memberships.
 """
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from sqlalchemy.orm import Session
 
 from backend.monolith.models.models import Song, MemberOfTeam, TeamsShareSongs
@@ -108,3 +108,31 @@ def can_read_song(db: Session, user_id: int, teams_sharing_song: List[str]) -> T
     except Exception as exc:
         print(f"Error checking read permissions: {exc}")
         return (False, f"Error checking read permissions: {exc}")
+
+
+def get_song_by_id_with_ownership(db: Session, song_id: int, user_id: int) -> Tuple[Optional[Song], str]:
+    """
+    Get a song by ID and check if the user owns it.
+    
+    Args:
+        db: Database session
+        song_id: ID of the song to retrieve
+        user_id: ID of the user to check ownership for
+        
+    Returns:
+        Tuple[Optional[Song], str]: (song or None, message)
+    """
+    try:
+        song = db.query(Song).filter(Song.id == song_id).first()
+        
+        if not song:
+            return (None, f"Song with ID {song_id} not found")
+        
+        if song.made_by != user_id:
+            return (None, "You can only update songs that you created")
+        
+        return (song, "Song found and ownership verified")
+        
+    except Exception as exc:
+        print(f"Error getting song by ID with ownership: {exc}")
+        return (None, f"Error getting song by ID with ownership: {exc}")

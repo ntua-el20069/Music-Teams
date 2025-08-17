@@ -18,7 +18,8 @@ from backend.monolith.routes.teams import get_teams_of_user
 from backend.monolith.utils.song_access import (
     song_exists_by_user,
     can_write_song,
-    can_read_song
+    can_read_song,
+    get_song_by_id_with_ownership
 )
 from backend.monolith.utils.create_song import (
     manage_song,
@@ -158,18 +159,18 @@ async def update_song(
         user_id = current_user["user_id"]
         
         # Check if song exists and is owned by this user
-        existing_song = db.query(Song).filter(Song.id == song_data.id).first()
+        existing_song, ownership_msg = get_song_by_id_with_ownership(db, song_data.id, user_id)
         if not existing_song:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Song with ID {song_data.id} not found"
-            )
-        
-        if existing_song.made_by != user_id:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="You can only update songs that you created"
-            )
+            if "not found" in ownership_msg:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=ownership_msg
+                )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=ownership_msg
+                )
         
         # Check if user can write to all specified teams
         can_write, write_msg = can_write_song(db, user_id, song_data.shared_with_teams)
