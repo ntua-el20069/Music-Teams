@@ -63,14 +63,15 @@ class TestSongEndpoints(unittest.TestCase):
             else:
                 print(f"❌ Failed to create test team: {team_response.status_code}")
 
-        # Get team data for both users
+        # Load team data (required for song endpoints) - sets team_data cookie
         for i in range(NUM_USERS):
             if self.logged_in[i]:
-                teams_response = self.sessions[i].get(f"{BASE_URL}/my_teams/teams")
+                teams_response = self.sessions[i].get(f"{BASE_URL}/teams/teams", timeout=10)
                 if teams_response.status_code == 200:
-                    print(f"✅ Got team data for user {i}")
+                    print(f"✅ Teams data loaded successfully for user {i}")
                 else:
-                    print(f"❌ Failed to get team data for user {i}")
+                    print(f"❌ Teams loading failed for user {i}: {teams_response.status_code} - {teams_response.text}")
+                    self.fail(f"Setup failed: Could not load teams data for user {i}")
 
     def tearDown(self):
         """Clean up test environment following project guidelines."""
