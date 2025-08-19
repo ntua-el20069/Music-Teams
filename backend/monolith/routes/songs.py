@@ -12,7 +12,14 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 
 from backend.monolith.database.database import get_db
-from backend.monolith.models.models import SongModel, Song
+from backend.monolith.models.models import (
+    SongModel, 
+    Song, 
+    SongInsertModel, 
+    SongUpdateModel, 
+    TransportoModel, 
+    UpdateLyricsChordsModel
+)
 from backend.monolith.routes.home import get_current_user
 from backend.monolith.routes.teams import get_teams_of_user
 from backend.monolith.utils.song_access import (
@@ -25,38 +32,12 @@ from backend.monolith.utils.create_song import (
     manage_song,
     get_song_with_teams,
     transpose_chords,
-    update_song_chords_only
+    update_song_chords_only,
+    update_song_lyrics_chords
 )
 
 router = APIRouter()
 db_dependency = Annotated[Session, Depends(get_db)]
-
-
-class SongInsertModel(BaseModel):
-    """Model for song insertion requests."""
-    title: str = Field(..., title="Song Title")
-    composers: List[str] = Field(default=[], title="Composers")
-    lyricists: List[str] = Field(default=[], title="Lyricists")
-    lyrics: str = Field(..., title="Song Lyrics")
-    public: bool = Field(default=False, title="Public")
-    shared_with_teams: List[str] = Field(default=[], title="Shared With Teams")
-
-
-class SongUpdateModel(BaseModel):
-    """Model for song update requests."""
-    id: int = Field(..., title="Song ID")
-    title: str = Field(..., title="Song Title")
-    composers: List[str] = Field(default=[], title="Composers")
-    lyricists: List[str] = Field(default=[], title="Lyricists")
-    lyrics: str = Field(..., title="Song Lyrics")
-    public: bool = Field(default=False, title="Public")
-    shared_with_teams: List[str] = Field(default=[], title="Shared With Teams")
-
-
-class TransportoModel(BaseModel):
-    """Model for permanent transposition requests."""
-    song_id: int = Field(..., title="Song ID")
-    transporto_units: int = Field(..., title="Transposition Units")
 
 
 @router.post("/insert-song", summary="Insert a new song")
@@ -373,6 +354,87 @@ async def get_song(
         raise
     except Exception as exc:
         print(f"Unexpected error in get_song: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error: {exc}"
+        )
+
+
+@router.post("/update-lyrics-chords", summary="Update song lyrics and chords")
+async def update_lyrics_chords(
+    db: db_dependency,
+    song_data: UpdateLyricsChordsModel,
+    current_user: dict = Depends(get_current_user),
+    teams: List = Depends(get_teams_of_user)
+) -> JSONResponse:
+    """
+    Update both lyrics and chords of an existing song.
+    
+    Requires:
+    - Authenticated user
+    - team_data cookie with user teams
+    - Song must be made_by this user
+    - User must have can_edit = True in all teams the song is shared with
+    """
+    try:
+        user_id = current_user["user_id"]
+        
+        # Check if song exists and is owned by this user
+        existing_song, ownership_msg = get_song_by_id_with_ownership(db, song_data.song_id, user_id)
+        if not existing_song:
+            if "not found" in ownership_msg:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=ownership_msg
+                )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=ownership_msg
+                )
+        
+        # Get song teams to check permissions
+        song, song_teams = get_song_with_teams(db, song_data.song_id)
+        if not song:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Song with ID {song_data.song_id} not found"
+            )
+        
+        # Check if user can write to all teams the song is shared with
+        can_write, write_msg = can_write_song(db, user_id, song_teams)
+        if not can_write:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=write_msg
+            )
+        
+        # Update the song lyrics and chords
+        success, message = update_song_lyrics_chords(
+            db=db,
+            song_id=song_data.song_id,
+            new_lyrics=song_data.lyrics,
+            new_chords=song_data.chords
+        )
+        
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=message
+            )
+        
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={
+                "message": message,
+                "status": "success"
+            }
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as exc:
+        print(f"Unexpected error in update_lyrics_chords: {exc}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Internal server error: {exc}"

@@ -214,6 +214,69 @@ class UpdateChordsModel(BaseModel):
         schema_extra = {"example": {"song_id": 1, "chords": "C G Am F"}}
 
 
+class SongInsertModel(BaseModel):
+    """Model for song insertion requests."""
+    title: str = Field(..., title="Song Title")
+    composers: list[str] = Field(default=[], title="Composers")
+    lyricists: list[str] = Field(default=[], title="Lyricists")
+    lyrics: str = Field(..., title="Song Lyrics")
+    public: bool = Field(default=False, title="Public")
+    shared_with_teams: list[str] = Field(default=[], title="Shared With Teams")
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "title": "My Song",
+                "composers": ["Composer1", "Composer2"],
+                "lyricists": ["Lyricist1"],
+                "lyrics": "These are the song lyrics",
+                "public": False,
+                "shared_with_teams": ["Team1", "Team2"]
+            }
+        }
+
+
+class SongUpdateModel(BaseModel):
+    """Model for song update requests."""
+    id: int = Field(..., title="Song ID")
+    title: str = Field(..., title="Song Title")
+    composers: list[str] = Field(default=[], title="Composers")
+    lyricists: list[str] = Field(default=[], title="Lyricists")
+    lyrics: str = Field(..., title="Song Lyrics")
+    public: bool = Field(default=False, title="Public")
+    shared_with_teams: list[str] = Field(default=[], title="Shared With Teams")
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "title": "Updated Song Title",
+                "composers": ["Composer1", "Composer2"],
+                "lyricists": ["Lyricist1"],
+                "lyrics": "These are the updated song lyrics",
+                "public": True,
+                "shared_with_teams": ["Team1"]
+            }
+        }
+
+
+class TransportoModel(BaseModel):
+    """Model for permanent transposition requests."""
+    song_id: int = Field(..., title="Song ID")
+    transporto_units: int = Field(..., title="Transposition Units")
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "song_id": 1,
+                "transporto_units": 2
+            }
+        }
+
+
 class Composer(Base):  # type: ignore
     __tablename__ = "composer"
 

@@ -262,3 +262,33 @@ def update_song_chords_only(db: Session, song_id: int, new_chords: str) -> Tuple
         db.rollback()
         print(f"Error updating song chords: {exc}")
         return (False, f"Error updating song chords: {exc}")
+
+
+def update_song_lyrics_chords(db: Session, song_id: int, new_lyrics: str, new_chords: str) -> Tuple[bool, str]:
+    """
+    Update both lyrics and chords fields of a song.
+    
+    Args:
+        db: Database session
+        song_id: ID of the song to update
+        new_lyrics: New lyrics string
+        new_chords: New chords string
+        
+    Returns:
+        Tuple[bool, str]: (success, message)
+    """
+    try:
+        song = db.query(Song).filter(Song.id == song_id).first()
+        if not song:
+            return (False, f"Song with ID {song_id} not found")
+        
+        song.lyrics = new_lyrics
+        song.chords = new_chords
+        db.commit()
+        
+        return (True, "Song lyrics and chords updated successfully")
+        
+    except Exception as exc:
+        db.rollback()
+        print(f"Error updating song lyrics and chords: {exc}")
+        return (False, f"Error updating song lyrics and chords: {exc}")
