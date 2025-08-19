@@ -14,7 +14,6 @@ from pydantic import BaseModel, Field
 from backend.monolith.database.database import get_db
 from backend.monolith.models.models import (
     SongModel, 
-    Song, 
     SongInsertModel, 
     SongUpdateModel, 
     TransportoModel, 
@@ -48,11 +47,29 @@ async def insert_song(
     teams: List = Depends(get_teams_of_user)
 ) -> JSONResponse:
     """
-    Insert a new song with proper authentication and team permissions.
+    Insert a new song with proper authentication and team permissions.\n
     
-    Requires:
-    - Authenticated user
-    - team_data cookie with user teams
+    Payload:\n
+    - title: str (song title)\n
+    - composers: list[str] (list of composer names)\n
+    - lyricists: list[str] (list of lyricist names)\n
+    - lyrics: str (song lyrics)\n
+    - public: bool (whether song is public)\n
+    - shared_with_teams: list[str] (teams to share the song with)\n
+    
+    Returns on success (201):\n
+    - message: str (success message)\n
+    - song_id: int (ID of created song)\n
+    - status: "success"\n
+    
+    Error codes:\n
+    - 403: User lacks edit permissions in specified teams\n
+    - 409: Song with same title already exists by this user\n
+    - 500: Internal server error\n
+    
+    Requires:\n
+    - Authenticated user\n
+    - team_data cookie with user teams\n
     - User must have can_edit = True in all teams specified in shared_with_teams
     """
     try:
@@ -128,12 +145,31 @@ async def update_song(
     teams: List = Depends(get_teams_of_user)
 ) -> JSONResponse:
     """
-    Update an existing song with proper authentication and ownership checks.
+    Update an existing song with proper authentication and ownership checks.\n
     
-    Requires:
-    - Authenticated user
-    - team_data cookie with user teams
-    - Song must be made_by this user
+    Payload:\n
+    - id: int (song ID)\n
+    - title: str (song title)\n
+    - composers: list[str] (list of composer names)\n
+    - lyricists: list[str] (list of lyricist names)\n
+    - lyrics: str (song lyrics)\n
+    - public: bool (whether song is public)\n
+    - shared_with_teams: list[str] (teams to share the song with)\n
+    
+    Returns on success (200):\n
+    - message: str (success message)\n
+    - status: "success"\n
+    
+    Error codes:\n
+    - 403: User lacks edit permissions or doesn't own the song\n
+    - 404: Song not found\n
+    - 409: Song with same title already exists by this user\n
+    - 500: Internal server error\n
+    
+    Requires:\n
+    - Authenticated user\n
+    - team_data cookie with user teams\n
+    - Song must be made_by this user\n
     - User must have can_edit = True in all teams specified in shared_with_teams
     """
     try:
@@ -223,12 +259,25 @@ async def permanent_transporto(
     teams: List = Depends(get_teams_of_user)
 ) -> JSONResponse:
     """
-    Permanently transpose the chords of a song in the database.
+    Permanently transpose the chords of a song in the database.\n
     
-    Requires:
-    - Authenticated user
-    - team_data cookie with user teams  
-    - Song must be made_by this user
+    Payload:\n
+    - song_id: int (ID of song to transpose)\n
+    - transporto_units: int (number of semitones to transpose)\n
+    
+    Returns on success (200):\n
+    - message: str (success message with transposition info)\n
+    - status: "success"\n
+    
+    Error codes:\n
+    - 403: User lacks edit permissions or doesn't own the song\n
+    - 404: Song not found\n
+    - 500: Internal server error\n
+    
+    Requires:\n
+    - Authenticated user\n
+    - team_data cookie with user teams\n
+    - Song must be made_by this user\n
     - User must have can_edit = True in all teams the song is shared with
     """
     try:
@@ -296,12 +345,34 @@ async def get_song(
     teams: List = Depends(get_teams_of_user)
 ) -> JSONResponse:
     """
-    Get a song with optional chord transposition (no database changes).
+    Get a song with optional chord transposition (no database changes).\n
     
-    Requires:
-    - Authenticated user
-    - team_data cookie with user teams
-    - User must be enrolled in at least one team the song is shared with
+    Query parameters:\n
+    - song_id: int (ID of song to retrieve)\n
+    - transporto_units: int (optional, semitones to transpose, default 0)\n
+    
+    Returns on success (200):\n
+    - id: int (song ID)\n
+    - title: str (song title)\n
+    - lyrics: str (song lyrics)\n
+    - chords: str (song chords, possibly transposed)\n
+    - likes: int (number of likes)\n
+    - made_by: int (user ID of creator)\n
+    - public: bool (whether song is public)\n
+    - composers: list[str] (composer names)\n
+    - lyricists: list[str] (lyricist names)\n
+    - shared_with_teams: list[str] (teams song is shared with)\n
+    - transposed_by: int|null (transposition applied, if any)\n
+    
+    Error codes:\n
+    - 403: User lacks read permissions\n
+    - 404: Song not found\n
+    - 500: Internal server error\n
+    
+    Requires:\n
+    - Authenticated user\n
+    - team_data cookie with user teams\n
+    - User must have access (song is public, user owns it, or user is in a team that has access)
     """
     try:
         user_id = current_user["user_id"]
@@ -314,15 +385,13 @@ async def get_song(
                 detail=f"Song with ID {song_id} not found"
             )
         
-        # Check if song is public or if user owns it
-        if not song.public and song.made_by != user_id:
-            # Check read permissions
-            can_read, read_msg = can_read_song(db, user_id, song_teams)
-            if not can_read:
-                raise HTTPException(
-                    status_code=status.HTTP_403_FORBIDDEN,
-                    detail=read_msg
-                )
+        # Check read permissions
+        can_read, read_msg = can_read_song(db, user_id, song_id)
+        if not can_read:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=read_msg
+            )
         
         # Get composers and lyricists from relationships
         composers = [c.name for c in song.composers]
@@ -368,12 +437,26 @@ async def update_lyrics_chords(
     teams: List = Depends(get_teams_of_user)
 ) -> JSONResponse:
     """
-    Update both lyrics and chords of an existing song.
+    Update both lyrics and chords of an existing song.\n
     
-    Requires:
-    - Authenticated user
-    - team_data cookie with user teams
-    - Song must be made_by this user
+    Payload:\n
+    - song_id: int (ID of song to update)\n
+    - lyrics: str (new song lyrics)\n
+    - chords: str (new song chords)\n
+    
+    Returns on success (200):\n
+    - message: str (success message)\n
+    - status: "success"\n
+    
+    Error codes:\n
+    - 403: User lacks edit permissions or doesn't own the song\n
+    - 404: Song not found\n
+    - 500: Internal server error\n
+    
+    Requires:\n
+    - Authenticated user\n
+    - team_data cookie with user teams\n
+    - Song must be made_by this user\n
     - User must have can_edit = True in all teams the song is shared with
     """
     try:

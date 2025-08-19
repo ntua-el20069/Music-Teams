@@ -76,34 +76,50 @@ def can_write_song(db: Session, user_id: int, teams_sharing_song: List[str]) -> 
         return (False, f"Error checking write permissions: {exc}")
 
 
-def can_read_song(db: Session, user_id: int, teams_sharing_song: List[str]) -> Tuple[bool, str]:
+def can_read_song(db: Session, user_id: int, song_id: int) -> Tuple[bool, str]:
     """
-    Check if user is enrolled in at least one team that shares the song.
+    Check if user can read a song based on ownership, public status, or team membership.
     
     Args:
         db: Database session
         user_id: ID of the user
-        teams_sharing_song: List of team names that share the song
+        song_id: ID of the song to check access for
         
     Returns:
         Tuple[bool, str]: (can_read, message)
     """
     try:
-        # If no teams specified, assume public access or check other logic
-        if not teams_sharing_song:
-            return (True, "No team restrictions")
+        # Get the song
+        song = db.query(Song).filter(Song.id == song_id).first()
+        if not song:
+            return (False, f"Song with ID {song_id} not found")
         
-        # Check if user is enrolled in at least one team
-        for team_name in teams_sharing_song:
-            membership = db.query(MemberOfTeam).filter(
-                MemberOfTeam.user_id == user_id,
-                MemberOfTeam.teamname == team_name
-            ).first()
+        # Check if song is public or user owns it
+        if not song.public and song.made_by != user_id:
+            # Get teams that share this song
+            teams_query = db.query(TeamsShareSongs).filter(
+                TeamsShareSongs.song_id == song_id
+            ).all()
+            teams_sharing_song = [ts.team_name for ts in teams_query]
             
-            if membership:
-                return (True, f"User has access through team '{team_name}'")
+            # If no teams specified, user cannot read private song they don't own
+            if not teams_sharing_song:
+                return (False, "Song is private and you are not the owner")
+            
+            # Check if user is enrolled in at least one team
+            for team_name in teams_sharing_song:
+                membership = db.query(MemberOfTeam).filter(
+                    MemberOfTeam.user_id == user_id,
+                    MemberOfTeam.teamname == team_name
+                ).first()
+                
+                if membership:
+                    return (True, f"User has access through team '{team_name}'")
+            
+            return (False, "User is not enrolled in any of the teams that share this song")
         
-        return (False, "User is not enrolled in any of the teams that share this song")
+        # Song is public or user owns it
+        return (True, "User has access to the song")
         
     except Exception as exc:
         print(f"Error checking read permissions: {exc}")
