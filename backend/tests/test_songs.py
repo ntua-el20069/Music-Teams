@@ -128,7 +128,7 @@ class TestSongEndpoints(unittest.TestCase):
     def test_01_insert_song_success(self):
         """Test successful song insertion."""
         if not self.logged_in[0]:
-            self.skipTest("User 0 not logged in")
+            self.fail("User 0 not logged in")
 
         song_data = {
             "title": self.test_song_title,
@@ -159,7 +159,7 @@ class TestSongEndpoints(unittest.TestCase):
     def test_02_insert_song_duplicate_title(self):
         """Test inserting song with duplicate title by same user fails."""
         if not self.logged_in[0]:
-            self.skipTest("User 0 not logged in")
+            self.fail("User 0 not logged in")
 
         # First song
         song_data = {
@@ -191,7 +191,7 @@ class TestSongEndpoints(unittest.TestCase):
     def test_03_insert_song_with_team_sharing(self):
         """Test inserting song with team sharing."""
         if not self.logged_in[0] or not self.created_teams:
-            self.skipTest("User 0 not logged in or no test team available")
+            self.fail("User 0 not logged in or no test team available")
 
         song_data = {
             "title": f"team_song_{self.test_song_title}",
@@ -209,17 +209,14 @@ class TestSongEndpoints(unittest.TestCase):
         print(f"Team song response: {response.status_code}")
         print(f"Response content: {response.text}")
 
-        if response.status_code == 201:
-            self.created_songs.append(response.json()["song_id"])
-            self.assertEqual(response.json()["status"], "success")
-        else:
-            # This might fail if team setup didn't work properly
-            print("⚠️ Team song insertion failed, possibly due to team setup issues")
+        self.assertEqual(response.status_code, 201)
+        self.created_songs.append(response.json()["song_id"])
+        self.assertEqual(response.json()["status"], "success")
 
     def test_04_get_song_success(self):
         """Test successful song retrieval."""
         if not self.logged_in[0]:
-            self.skipTest("User 0 not logged in")
+            self.fail("User 0 not logged in")
 
         # First create a song
         song_data = {
@@ -235,8 +232,9 @@ class TestSongEndpoints(unittest.TestCase):
             f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
-        if create_response.status_code != 201:
-            self.skipTest("Failed to create song for get test")
+        self.assertEqual(
+            create_response.status_code, 201, "Song creation failed in get test"
+        )
 
         song_id = create_response.json()["song_id"]
         self.created_songs.append(song_id)
@@ -259,7 +257,7 @@ class TestSongEndpoints(unittest.TestCase):
     def test_05_get_song_with_transposition(self):
         """Test song retrieval with chord transposition."""
         if not self.logged_in[0]:
-            self.skipTest("User 0 not logged in")
+            self.fail("User 0 not logged in")
 
         # Create a song with chords (this would normally be done via add-chords endpoint)
         song_data = {
@@ -275,8 +273,9 @@ class TestSongEndpoints(unittest.TestCase):
             f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
-        if create_response.status_code != 201:
-            self.skipTest("Failed to create song for transpose test")
+        self.assertEqual(
+            create_response.status_code, 201, "Song creation failed in transpose test"
+        )
 
         song_id = create_response.json()["song_id"]
         self.created_songs.append(song_id)
@@ -297,7 +296,7 @@ class TestSongEndpoints(unittest.TestCase):
     def test_06_update_song_success(self):
         """Test successful song update."""
         if not self.logged_in[0]:
-            self.skipTest("User 0 not logged in")
+            self.fail("User 0 not logged in")
 
         # First create a song
         song_data = {
@@ -313,8 +312,9 @@ class TestSongEndpoints(unittest.TestCase):
             f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
-        if create_response.status_code != 201:
-            self.skipTest("Failed to create song for update test")
+        self.assertEqual(
+            create_response.status_code, 201, "Song creation failed in update test"
+        )
 
         song_id = create_response.json()["song_id"]
         self.created_songs.append(song_id)
@@ -343,7 +343,7 @@ class TestSongEndpoints(unittest.TestCase):
     def test_07_update_song_not_owner(self):
         """Test that updating someone else's song fails."""
         if not all(self.logged_in[:2]):
-            self.skipTest("Both users not logged in")
+            self.fail("Both users not logged in")
 
         # User 0 creates a song
         song_data = {
@@ -359,8 +359,9 @@ class TestSongEndpoints(unittest.TestCase):
             f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
-        if create_response.status_code != 201:
-            self.skipTest("Failed to create song for ownership test")
+        self.assertEqual(
+            create_response.status_code, 201, "Song creation failed in owner test"
+        )
 
         song_id = create_response.json()["song_id"]
         self.created_songs.append(song_id)
@@ -388,7 +389,7 @@ class TestSongEndpoints(unittest.TestCase):
     def test_08_permanent_transporto(self):
         """Test permanent chord transposition."""
         if not self.logged_in[0]:
-            self.skipTest("User 0 not logged in")
+            self.fail("User 0 not logged in")
 
         # Create a song with chords
         song_data = {
@@ -404,8 +405,9 @@ class TestSongEndpoints(unittest.TestCase):
             f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
-        if create_response.status_code != 201:
-            self.skipTest("Failed to create song for permanent transpose test")
+        self.assertEqual(
+            create_response.status_code, 201, "Song creation failed in transpose test"
+        )
 
         song_id = create_response.json()["song_id"]
         self.created_songs.append(song_id)
@@ -420,16 +422,13 @@ class TestSongEndpoints(unittest.TestCase):
         print(f"Permanent transpose response: {transpose_response.status_code}")
         print(f"Response content: {transpose_response.text}")
 
-        if transpose_response.status_code == 200:
-            self.assertEqual(transpose_response.json()["status"], "success")
-        else:
-            # This might fail if the song doesn't have chords set
-            print("⚠️ Permanent transposition failed, possibly due to missing chords")
+        self.assertEqual(transpose_response.status_code, 200)
+        self.assertEqual(transpose_response.json()["status"], "success")
 
     def test_09_get_nonexistent_song(self):
         """Test getting a non-existent song."""
         if not self.logged_in[0]:
-            self.skipTest("User 0 not logged in")
+            self.fail("User 0 not logged in")
 
         response = self.sessions[0].get(f"{BASE_URL}/songs/song?song_id=999999")
 
