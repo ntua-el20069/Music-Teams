@@ -6,7 +6,13 @@ from dotenv import load_dotenv
 from sqlalchemy import exc as sqlalchemy_exc
 from sqlalchemy.orm import Session
 
-from backend.monolith.models.models import MemberOfTeam, Team, TeamModel
+from backend.monolith.models.models import (
+    MemberOfTeam,
+    Song,
+    Team,
+    TeamModel,
+    TeamsShareSongs,
+)
 
 env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
@@ -112,12 +118,32 @@ def leave_team(db: Session, user_id: str, team_name: str) -> Tuple[bool, str]:
             db.query(MemberOfTeam).filter(MemberOfTeam.teamname == team_name).count()
         )
 
+        # Remove songs made by this user from the team (TODO: change policy to keep songs?)
+        delete_query = TeamsShareSongs.__table__.delete().where(
+            (TeamsShareSongs.teamname == team_name)
+            & (
+                TeamsShareSongs.song_id.in_(
+                    db.query(Song.id).filter(Song.made_by == user_id).subquery()
+                )
+            )
+        )
+
+        db.execute(delete_query)
+        db.commit()
+
         db.delete(member)
         msg = f"User {user_id} successfully left team {team_name}"
 
         if number_of_team_members <= 1:
             # if the team has only one member, delete the team
             msg += " and the team was deleted"
+
+            # first delete all the associations in TeamsShareSongs
+            db.query(TeamsShareSongs).filter(
+                TeamsShareSongs.teamname == team_name
+            ).delete()
+
+            # then delete the team
             db.query(Team).filter(Team.name == team_name).delete()
 
         db.commit()  # single commit for both delete operations

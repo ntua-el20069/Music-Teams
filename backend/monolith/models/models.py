@@ -216,6 +216,7 @@ class UpdateChordsModel(BaseModel):
 
 class SongInsertModel(BaseModel):
     """Model for song insertion requests."""
+
     title: str = Field(..., title="Song Title")
     composers: list[str] = Field(default=[], title="Composers")
     lyricists: list[str] = Field(default=[], title="Lyricists")
@@ -232,13 +233,14 @@ class SongInsertModel(BaseModel):
                 "lyricists": ["Lyricist1"],
                 "lyrics": "These are the song lyrics",
                 "public": False,
-                "shared_with_teams": ["Team1", "Team2"]
+                "shared_with_teams": ["Team1", "Team2"],
             }
         }
 
 
 class SongUpdateModel(BaseModel):
     """Model for song update requests."""
+
     id: int = Field(..., title="Song ID")
     title: str = Field(..., title="Song Title")
     composers: list[str] = Field(default=[], title="Composers")
@@ -257,24 +259,20 @@ class SongUpdateModel(BaseModel):
                 "lyricists": ["Lyricist1"],
                 "lyrics": "These are the updated song lyrics",
                 "public": True,
-                "shared_with_teams": ["Team1"]
+                "shared_with_teams": ["Team1"],
             }
         }
 
 
 class TransportoModel(BaseModel):
     """Model for permanent transposition requests."""
+
     song_id: int = Field(..., title="Song ID")
     transporto_units: int = Field(..., title="Transposition Units")
 
     class Config:
         orm_mode = True
-        schema_extra = {
-            "example": {
-                "song_id": 1,
-                "transporto_units": 2
-            }
-        }
+        schema_extra = {"example": {"song_id": 1, "transporto_units": 2}}
 
 
 class Composer(Base):  # type: ignore

@@ -7,11 +7,19 @@
 # - Tracks created resources for proper cleanup
 # - Uses unique test data to prevent conflicts
 
-import os
 import unittest
 import uuid
+
 import requests
 from dotenv import load_dotenv
+
+from backend.tests.helpers import (
+    create_team,
+    get_teams,
+    leave_team,
+    login_user,
+    logout_user,
+)
 
 env_path = "backend/.env"
 load_dotenv(dotenv_path=env_path)
@@ -38,40 +46,45 @@ class TestSongEndpoints(unittest.TestCase):
         self.created_teams = []  # Track teams created for testing
         self.logged_in = [False] * NUM_USERS
 
-        # Log in for the test
+        # Log in for the test (login all users)
         for i, session in enumerate(self.sessions):
-            response = session.post(
-                f"{BASE_URL}/simple_login/login",
-                json=self.valid_credentials[i],
-                allow_redirects=True,
+            login_ok, login_status, response = login_user(
+                session, self.valid_credentials[i]
             )
-            if response.status_code == 200:
+            if login_ok:
                 self.logged_in[i] = True
                 print(f"✅ Successfully logged in for user {i}")
             else:
-                print(f"❌ Failed to log in for user {i}: {response.status_code}")
-                print(f"Response: {response.text}")
+                self.fail(
+                    f"❌ Failed to log in for user {i}: {login_status} \
+                    \n Response: {response}"
+                )
 
-        # Create a test team for user 0
+        # Create a test team for user 0 (only user 0 creates and participates in team)
         if self.logged_in[0]:
-            team_response = self.sessions[0].get(
-                f"{BASE_URL}/teams/create-team?team_name={self.test_team_name}"
+            team_create_ok, team_create_status, response = create_team(
+                self.sessions[0], self.test_team_name
             )
-            if team_response.status_code == 200:
+            if team_create_ok:
                 self.created_teams.append(self.test_team_name)
-                print(f"✅ Created test team: {self.test_team_name}")
+                print(f"✅ Successfully created test team: {self.test_team_name}")
             else:
-                print(f"❌ Failed to create test team: {team_response.status_code}")
+                self.fail(
+                    f"❌ Failed to create test team: {team_create_status} \
+                    \n Response: {response}"
+                )
 
-        # Load team data (required for song endpoints) - sets team_data cookie
+        # Load team data for all users (required for song endpoints) - sets team_data cookie
         for i in range(NUM_USERS):
             if self.logged_in[i]:
-                teams_response = self.sessions[i].get(f"{BASE_URL}/teams/teams", timeout=10)
-                if teams_response.status_code == 200:
-                    print(f"✅ Teams data loaded successfully for user {i}")
+                get_teams_ok, get_teams_status, response = get_teams(self.sessions[i])
+                if get_teams_ok:
+                    print(f"✅ Successfully loaded teams for user {i}")
                 else:
-                    print(f"❌ Teams loading failed for user {i}: {teams_response.status_code} - {teams_response.text}")
-                    self.fail(f"Setup failed: Could not load teams data for user {i}")
+                    self.fail(
+                        f"❌ Failed to load teams for user {i}: {get_teams_status} \
+                        \n Response: {response}"
+                    )
 
     def tearDown(self):
         """Clean up test environment following project guidelines."""
@@ -80,36 +93,37 @@ class TestSongEndpoints(unittest.TestCase):
         # Clean up created songs (if any were successfully created)
         for song_id in self.created_songs:
             try:
-                # Note: We would need a delete endpoint to properly clean up
+                # TODO: Note: We would need a delete endpoint to properly clean up
                 # For now, we'll leave songs in database but this should be addressed
                 print(f"⚠️ Song {song_id} left in database (no delete endpoint)")
             except Exception as e:
                 print(f"Error cleaning up song {song_id}: {e}")
 
-        # Clean up teams
-        for team_name in self.created_teams:
-            try:
-                for i in range(NUM_USERS):
-                    if self.logged_in[i]:
-                        leave_response = self.sessions[i].get(
-                            f"{BASE_URL}/teams/leave-team?team_name={team_name}"
-                        )
-                        if leave_response.status_code == 200:
-                            print(f"✅ User {i} left team {team_name}")
-            except Exception as e:
-                print(f"Error cleaning up team {team_name}: {e}")
+        # Clean up teams (only user 0 created and participates in a team)
+        if self.logged_in[0]:
+            leave_team_ok, leave_team_status, response = leave_team(
+                self.sessions[0], self.test_team_name
+            )
+            if leave_team_ok:
+                print(f"✅ User {0} left team {self.test_team_name}")
+            else:
+                self.fail(
+                    f"❌ Failed to leave team {self.test_team_name} for user {0}: \
+                        {leave_team_status} \n Response: {response}"
+                )
 
         # Log out all users
         for i, session in enumerate(self.sessions):
             if self.logged_in[i]:
-                try:
-                    logout_response = session.post(f"{BASE_URL}/simple_login/logout")
-                    if logout_response.status_code == 200:
-                        print(f"✅ Successfully logged out user {i}")
-                    else:
-                        print(f"❌ Failed to logout user {i}: {logout_response.status_code}")
-                except Exception as e:
-                    print(f"Error during logout for user {i}: {e}")
+                logout_ok, logout_status, response = logout_user(session)
+                if logout_ok:
+                    self.logged_in[i] = False
+                    print(f"✅ Successfully logged out user {i}")
+                else:
+                    self.fail(
+                        f"❌ Failed to logout user {i}: {logout_status} \
+                        \n Response: {response}"
+                    )
 
     def test_01_insert_song_success(self):
         """Test successful song insertion."""
@@ -122,24 +136,23 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Test Lyricist"],
             "lyrics": "Test lyrics\nSecond line",
             "public": True,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         response = self.sessions[0].post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
         print(f"Insert song response: {response.status_code}")
         print(f"Response content: {response.text}")
 
         self.assertEqual(response.status_code, 201)
-        
+
         response_data = response.json()
         self.assertIn("song_id", response_data)
         self.assertIn("message", response_data)
         self.assertEqual(response_data["status"], "success")
-        
+
         # Track created song for cleanup
         self.created_songs.append(response_data["song_id"])
 
@@ -155,21 +168,19 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Test Lyricist"],
             "lyrics": "Test lyrics",
             "public": True,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         response1 = self.sessions[0].post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
-        
+
         if response1.status_code == 201:
             self.created_songs.append(response1.json()["song_id"])
 
         # Second song with same title
         response2 = self.sessions[0].post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
         print(f"Duplicate song response: {response2.status_code}")
@@ -188,12 +199,11 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Team Lyricist"],
             "lyrics": "Team song lyrics",
             "public": False,
-            "shared_with_teams": [self.test_team_name]
+            "shared_with_teams": [self.test_team_name],
         }
 
         response = self.sessions[0].post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
         print(f"Team song response: {response.status_code}")
@@ -204,7 +214,7 @@ class TestSongEndpoints(unittest.TestCase):
             self.assertEqual(response.json()["status"], "success")
         else:
             # This might fail if team setup didn't work properly
-            print(f"⚠️ Team song insertion failed, possibly due to team setup issues")
+            print("⚠️ Team song insertion failed, possibly due to team setup issues")
 
     def test_04_get_song_success(self):
         """Test successful song retrieval."""
@@ -218,12 +228,11 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Get Test Lyricist"],
             "lyrics": "Get test lyrics",
             "public": True,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         create_response = self.sessions[0].post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
         if create_response.status_code != 201:
@@ -233,15 +242,13 @@ class TestSongEndpoints(unittest.TestCase):
         self.created_songs.append(song_id)
 
         # Now get the song
-        get_response = self.sessions[0].get(
-            f"{BASE_URL}/songs/song?song_id={song_id}"
-        )
+        get_response = self.sessions[0].get(f"{BASE_URL}/songs/song?song_id={song_id}")
 
         print(f"Get song response: {get_response.status_code}")
         print(f"Response content: {get_response.text}")
 
         self.assertEqual(get_response.status_code, 200)
-        
+
         song = get_response.json()
         self.assertEqual(song["id"], song_id)
         self.assertEqual(song["title"], song_data["title"])
@@ -261,12 +268,11 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Transpose Lyricist"],
             "lyrics": "Transpose test lyrics",
             "public": True,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         create_response = self.sessions[0].post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
         if create_response.status_code != 201:
@@ -284,7 +290,7 @@ class TestSongEndpoints(unittest.TestCase):
         print(f"Response content: {get_response.text}")
 
         self.assertEqual(get_response.status_code, 200)
-        
+
         song = get_response.json()
         self.assertEqual(song["transposed_by"], 2)
 
@@ -300,12 +306,11 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Original Lyricist"],
             "lyrics": "Original lyrics",
             "public": True,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         create_response = self.sessions[0].post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
         if create_response.status_code != 201:
@@ -322,12 +327,11 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Updated Lyricist"],
             "lyrics": "Updated lyrics",
             "public": False,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         update_response = self.sessions[0].post(
-            f"{BASE_URL}/songs/update-song",
-            json=update_data
+            f"{BASE_URL}/songs/update-song", json=update_data
         )
 
         print(f"Update song response: {update_response.status_code}")
@@ -348,12 +352,11 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Owner Lyricist"],
             "lyrics": "Owner lyrics",
             "public": True,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         create_response = self.sessions[0].post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
         if create_response.status_code != 201:
@@ -370,12 +373,11 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Hacker Lyricist"],
             "lyrics": "Hacked lyrics",
             "public": True,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         update_response = self.sessions[1].post(
-            f"{BASE_URL}/songs/update-song",
-            json=update_data
+            f"{BASE_URL}/songs/update-song", json=update_data
         )
 
         print(f"Unauthorized update response: {update_response.status_code}")
@@ -395,12 +397,11 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Transpose Lyricist"],
             "lyrics": "C major scale\nF G C",
             "public": True,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         create_response = self.sessions[0].post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
         if create_response.status_code != 201:
@@ -410,14 +411,10 @@ class TestSongEndpoints(unittest.TestCase):
         self.created_songs.append(song_id)
 
         # Apply permanent transposition
-        transpose_data = {
-            "song_id": song_id,
-            "transporto_units": 2
-        }
+        transpose_data = {"song_id": song_id, "transporto_units": 2}
 
         transpose_response = self.sessions[0].post(
-            f"{BASE_URL}/songs/permanent-transporto",
-            json=transpose_data
+            f"{BASE_URL}/songs/permanent-transporto", json=transpose_data
         )
 
         print(f"Permanent transpose response: {transpose_response.status_code}")
@@ -427,16 +424,14 @@ class TestSongEndpoints(unittest.TestCase):
             self.assertEqual(transpose_response.json()["status"], "success")
         else:
             # This might fail if the song doesn't have chords set
-            print(f"⚠️ Permanent transposition failed, possibly due to missing chords")
+            print("⚠️ Permanent transposition failed, possibly due to missing chords")
 
     def test_09_get_nonexistent_song(self):
         """Test getting a non-existent song."""
         if not self.logged_in[0]:
             self.skipTest("User 0 not logged in")
 
-        response = self.sessions[0].get(
-            f"{BASE_URL}/songs/song?song_id=999999"
-        )
+        response = self.sessions[0].get(f"{BASE_URL}/songs/song?song_id=999999")
 
         print(f"Non-existent song response: {response.status_code}")
         print(f"Response content: {response.text}")
@@ -454,12 +449,11 @@ class TestSongEndpoints(unittest.TestCase):
             "lyricists": ["Unauthorized Lyricist"],
             "lyrics": "Unauthorized lyrics",
             "public": True,
-            "shared_with_teams": []
+            "shared_with_teams": [],
         }
 
         response = unauthorized_session.post(
-            f"{BASE_URL}/songs/insert-song",
-            json=song_data
+            f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
         print(f"Unauthorized access response: {response.status_code}")
