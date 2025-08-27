@@ -9,7 +9,14 @@ from typing import List, Optional, Tuple
 
 from sqlalchemy.orm import Session
 
-from backend.monolith.models.models import MemberOfTeam, Song, TeamsShareSongs
+from backend.monolith.models.models import (
+    MemberOfTeam,
+    Song,
+    SongModel,
+    TeamsShareSongs,
+    WroteLyrics,
+    WroteMusic,
+)
 
 
 def song_exists_by_user(db: Session, user_id: int, title: str) -> Tuple[bool, str]:
@@ -110,7 +117,7 @@ def can_read_song(db: Session, user_id: int, song_id: int) -> Tuple[bool, str]:
                 .filter(TeamsShareSongs.song_id == song_id)
                 .all()
             )
-            teams_sharing_song = [ts.team_name for ts in teams_query]
+            teams_sharing_song = [ts.teamname for ts in teams_query]
 
             # If no teams specified, user cannot read private song they don't own
             if not teams_sharing_song:
@@ -145,7 +152,7 @@ def can_read_song(db: Session, user_id: int, song_id: int) -> Tuple[bool, str]:
 
 def get_song_by_id_with_ownership(
     db: Session, song_id: int, user_id: int
-) -> Tuple[Optional[Song], str]:
+) -> Tuple[Optional[SongModel], str]:
     """
     Get a song by ID and check if the user owns it.
 
@@ -155,7 +162,7 @@ def get_song_by_id_with_ownership(
         user_id: ID of the user to check ownership for
 
     Returns:
-        Tuple[Optional[Song], str]: (song or None, message)
+        Tuple[Optional[SongModel], str]: (song or None, message)
     """
     try:
         song = db.query(Song).filter(Song.id == song_id).first()
@@ -166,7 +173,36 @@ def get_song_by_id_with_ownership(
         if song.made_by != user_id:
             return (None, "You can only update songs that you created")
 
-        return (song, "Song found and ownership verified")
+        song_model_instance = SongModel(
+            id=song.id,
+            title=song.title,
+            chords=song.chords,
+            lyrics=song.lyrics,
+            likes=song.likes,
+            made_by=song.made_by,
+            public=song.public,
+            composers=[
+                cm[0]
+                for cm in db.query(WroteMusic.composer)
+                .filter(WroteMusic.song_id == song_id)
+                .all()
+            ],
+            lyricists=[
+                ly[0]
+                for ly in db.query(WroteLyrics.lyricist)
+                .filter(WroteLyrics.song_id == song_id)
+                .all()
+            ],
+            shared_with_teams=[
+                share.teamname
+                for share in db.query(TeamsShareSongs)
+                .filter(TeamsShareSongs.song_id == song_id)
+                .all()
+            ],
+        )
+        # Currently, composers, lyricists, and shared_with_teams are not needed.
+        # only title and chords are used in update operations.
+        return (song_model_instance, "Song found and ownership verified")
 
     except Exception as exc:
         print(f"Error getting song by ID with ownership: {exc}")

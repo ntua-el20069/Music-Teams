@@ -5,7 +5,6 @@ This module contains functions for creating, updating songs and managing
 composers, lyricists, and team sharing relationships.
 """
 
-import re
 from typing import List, Optional, Tuple
 
 from sqlalchemy import exc as sqlalchemy_exc
@@ -22,8 +21,13 @@ from backend.monolith.models.models import (
     WroteMusic,
 )
 
+major = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
 
-def transpose_chord(chord: str, semitones: int) -> str:
+sharp_to_flat = {"C#": "Db", "D#": "Eb", "F#": "Gb", "G#": "Ab", "A#": "Bb"}
+flat_to_sharp = {v: k for k, v in sharp_to_flat.items()}
+
+
+def transpose_chords(chords: str, transporto: int) -> str:
     """
     Transpose a single chord by the specified number of semitones.
 
@@ -34,56 +38,25 @@ def transpose_chord(chord: str, semitones: int) -> str:
     Returns:
         str: The transposed chord
     """
-    # Define the chromatic scale
-    notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-    sharp_to_flat = {"C#": "Db", "D#": "Eb", "F#": "Gb", "G#": "Ab", "A#": "Bb"}
-    flat_to_sharp = {v: k for k, v in sharp_to_flat.items()}
+    # Replace all flats with their sharp equivalents in the chords string
+    for flat, sharp in flat_to_sharp.items():
+        chords = chords.replace(flat, sharp)
 
-    # Extract the root note from the chord
-    root_match = re.match(r"^([A-G][#b]?)", chord)
-    if not root_match:
-        return chord  # Return original if can't parse
-
-    root = root_match.group(1)
-    remainder = chord[len(root) :]  # noqa: E203
-
-    # Convert flats to sharps for calculation
-    if root in flat_to_sharp:
-        root = flat_to_sharp[root]
-
-    if root not in notes:
-        return chord  # Return original if not recognized
-
-    # Calculate new position
-    current_index = notes.index(root)
-    new_index = (current_index + semitones) % 12
-    new_root = notes[new_index]
-
-    return new_root + remainder
-
-
-def transpose_chords(chords: str, semitones: int) -> str:
-    """
-    Transpose all chords in a chord string by the specified number of semitones.
-
-    Args:
-        chords: String containing chords (may be multiline)
-        semitones: Number of semitones to transpose
-
-    Returns:
-        str: String with all chords transposed
-    """
-    if not chords or semitones == 0:
-        return chords
-
-    # Pattern to match chord names (including variations like C7, Am, F#m, etc.)
-    chord_pattern = r"\b([A-G][#b]?(?:m|maj|min|dim|aug|sus|add|\d)*)\b"
-
-    def replace_chord(match):
-        chord = match.group(1)
-        return transpose_chord(chord, semitones)
-
-    return re.sub(chord_pattern, replace_chord, chords)
+    transposed_chords = ""
+    i = 0
+    while i < len(chords):  # for each letter in chords string
+        if chords[i : i + 2] in major:  # check if it is A#, C#, ... # noqa: E203
+            k = major.index(chords[i : i + 2])  # noqa: E203
+            transposed_chords += major[(k + transporto) % 12]
+            i += 2
+        elif chords[i] in major:  # check if it is A, B, C, ...
+            k = major.index(chords[i])
+            transposed_chords += major[(k + transporto) % 12]
+            i += 1
+        else:  # else write the same character
+            transposed_chords += chords[i]
+            i += 1
+    return transposed_chords
 
 
 def manage_song(
@@ -210,7 +183,9 @@ def manage_song(
         return (False, f"Unexpected error: {exc}", None)
 
 
-def get_song_with_teams(db: Session, song_id: int) -> Tuple[Optional[Song], List[str]]:
+def get_song_with_teams(
+    db: Session, song_id: int
+) -> Tuple[Optional[SongModel], List[str]]:
     """
     Get a song and the list of teams it's shared with.
 
@@ -219,7 +194,7 @@ def get_song_with_teams(db: Session, song_id: int) -> Tuple[Optional[Song], List
         song_id: ID of the song
 
     Returns:
-        Tuple[Optional[Song], List[str]]: (song, list of team names)
+        Tuple[Optional[SongModel], List[str]]: (song, list of team names)
     """
     try:
         song = db.query(Song).filter(Song.id == song_id).first()
@@ -233,7 +208,28 @@ def get_song_with_teams(db: Session, song_id: int) -> Tuple[Optional[Song], List
 
         team_names = [share.teamname for share in team_shares]
 
-        return (song, team_names)
+        song_model_instance = SongModel(
+            id=song.id,
+            title=song.title,
+            lyrics=song.lyrics,
+            chords=song.chords,
+            made_by=song.made_by,
+            public=song.public,
+            composers=[
+                cm[0]
+                for cm in db.query(WroteMusic.composer)
+                .filter(WroteMusic.song_id == song_id)
+                .all()
+            ],
+            lyricists=[
+                ly[0]
+                for ly in db.query(WroteLyrics.lyricist)
+                .filter(WroteLyrics.song_id == song_id)
+                .all()
+            ],
+            shared_with_teams=team_names,
+        )
+        return (song_model_instance, team_names)
 
     except Exception as exc:
         print(f"Error getting song with teams: {exc}")

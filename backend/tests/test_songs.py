@@ -175,8 +175,8 @@ class TestSongEndpoints(unittest.TestCase):
             f"{BASE_URL}/songs/insert-song", json=song_data
         )
 
-        if response1.status_code == 201:
-            self.created_songs.append(response1.json()["song_id"])
+        self.assertEqual(response1.status_code, 201)
+        self.created_songs.append(response1.json()["song_id"])
 
         # Second song with same title
         response2 = self.sessions[0].post(
@@ -280,6 +280,9 @@ class TestSongEndpoints(unittest.TestCase):
         song_id = create_response.json()["song_id"]
         self.created_songs.append(song_id)
 
+        # TODO: Add chords to the song via /songs/update-lyrics-chords endpoint if available
+        # ... (add chords "C# F Gb")
+
         # Get the song with transposition
         get_response = self.sessions[0].get(
             f"{BASE_URL}/songs/song?song_id={song_id}&transporto_units=2"
@@ -292,6 +295,9 @@ class TestSongEndpoints(unittest.TestCase):
 
         song = get_response.json()
         self.assertEqual(song["transposed_by"], 2)
+
+        # TODO: Verify that chords in lyrics are transposed correctly
+        # assert "D# G G#" in song["chords"] (only hash in chords, not flat)
 
     def test_06_update_song_success(self):
         """Test successful song update."""
@@ -396,7 +402,7 @@ class TestSongEndpoints(unittest.TestCase):
             "title": f"permanent_transpose_{self.test_song_title}",
             "composers": ["Transpose Composer"],
             "lyricists": ["Transpose Lyricist"],
-            "lyrics": "C major scale\nF G C",
+            "lyrics": "Some lyrics here...",
             "public": True,
             "shared_with_teams": [],
         }
@@ -412,6 +418,9 @@ class TestSongEndpoints(unittest.TestCase):
         song_id = create_response.json()["song_id"]
         self.created_songs.append(song_id)
 
+        # TODO: Add chords to the song via /songs/update-lyrics-chords endpoint
+        # ... (add chords "C# F Gb")
+
         # Apply permanent transposition
         transpose_data = {"song_id": song_id, "transporto_units": 2}
 
@@ -424,6 +433,10 @@ class TestSongEndpoints(unittest.TestCase):
 
         self.assertEqual(transpose_response.status_code, 200)
         self.assertEqual(transpose_response.json()["status"], "success")
+
+        # verify that chords have been transposed permanently
+        # TODO: Fetch song and check chords
+        # using the get endpoint and verify chords are now ""D# G A#" etc. (only hash in chords)
 
     def test_09_get_nonexistent_song(self):
         """Test getting a non-existent song."""

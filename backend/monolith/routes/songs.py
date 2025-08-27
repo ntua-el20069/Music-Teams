@@ -362,10 +362,6 @@ async def get_song(
         if not can_read:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=read_msg)
 
-        # Get composers and lyricists from relationships
-        composers = [comp.name for comp in song.composers]
-        lyricists = [lyr.name for lyr in song.lyricists]
-
         # Apply transposition if requested
         chords = song.chords
         if transporto_units != 0:
@@ -381,8 +377,8 @@ async def get_song(
                 "likes": song.likes,
                 "made_by": song.made_by,
                 "public": song.public,
-                "composers": composers,
-                "lyricists": lyricists,
+                "composers": song.composers,
+                "lyricists": song.lyricists,
                 "shared_with_teams": song_teams,
                 "transposed_by": transporto_units if transporto_units != 0 else None,
             },
