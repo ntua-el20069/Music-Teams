@@ -90,14 +90,18 @@ class TestSongEndpoints(unittest.TestCase):
         """Clean up test environment following project guidelines."""
         print("Cleaning up test environment...")
 
-        # Clean up created songs (if any were successfully created)
+        # Clean up created songs using the delete endpoint
         for song_id in self.created_songs:
             try:
-                # TODO: Note: We would need a delete endpoint to properly clean up
-                # For now, we'll leave songs in database but this should be addressed
-                print(f"⚠️ Song {song_id} left in database (no delete endpoint)")
+                delete_response = self.sessions[0].delete(
+                    f"{BASE_URL}/songs/delete-song?song_id={song_id}"
+                )
+                if delete_response.status_code == 200:
+                    print(f"✅ Successfully deleted song {song_id}")
+                else:
+                    print(f"⚠️ Failed to delete song {song_id}: {delete_response.status_code} - {delete_response.text}")
             except Exception as e:
-                print(f"Error cleaning up song {song_id}: {e}")
+                print(f"Error deleting song {song_id}: {e}")
 
         # Clean up teams (only user 0 created and participates in a team)
         if self.logged_in[0]:
@@ -280,8 +284,21 @@ class TestSongEndpoints(unittest.TestCase):
         song_id = create_response.json()["song_id"]
         self.created_songs.append(song_id)
 
-        # TODO: Add chords to the song via /songs/update-lyrics-chords endpoint if available
-        # ... (add chords "C# F Gb")
+        # Add chords to the song via /songs/update-lyrics-chords endpoint
+        chords_data = {
+            "song_id": song_id,
+            "lyrics": "Transpose test lyrics",
+            "chords": "C# F Gb"
+        }
+        
+        chords_response = self.sessions[0].post(
+            f"{BASE_URL}/songs/update-lyrics-chords", json=chords_data
+        )
+        
+        print(f"Add chords response: {chords_response.status_code}")
+        print(f"Response content: {chords_response.text}")
+        
+        self.assertEqual(chords_response.status_code, 200, "Failed to add chords to song")
 
         # Get the song with transposition
         get_response = self.sessions[0].get(
@@ -296,8 +313,12 @@ class TestSongEndpoints(unittest.TestCase):
         song = get_response.json()
         self.assertEqual(song["transposed_by"], 2)
 
-        # TODO: Verify that chords in lyrics are transposed correctly
-        # assert "D# G G#" in song["chords"] (only hash in chords, not flat)
+        # Verify that chords in lyrics are transposed correctly
+        # The original chords "C# F Gb" transposed by 2 semitones should become "D# G G#"
+        # (only hash in chords, not flat)
+        expected_chords = "D# G G#"
+        self.assertIn("D#", song["chords"], "Chords should contain D# after transposition")
+        self.assertIn("G#", song["chords"], "Chords should contain G# after transposition")
 
     def test_06_update_song_success(self):
         """Test successful song update."""
@@ -418,8 +439,21 @@ class TestSongEndpoints(unittest.TestCase):
         song_id = create_response.json()["song_id"]
         self.created_songs.append(song_id)
 
-        # TODO: Add chords to the song via /songs/update-lyrics-chords endpoint
-        # ... (add chords "C# F Gb")
+        # Add chords to the song via /songs/update-lyrics-chords endpoint
+        chords_data = {
+            "song_id": song_id,
+            "lyrics": "Some lyrics here...",
+            "chords": "C# F Gb"
+        }
+        
+        chords_response = self.sessions[0].post(
+            f"{BASE_URL}/songs/update-lyrics-chords", json=chords_data
+        )
+        
+        print(f"Add chords response: {chords_response.status_code}")
+        print(f"Response content: {chords_response.text}")
+        
+        self.assertEqual(chords_response.status_code, 200, "Failed to add chords to song")
 
         # Apply permanent transposition
         transpose_data = {"song_id": song_id, "transporto_units": 2}
@@ -434,9 +468,19 @@ class TestSongEndpoints(unittest.TestCase):
         self.assertEqual(transpose_response.status_code, 200)
         self.assertEqual(transpose_response.json()["status"], "success")
 
-        # verify that chords have been transposed permanently
-        # TODO: Fetch song and check chords
-        # using the get endpoint and verify chords are now ""D# G A#" etc. (only hash in chords)
+        # Fetch song and check chords have been transposed permanently
+        get_response = self.sessions[0].get(f"{BASE_URL}/songs/song?song_id={song_id}")
+        
+        print(f"Get song after transpose response: {get_response.status_code}")
+        print(f"Response content: {get_response.text}")
+        
+        self.assertEqual(get_response.status_code, 200, "Failed to get song after transposition")
+        
+        song = get_response.json()
+        # Verify chords are now "D# G A#" (C# F Gb transposed by 2 semitones)
+        expected_chords = "D# G A#"
+        self.assertIn("D#", song["chords"], "Chords should contain D# after permanent transposition")
+        self.assertIn("A#", song["chords"], "Chords should contain A# after permanent transposition")
 
     def test_09_get_nonexistent_song(self):
         """Test getting a non-existent song."""
