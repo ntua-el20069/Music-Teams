@@ -477,10 +477,10 @@ class TestSongEndpoints(unittest.TestCase):
         self.assertEqual(get_response.status_code, 200, "Failed to get song after transposition")
         
         song = get_response.json()
-        # Verify chords are now "D# G A#" (C# F Gb transposed by 2 semitones)
-        expected_chords = "D# G A#"
+        # Verify chords are now "D# G G#" (C# F Gb transposed by 2 semitones)
+        # Note: Gb is enharmonic equivalent of F#, so F# + 2 semitones = G# (not A#)
         self.assertIn("D#", song["chords"], "Chords should contain D# after permanent transposition")
-        self.assertIn("A#", song["chords"], "Chords should contain A# after permanent transposition")
+        self.assertIn("G#", song["chords"], "Chords should contain G# after permanent transposition")
 
     def test_09_get_nonexistent_song(self):
         """Test getting a non-existent song."""
