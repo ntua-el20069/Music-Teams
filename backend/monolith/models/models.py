@@ -347,6 +347,40 @@ class TeamsShareSongs(Base):  # type: ignore
     song_id = Column(Integer, ForeignKey("song.id"), primary_key=True)
 
 
+class SongListSaveModel(BaseModel):
+    """Model for saving/reshaping song lists."""
+    
+    songlist_id: int = Field(..., title="Song List ID", ge=1, le=3)
+    songs: list[int] = Field(default=[], title="Song IDs", max_length=int(os.getenv("MAX_SONGS_IN_LIST", 300)))
+    team_name: str = Field(default=None, title="Team Name")
+    
+    class Config:
+        from_attributes = True
+        json_schema_extra = {
+            "example": {
+                "songlist_id": 1,
+                "songs": [12, 345, 54, 23],
+                "team_name": "MyTeam"  # optional
+            }
+        }
+
+
+class SongInListModel(BaseModel):
+    """Model for songs in song lists."""
+    
+    id: int = Field(..., title="Song ID")
+    title: str = Field(..., title="Song Title")
+    
+    class Config:
+        from_attributes = True
+        json_schema_extra = {
+            "example": {
+                "id": 234,
+                "title": "Eye of the tiger"
+            }
+        }
+
+
 # Create engine
 DB_TYPE, DATABASE_URL = db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE)
 

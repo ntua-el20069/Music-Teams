@@ -18,6 +18,7 @@ from backend.monolith.routes.my_teams import router as my_teams_router
 from backend.monolith.routes.profile import router as profile_router
 from backend.monolith.routes.public import router as public_router
 from backend.monolith.routes.songs import router as songs_router
+from backend.monolith.routes.songlists import router as songlists_router
 from backend.monolith.routes.specific_team import router as specific_router
 from backend.monolith.routes.teams import router as teams_router
 
@@ -90,6 +91,7 @@ app.include_router(public_router, prefix="/public", tags=["Public"])
 app.include_router(specific_router, prefix="/specific_team", tags=["Specific Team"])
 app.include_router(teams_router, prefix="/teams", tags=["Teams"])
 app.include_router(songs_router, prefix="/songs", tags=["Songs"])
+app.include_router(songlists_router, prefix="/songlists", tags=["Song Lists"])
 
 if os.getenv("MODE") == "DEVELOPMENT":
     app.include_router(database_init_router, prefix="/init-db", tags=["Init Database"])
