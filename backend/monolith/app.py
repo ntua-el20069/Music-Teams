@@ -13,8 +13,8 @@ from backend.monolith.routes.API import router as API_router
 from backend.monolith.routes.helpers import router as database_init_router
 from backend.monolith.routes.home import router as home_router
 from backend.monolith.routes.login import google_login_router, simple_login_router
-from backend.monolith.routes.my_teams import router as my_teams_router
 from backend.monolith.routes.my_songs import router as my_songs_router
+from backend.monolith.routes.my_teams import router as my_teams_router
 from backend.monolith.routes.profile import router as profile_router
 from backend.monolith.routes.public import router as public_router
 from backend.monolith.routes.songs import router as songs_router

@@ -212,57 +212,64 @@ def get_song_by_id_with_ownership(
 def delete_song_by_id(db: Session, song_id: int, user_id: int) -> Tuple[bool, str]:
     """
     Delete a song by ID with proper foreign key constraint handling.
-    
+
     Only the user who created the song (made_by field) can delete it.
     Deletes in order to respect foreign key constraints:
     1. TeamsShareSongs records
-    2. WroteMusic records  
+    2. WroteMusic records
     3. WroteLyrics records
     4. Song itself
-    
+
     Args:
         db: Database session
         song_id: ID of the song to delete
         user_id: ID of the user requesting deletion
-        
+
     Returns:
         Tuple[bool, str]: (success, message)
     """
     try:
         # First check if song exists and user owns it
         song = db.query(Song).filter(Song.id == song_id).first()
-        
+
         if not song:
             return (False, f"Song with ID {song_id} not found")
-            
+
         if song.made_by != user_id:
             return (False, "You can only delete songs that you created")
-        
+
         # Delete related records first due to foreign key constraints
-        
+
         # 1. Delete team sharing relationships
-        deleted_teams = db.query(TeamsShareSongs).filter(
-            TeamsShareSongs.song_id == song_id
-        ).delete()
-        
+        deleted_teams = (
+            db.query(TeamsShareSongs)
+            .filter(TeamsShareSongs.song_id == song_id)
+            .delete()
+        )
+
         # 2. Delete composer relationships
-        deleted_composers = db.query(WroteMusic).filter(
-            WroteMusic.song_id == song_id
-        ).delete()
-        
+        deleted_composers = (
+            db.query(WroteMusic).filter(WroteMusic.song_id == song_id).delete()
+        )
+
         # 3. Delete lyricist relationships
-        deleted_lyricists = db.query(WroteLyrics).filter(
-            WroteLyrics.song_id == song_id
-        ).delete()
-        
+        deleted_lyricists = (
+            db.query(WroteLyrics).filter(WroteLyrics.song_id == song_id).delete()
+        )
+
         # 4. Finally delete the song itself
         db.delete(song)
-        
+
         # Commit all changes
         db.commit()
-        
-        return (True, f"Song '{song.title}' deleted successfully (removed {deleted_teams} team shares, {deleted_composers} composer relations, {deleted_lyricists} lyricist relations)")
-        
+
+        return (
+            True,
+            f"Song '{song.title}' deleted successfully \
+                (removed {deleted_teams} team shares, {deleted_composers} composer relations,\
+                      {deleted_lyricists} lyricist relations)",
+        )
+
     except Exception as exc:
         db.rollback()
         print(f"Error deleting song: {exc}")

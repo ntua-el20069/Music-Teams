@@ -99,7 +99,10 @@ class TestSongEndpoints(unittest.TestCase):
                 if delete_response.status_code == 200:
                     print(f"✅ Successfully deleted song {song_id}")
                 else:
-                    print(f"⚠️ Failed to delete song {song_id}: {delete_response.status_code} - {delete_response.text}")
+                    self.fail(
+                        f"⚠️ Failed to delete song {song_id}: \
+                            {delete_response.status_code} - {delete_response.text}"
+                    )
             except Exception as e:
                 print(f"Error deleting song {song_id}: {e}")
 
@@ -288,17 +291,19 @@ class TestSongEndpoints(unittest.TestCase):
         chords_data = {
             "song_id": song_id,
             "lyrics": "Transpose test lyrics",
-            "chords": "C# F Gb"
+            "chords": "C# F Gb",
         }
-        
+
         chords_response = self.sessions[0].post(
             f"{BASE_URL}/songs/update-lyrics-chords", json=chords_data
         )
-        
+
         print(f"Add chords response: {chords_response.status_code}")
         print(f"Response content: {chords_response.text}")
-        
-        self.assertEqual(chords_response.status_code, 200, "Failed to add chords to song")
+
+        self.assertEqual(
+            chords_response.status_code, 200, "Failed to add chords to song"
+        )
 
         # Get the song with transposition
         get_response = self.sessions[0].get(
@@ -316,9 +321,15 @@ class TestSongEndpoints(unittest.TestCase):
         # Verify that chords in lyrics are transposed correctly
         # The original chords "C# F Gb" transposed by 2 semitones should become "D# G G#"
         # (only hash in chords, not flat)
-        expected_chords = "D# G G#"
-        self.assertIn("D#", song["chords"], "Chords should contain D# after transposition")
-        self.assertIn("G#", song["chords"], "Chords should contain G# after transposition")
+        self.assertIn(
+            "D#", song["chords"], "Chords should contain D# after transposition"
+        )
+        self.assertIn(
+            "G#", song["chords"], "Chords should contain G# after transposition"
+        )
+        self.assertIn(
+            "G", song["chords"], "Chords should contain G after transposition"
+        )
 
     def test_06_update_song_success(self):
         """Test successful song update."""
@@ -443,17 +454,19 @@ class TestSongEndpoints(unittest.TestCase):
         chords_data = {
             "song_id": song_id,
             "lyrics": "Some lyrics here...",
-            "chords": "C# F Gb"
+            "chords": "C# F Gb",
         }
-        
+
         chords_response = self.sessions[0].post(
             f"{BASE_URL}/songs/update-lyrics-chords", json=chords_data
         )
-        
+
         print(f"Add chords response: {chords_response.status_code}")
         print(f"Response content: {chords_response.text}")
-        
-        self.assertEqual(chords_response.status_code, 200, "Failed to add chords to song")
+
+        self.assertEqual(
+            chords_response.status_code, 200, "Failed to add chords to song"
+        )
 
         # Apply permanent transposition
         transpose_data = {"song_id": song_id, "transporto_units": 2}
@@ -470,17 +483,32 @@ class TestSongEndpoints(unittest.TestCase):
 
         # Fetch song and check chords have been transposed permanently
         get_response = self.sessions[0].get(f"{BASE_URL}/songs/song?song_id={song_id}")
-        
+
         print(f"Get song after transpose response: {get_response.status_code}")
         print(f"Response content: {get_response.text}")
-        
-        self.assertEqual(get_response.status_code, 200, "Failed to get song after transposition")
-        
+
+        self.assertEqual(
+            get_response.status_code, 200, "Failed to get song after transposition"
+        )
+
         song = get_response.json()
         # Verify chords are now "D# G G#" (C# F Gb transposed by 2 semitones)
         # Note: Gb is enharmonic equivalent of F#, so F# + 2 semitones = G# (not A#)
-        self.assertIn("D#", song["chords"], "Chords should contain D# after permanent transposition")
-        self.assertIn("G#", song["chords"], "Chords should contain G# after permanent transposition")
+        self.assertIn(
+            "D#",
+            song["chords"],
+            "Chords should contain D# after permanent transposition",
+        )
+        self.assertIn(
+            "G#",
+            song["chords"],
+            "Chords should contain G# after permanent transposition",
+        )
+        self.assertIn(
+            "G",
+            song["chords"],
+            "Chords should contain G after permanent transposition",
+        )
 
     def test_09_get_nonexistent_song(self):
         """Test getting a non-existent song."""
