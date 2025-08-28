@@ -31,6 +31,7 @@ from backend.monolith.utils.create_song import (
 from backend.monolith.utils.song_access import (
     can_read_song,
     can_write_song,
+    delete_song_by_id,
     get_song_by_id_with_ownership,
     song_exists_by_user,
 )
@@ -476,6 +477,71 @@ async def update_lyrics_chords(
         raise
     except Exception as exc:
         print(f"Unexpected error in update_lyrics_chords: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error: {exc}",
+        )
+
+
+@router.delete("/delete-song", summary="Delete a song")
+async def delete_song(
+    db: db_dependency,
+    song_id: int,
+    current_user: dict = Depends(get_current_user),
+    teams: List = Depends(get_teams_of_user),
+) -> JSONResponse:
+    """
+    Delete a song and all its related records.\n
+
+    Query parameters:\n
+    - song_id: int (ID of song to delete)\n
+
+    Returns on success (200):\n
+    - message: str (success message with deletion details)\n
+    - status: "success"\n
+
+    Error codes:\n
+    - 403: User doesn't own the song\n
+    - 404: Song not found\n
+    - 500: Internal server error\n
+
+    Requires:\n
+    - Authenticated user\n
+    - team_data cookie with user teams\n
+    - Song must be made_by this user\n
+
+    Note:\n
+    Deletes related records in order to respect foreign key constraints:\n
+    1. TeamsShareSongs records\n
+    2. WroteMusic records\n
+    3. WroteLyrics records\n
+    4. Song itself\n
+    """
+    try:
+        user_id = current_user["user_id"]
+
+        # Delete the song and all related records
+        success, message = delete_song_by_id(db, song_id, user_id)
+
+        if not success:
+            if "not found" in message:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail=message
+                )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN, detail=message
+                )
+
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={"message": message, "status": "success"},
+        )
+
+    except HTTPException:
+        raise
+    except Exception as exc:
+        print(f"Unexpected error in delete_song: {exc}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Internal server error: {exc}",

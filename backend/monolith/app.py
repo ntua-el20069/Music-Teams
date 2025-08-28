@@ -14,6 +14,7 @@ from backend.monolith.routes.helpers import router as database_init_router
 from backend.monolith.routes.home import router as home_router
 from backend.monolith.routes.login import google_login_router, simple_login_router
 from backend.monolith.routes.my_teams import router as my_teams_router
+from backend.monolith.routes.my_songs import router as my_songs_router
 from backend.monolith.routes.profile import router as profile_router
 from backend.monolith.routes.public import router as public_router
 from backend.monolith.routes.songs import router as songs_router
@@ -83,6 +84,7 @@ app.include_router(API_router, prefix="/API", tags=["API"])
 app.include_router(google_login_router, prefix="/google_login", tags=["Google login"])
 app.include_router(home_router, prefix="/home", tags=["home"])
 app.include_router(my_teams_router, prefix="/my_teams", tags=["My Teams"])
+app.include_router(my_songs_router, prefix="/my_songs", tags=["My Songs"])
 app.include_router(profile_router, prefix="/profile", tags=["Profile"])
 app.include_router(public_router, prefix="/public", tags=["Public"])
 app.include_router(specific_router, prefix="/specific_team", tags=["Specific Team"])
