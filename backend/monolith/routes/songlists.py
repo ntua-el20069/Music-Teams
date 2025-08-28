@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 
 from backend.monolith.database.database import get_db
 from backend.monolith.models.models import (
+    Song,
     SongInListModel,
     SongListSaveModel,
 )
@@ -153,7 +154,6 @@ async def add_song_to_songlist(
         song, song_msg = get_song_by_id_with_ownership(db, song_id, user_id)
         if song is None:
             # Try to get basic song info if user can read it
-            from backend.monolith.models.models import Song
             db_song = db.query(Song).filter(Song.id == song_id).first()
             if db_song is None:
                 raise HTTPException(
@@ -252,7 +252,6 @@ async def save_songlist(
         # We need to get song titles for all songs
         # For now, we'll do a basic implementation and improve later
         song_data_list = []
-        from backend.monolith.models.models import Song
         
         for song_id in song_list_data.songs:
             db_song = db.query(Song).filter(Song.id == song_id).first()
