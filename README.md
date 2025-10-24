@@ -1,6 +1,8 @@
 # Music-Teams
 Organize your own lyrics, chords, small recordings and share them with your musical partners.
 
+The mobile app called Music-Teams, is helping music lovers keep notes for their lyrics and music stuff (notes, chords) and manipulate them easily (perform music tranformation operations easily - e.g. transporto) and use this app in a music team where real-time communication for song demands is accelarating team engagement and entertainment.
+
 ## Web host Code
 
 1. In the local code `lib/url.dart` change `baseUrl` for requests from `http://10.0.2.2:5001` to `https://nikolaospapa3.pythonanywhere.com` and git add, commit, push
