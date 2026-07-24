@@ -26,7 +26,7 @@ def db_type_url(DB_USERSNAME, DB_PASSWORD, DB_HOST, DB_DATABASE) -> Tuple[str, s
             DATABASE_URL = "postgresql://" + DATABASE_URL
         elif DB_TYPE == "sqlite":
             # For SQLite, use the DATABASE path directly
-            DATABASE_URL = f"sqlite:///{DB_DATABASE}"
+            DATABASE_URL = "sqlite:///" + DB_DATABASE
         else:
             raise ValueError(f"Unsupported DB_TYPE: {DB_TYPE}")
     except Exception as e:

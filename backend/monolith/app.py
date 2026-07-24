@@ -17,8 +17,8 @@ from backend.monolith.routes.my_songs import router as my_songs_router
 from backend.monolith.routes.my_teams import router as my_teams_router
 from backend.monolith.routes.profile import router as profile_router
 from backend.monolith.routes.public import router as public_router
-from backend.monolith.routes.songs import router as songs_router
 from backend.monolith.routes.songlists import router as songlists_router
+from backend.monolith.routes.songs import router as songs_router
 from backend.monolith.routes.specific_team import router as specific_router
 from backend.monolith.routes.teams import router as teams_router
 

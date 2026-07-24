@@ -265,9 +265,11 @@ def delete_song_by_id(db: Session, song_id: int, user_id: int) -> Tuple[bool, st
 
         return (
             True,
-            f"Song '{song.title}' deleted successfully \
-                (removed {deleted_teams} team shares, {deleted_composers} composer relations,\
-                      {deleted_lyricists} lyricist relations)",
+            (
+                f"Song '{song.title}' deleted successfully "
+                f"(removed {deleted_teams} team shares, {deleted_composers} composer relations, "
+                f"{deleted_lyricists} lyricist relations)"
+            ),
         )
 
     except Exception as exc:
