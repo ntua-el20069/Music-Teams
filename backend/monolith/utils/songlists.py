@@ -7,6 +7,8 @@ stored as JSON files, with proper access control and validation.
 
 import json
 import os
+import re
+import tempfile
 from typing import Any, Dict, List, Optional, Tuple
 
 from pydantic import BaseModel
@@ -21,6 +23,19 @@ def can_read_song(db: Session, user_id: int, song_id: int) -> Tuple[bool, str]:
     from backend.monolith.utils.song_access import can_read_song as can_read_song_impl
 
     return can_read_song_impl(db, user_id, song_id)
+
+
+def _resolve_and_validate_songlist_path(file_path: str) -> str:
+    resolved_path = os.path.abspath(file_path)
+    songlists_dir = os.path.abspath(os.path.join("backend", "monolith", "songlists"))
+    temp_dir = os.path.abspath(tempfile.gettempdir())
+
+    if resolved_path.startswith(songlists_dir + os.sep) or resolved_path.startswith(
+        temp_dir + os.sep
+    ):
+        return resolved_path
+
+    raise ValueError("Invalid song list path")
 
 
 def get_songlist_file_path(user_id: Optional[int] = None, team_name: Optional[str] = None) -> str:
@@ -47,6 +62,8 @@ def get_songlist_file_path(user_id: Optional[int] = None, team_name: Optional[st
     if user_id is not None:
         return os.path.join(base_dir, f"songlist-user{user_id}.json")
     else:
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", team_name or ""):
+            raise ValueError("Invalid team name")
         return os.path.join(base_dir, f"songlist-team{team_name}.json")
 
 
@@ -60,11 +77,13 @@ def load_songlist_data(file_path: str) -> Dict[str, List[Dict[str, Any]]]:
     Returns:
         Dict with keys "1", "2", "3" containing lists of song dictionaries
     """
-    if not os.path.exists(file_path):
+    safe_file_path = _resolve_and_validate_songlist_path(file_path)
+
+    if not os.path.exists(safe_file_path):
         return {"1": [], "2": [], "3": []}
     
     try:
-        with open(file_path, 'r') as f:
+        with open(safe_file_path, 'r') as f:
             data = json.load(f)
         
         # Ensure all three lists exist
@@ -74,7 +93,7 @@ def load_songlist_data(file_path: str) -> Dict[str, List[Dict[str, Any]]]:
         
         return data
     except (json.JSONDecodeError, IOError) as e:
-        print(f"Error loading song list from {file_path}: {e}")
+        print(f"Error loading song list from {safe_file_path}: {e}")
         return {"1": [], "2": [], "3": []}
 
 
@@ -90,10 +109,12 @@ def save_songlist_data(file_path: str, data: Dict[str, List[Dict[str, Any]]]) ->
         Tuple[bool, str]: (success, message)
     """
     try:
+        safe_file_path = _resolve_and_validate_songlist_path(file_path)
+
         # Ensure directory exists
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        os.makedirs(os.path.dirname(safe_file_path), exist_ok=True)
         
-        with open(file_path, 'w') as f:
+        with open(safe_file_path, 'w') as f:
             json.dump(data, f, indent=2)
         
         return (True, "Song list saved successfully")
