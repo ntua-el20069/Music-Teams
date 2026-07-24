@@ -1,6 +1,6 @@
 # Song Lists Feature
 
-This implementation provides song list management functionality for the Music Teams application.
+This document summarizes the song list management functionality for the Music Teams application.
 
 ## Overview
 
