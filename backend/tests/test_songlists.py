@@ -77,7 +77,7 @@ class TestSongListUtils(unittest.TestCase):
 
     def test_load_songlist_data_existing_file(self):
         """Test loading data from existing file."""
-        test_file = os.path.join(self.test_dir, "test.json")
+        test_file = os.path.join(self.test_dir, "songlist-user123.json")
         test_data = {
             "1": [{"id": 1, "title": "Song 1"}],
             "2": [],
@@ -92,7 +92,7 @@ class TestSongListUtils(unittest.TestCase):
 
     def test_load_songlist_data_incomplete_file(self):
         """Test loading data from file missing some lists."""
-        test_file = os.path.join(self.test_dir, "test.json")
+        test_file = os.path.join(self.test_dir, "songlist-user123.json")
         test_data = {"1": [{"id": 1, "title": "Song 1"}]}  # Missing lists 2 and 3
 
         with open(test_file, "w") as f:
@@ -104,7 +104,7 @@ class TestSongListUtils(unittest.TestCase):
 
     def test_save_songlist_data(self):
         """Test saving song list data to file."""
-        test_file = os.path.join(self.test_dir, "test.json")
+        test_file = os.path.join(self.test_dir, "songlist-user123.json")
         test_data = {
             "1": [{"id": 1, "title": "Song 1"}],
             "2": [],

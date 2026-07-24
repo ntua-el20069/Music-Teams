@@ -171,11 +171,13 @@ async def add_song_to_songlist(
                 )
             else:
                 raise HTTPException(
-                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=message
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Failed to add song to list",
                 )
 
         return JSONResponse(
-            status_code=status.HTTP_200_OK, content={"message": message}
+            status_code=status.HTTP_200_OK,
+            content={"message": "Song added to list successfully"},
         )
 
     except HTTPException:
@@ -259,10 +261,19 @@ async def save_songlist(
         )
 
         if not success:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=message)
+            if "must be 1, 2, or 3" in message or "Too many songs" in message:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=message,
+                )
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to save song list",
+            )
 
         return JSONResponse(
-            status_code=status.HTTP_200_OK, content={"message": message}
+            status_code=status.HTTP_200_OK,
+            content={"message": "Song list saved successfully"},
         )
 
     except HTTPException:

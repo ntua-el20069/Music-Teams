@@ -27,16 +27,40 @@ def can_read_song(db: Session, user_id: int, song_id: int) -> Tuple[bool, str]:
 
 
 def _resolve_and_validate_songlist_path(file_path: str) -> str:
-    resolved_path = os.path.abspath(file_path)
     songlists_dir = os.path.abspath(os.path.join("backend", "monolith", "songlists"))
     temp_dir = os.path.abspath(tempfile.gettempdir())
+    filename = os.path.basename(file_path)
 
-    if resolved_path.startswith(songlists_dir + os.sep) or resolved_path.startswith(
-        temp_dir + os.sep
+    is_user_file = filename.startswith("songlist-user") and filename.endswith(".json")
+    is_team_file = filename.startswith("songlist-team") and filename.endswith(".json")
+    if is_user_file:
+        user_id_part = filename.removeprefix("songlist-user").removesuffix(".json")
+        if not user_id_part.isdigit():
+            raise ValueError("Invalid song list filename")
+    elif is_team_file:
+        team_name_part = filename.removeprefix("songlist-team").removesuffix(".json")
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", team_name_part):
+            raise ValueError("Invalid song list filename")
+    else:
+        raise ValueError("Invalid song list filename")
+
+    requested_dir = os.path.abspath(os.path.dirname(file_path) or songlists_dir)
+
+    if requested_dir.startswith(temp_dir + os.sep):
+        return os.path.join(requested_dir, filename)
+
+    if (
+        requested_dir.startswith(songlists_dir + os.sep)
+        or requested_dir == songlists_dir
     ):
-        return resolved_path
+        return os.path.join(requested_dir, filename)
 
-    raise ValueError("Invalid song list path")
+    if os.path.abspath(file_path).startswith(songlists_dir + os.sep) or os.path.abspath(
+        file_path
+    ).startswith(temp_dir + os.sep):
+        return os.path.join(songlists_dir, filename)
+
+    return os.path.join(songlists_dir, filename)
 
 
 def get_songlist_file_path(
