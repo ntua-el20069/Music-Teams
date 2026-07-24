@@ -236,7 +236,7 @@ class TestSongListUtils(unittest.TestCase):
         self.assertIn("full", message)
         self.assertIn("5", message)  # Should mention the limit
     
-    @patch('backend.monolith.utils.song_access.can_read_song')
+    @patch('backend.monolith.utils.songlists.can_read_song')
     def test_validate_song_access_for_list(self, mock_can_read):
         """Test validating song access for lists."""
         # Mock database session

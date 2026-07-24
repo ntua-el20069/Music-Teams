@@ -7,12 +7,20 @@ stored as JSON files, with proper access control and validation.
 
 import json
 import os
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from backend.monolith.models.models import SongInListModel
-from backend.monolith.utils.song_access import can_read_song
+class SongInListModel(BaseModel):
+    id: int
+    title: str
+
+
+def can_read_song(db: Session, user_id: int, song_id: int) -> Tuple[bool, str]:
+    from backend.monolith.utils.song_access import can_read_song as can_read_song_impl
+
+    return can_read_song_impl(db, user_id, song_id)
 
 
 def get_songlist_file_path(user_id: Optional[int] = None, team_name: Optional[str] = None) -> str:
@@ -42,7 +50,7 @@ def get_songlist_file_path(user_id: Optional[int] = None, team_name: Optional[st
         return os.path.join(base_dir, f"songlist-team{team_name}.json")
 
 
-def load_songlist_data(file_path: str) -> Dict[str, List[Dict[str, any]]]:
+def load_songlist_data(file_path: str) -> Dict[str, List[Dict[str, Any]]]:
     """
     Load song list data from JSON file.
     
@@ -70,7 +78,7 @@ def load_songlist_data(file_path: str) -> Dict[str, List[Dict[str, any]]]:
         return {"1": [], "2": [], "3": []}
 
 
-def save_songlist_data(file_path: str, data: Dict[str, List[Dict[str, any]]]) -> Tuple[bool, str]:
+def save_songlist_data(file_path: str, data: Dict[str, List[Dict[str, Any]]]) -> Tuple[bool, str]:
     """
     Save song list data to JSON file.
     
